@@ -3,7 +3,7 @@
   "lang": "sw",
   "name": "MyTab",
   "short_name": "MyTab",
-  "scope": "/",
+  "scope": "http://mytab-ghp.herokuapp.com/",
   "display": "standalone",
   "start_url": "http://mytab-ghp.herokuapp.com/",
   "background_color": "#000000",
