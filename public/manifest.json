@@ -1,0 +1,29 @@
+{
+  "dir": "ltr",
+  "lang": "sw",
+  "name": "MyTab",
+  "short_name": "MyTab",
+  "scope": "/",
+  "display": "standalone",
+  "start_url": "http://mytab-ghp.herokuapp.com/",
+  "background_color": "#000000",
+  "theme_color": "#329ba8",
+  "description": "",
+  "orientation": "any",
+  "related_applications": [],
+  "prefer_related_applications": "false",
+  "icons": [
+    {
+      "src": "/images/cupcake.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/cupcake-small.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "url": "http://mytab-ghp.herokuapp.com/"
+}

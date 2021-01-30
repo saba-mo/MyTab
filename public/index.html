@@ -1,15 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width initial-scale=1.0'>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width initial-scale=1.0" />
+    <meta name='theme-color' content='#329ba8'>
     <title>MyTab</title>
     <link rel="stylesheet" href="/style.css" />
+    <link rel="manifest" href="/manifest.json"></link>
+    <link rel="apple-touch-icon" href="/images/cupcake.png">
+    <link rel="icon" href="/images/cupcake-small.png" />
     <script defer src="/bundle.js"></script>
   </head>
   <body>
     <div id="app"></div>
+    <script type="module">
+      import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate'
+
+      const el = document.createElement('pwa-update')
+      document.body.appendChild(el)
+    </script>
+    <!-- Below is optional code to manually add a service worker, from next-steps.md -->
+    <!-- <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('../pwabuilder-sw.js');
+        })
+      }
+    </script> -->
+    <noscript>Your browser does not support JavaScript!</noscript>
   </body>
-
 </html>
-
