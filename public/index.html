@@ -13,20 +13,20 @@
   </head>
   <body>
     <div id="app"></div>
-    <!-- <script type="module">
+    <script type="module">
       import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate'
 
       const el = document.createElement('pwa-update')
       document.body.appendChild(el)
-    </script> -->
+    </script>
     <!-- Below is optional code to manually add a service worker, from next-steps.md -->
-    <script>
+    <!-- <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('../pwabuilder-sw.js');
+          navigator.serviceWorker.register('./pwabuilder-sw.js');
         })
       }
-    </script>
+    </script> -->
     <noscript>Your browser does not support JavaScript!</noscript>
   </body>
 </html>
