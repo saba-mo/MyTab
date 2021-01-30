@@ -7,7 +7,8 @@
     <title>MyTab</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="manifest" href="/manifest.json"></link>
-    <link rel="apple-touch-icon" href="/images/cupcake-small.png">
+    <link rel="apple-touch-icon" href="/images/cupcake.png">
+    <link rel="icon" href="/images/cupcake-small.png" />
     <script defer src="/bundle.js"></script>
   </head>
   <body>
@@ -18,13 +19,14 @@
       const el = document.createElement('pwa-update')
       document.body.appendChild(el)
     </script>
-    <script>
+    <!-- Below is optional code to manually add a service worker, from next-steps.md -->
+    <!-- <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('../pwabuilder-sw.js');
         })
       }
-    </script>
+    </script> -->
     <noscript>Your browser does not support JavaScript!</noscript>
   </body>
 </html>
