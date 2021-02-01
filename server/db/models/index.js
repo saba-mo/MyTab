@@ -1,6 +1,8 @@
 const User = require('./user')
 const Group = require('./group')
 const User_Group = require('./user_group')
+const Item = require('./item')
+const Expense = require('./expense')
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -22,4 +24,6 @@ module.exports = {
   User,
   Group,
   User_Group,
+  Item,
+  Expense,
 }
