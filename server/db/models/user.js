@@ -10,6 +10,7 @@ const User = db.define('user', {
     validate: {
       notNull: true,
       notEmpty: true,
+      isEmail: true,
     },
   },
   firstName: {
