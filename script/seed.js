@@ -1,27 +1,47 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Group} = require('../server/db/models')
+const {User, Group, Expense, Item} = require('../server/db/models')
+const groupData = require('../dummyDataGroups.js')
+const userData = require('../dummyDataUser.js')
+const expenseData = require('../dummyDataGroups.js')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const users = await Promise.all([
-    User.create({
-      firstName: 'murphy',
-      lastName: 'cody',
-      email: 'cody@email.com',
-      password: '123',
-    }),
-    User.create({
-      firstName: 'cody',
-      lastName: 'murphy',
-      email: 'murphy@email.com',
-      password: '123',
-    }),
-    Group.create({title: 'lunch'}),
-  ])
+  await Promise.all(
+    groupData.map((group) => {
+      return Group.bulkCreate(group)
+    })
+  )
+  await Promise.all(
+    userData.map((user) => {
+      return User.bulkCreate(user)
+    })
+  )
+  await Promise.all(
+    expenseData.map((expense) => {
+      return Expense.bulkCreate(expense)
+    })
+  )
+  // const users = await Promise.all([
+  //   User.create({
+  //     firstName: 'murphy',
+  //     lastName: 'cody',
+  //     email: 'cody@email.com',
+  //     password: '123',
+  //   }),
+  //   User.create({
+  //     firstName: 'cody',
+  //     lastName: 'murphy',
+  //     email: 'murphy@email.com',
+  //     password: '123',
+  //   }),
+
+  // Group.create({}),
+
+  // ])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
