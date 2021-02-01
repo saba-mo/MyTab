@@ -50,10 +50,7 @@ if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET) {
 
   passport.use(strategy)
 
-  router.get(
-    '/',
-    passport.authenticate('amazon', {scope: ['profile', 'postal_code']})
-  )
+  router.get('/', passport.authenticate('amazon', {scope: ['profile']}))
 
   router.get(
     '/callback',
