@@ -10,15 +10,6 @@
     <link rel="apple-touch-icon" href="/images/cupcake.png">
     <link rel="icon" href="/images/cupcake-small.png" />
     <script defer src="/bundle.js"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          console.log('hello')
-          navigator.serviceWorker.register('./pwabuilder-sw.js', {scope: "./"});
-          console.log('sw: ', navigator.serviceWorker)
-        })
-      }
-    </script>
     <script type="module">
       // import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate'
 
@@ -33,5 +24,20 @@
     
     <noscript>Your browser does not support JavaScript!</noscript>
     <footer>by Team ButterFingers</footer>
+    <script>
+      if (!navigator.serviceWorker.controller) {
+        console.log('firing')
+        navigator.serviceWorker.register("./pwabuilder-sw.js").then(function(reg) {
+         console.log("Service worker has been registered for scope: " + reg.scope);
+        });
+      }
+      // if ('serviceWorker' in navigator) {
+      //   window.addEventListener('load', function() {
+      //     console.log('hello')
+      //     navigator.serviceWorker.register('./pwabuilder-sw.js', {scope: "./"});
+      //     console.log('sw: ', navigator.serviceWorker)
+      //   })
+      // }
+    </script>
   </body>
 </html>
