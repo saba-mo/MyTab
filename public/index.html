@@ -13,7 +13,9 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
+          console.log('hello')
           navigator.serviceWorker.register('./pwabuilder-sw.js', {scope: "./"});
+          console.log('did we?')
         })
       }
     </script>
