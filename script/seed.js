@@ -4,7 +4,7 @@ const db = require('../server/db')
 const {User, Group, Expense, Item} = require('../server/db/models')
 const groupData = require('../dummyDataGroups.js')
 const userData = require('../dummyDataUser.js')
-const expenseData = require('../dummyDataGroups.js')
+const expenseData = require('../dummyDataExpenses.js')
 
 async function seed() {
   await db.sync({force: true})
@@ -43,7 +43,7 @@ async function seed() {
 
   // ])
 
-  console.log(`seeded ${users.length} users`)
+  // console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
 }
 

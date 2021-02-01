@@ -4,11 +4,11 @@ const db = require('../db')
 const Expense = db.define('expense', {
   name: {
     type: Sequelize.STRING,
-    // allowNull: false,
-    // validate: {
-    //   notEmpty: true,
-    //   notNull: true,
-    // },
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+      notNull: true,
+    },
   },
 
   totalCost: {
