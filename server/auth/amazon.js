@@ -1,6 +1,6 @@
 const passport = require('passport')
 const router = require('express').Router()
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
+const AmazonStrategy = require('passport-amazon').Strategy
 const {User} = require('../db/models')
 module.exports = router
 
@@ -18,28 +18,30 @@ module.exports = router
  * process.env.GOOGLE_CALLBACK = '/your/google/callback'
  */
 
-if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-  console.log('Google client ID / secret not found. Skipping Google OAuth.')
+if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET) {
+  console.log('Amazon client ID / secret not found. Skipping Amazon OAuth.')
 } else {
-  const googleConfig = {
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK
+  const amazonConfig = {
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: process.env.REDIRECT_URI,
   }
 
-  const strategy = new GoogleStrategy(
-    googleConfig,
+  const strategy = new AmazonStrategy(
+    amazonConfig,
     (token, refreshToken, profile, done) => {
-      const googleId = profile.id
+      console.log('profile', profile)
+      const amazonId = profile.id
       const email = profile.emails[0].value
-      const imgUrl = profile.photos[0].value
-      const firstName = profile.name.givenName
-      const lastName = profile.name.familyName
-      const fullName = profile.displayName
+      console.log('email', email)
+      // const imgUrl = profile.photos.value
+      const name = profile.name
+      // const lastName = profile.name.familyName
+      const userId = profile.user_id
 
       User.findOrCreate({
-        where: {googleId},
-        defaults: {email, imgUrl, firstName, lastName, fullName}
+        where: {amazonId},
+        defaults: {email, name, userId},
       })
         .then(([user]) => done(null, user))
         .catch(done)
@@ -50,14 +52,14 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 
   router.get(
     '/',
-    passport.authenticate('google', {scope: ['email', 'profile']})
+    passport.authenticate('amazon', {scope: ['profile', 'postal_code']})
   )
 
   router.get(
     '/callback',
-    passport.authenticate('google', {
+    passport.authenticate('amazon', {
       successRedirect: '/home',
-      failureRedirect: '/login'
+      failureRedirect: '/login',
     })
   )
 }
