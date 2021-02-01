@@ -15,7 +15,7 @@
         window.addEventListener('load', function() {
           console.log('hello')
           navigator.serviceWorker.register('./pwabuilder-sw.js', {scope: "./"});
-          console.log('did we?')
+          console.log('sw: ', navigator.serviceWorker)
         })
       }
     </script>
