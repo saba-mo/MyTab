@@ -25,4 +25,5 @@ module.exports = {
   User_Group,
   Item,
   Expense,
+  User_Expense,
 }

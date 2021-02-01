@@ -8,6 +8,9 @@ const Item = db.define('item', {
 
   cost: {
     type: Sequelize.FLOAT,
+    validate: {
+      min: 0,
+    },
   },
 
   quantity: {
