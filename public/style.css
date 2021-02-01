@@ -71,8 +71,9 @@ body {
   padding-bottom: 4rem;
   font-size: 2rem;
   font-family: 'Barriecito', cursive;
+  /* font-family: Circular, Helvetica, Arial, sans-serif; */
   margin-bottom: 2rem;
-  -webkit-clip-path: polygon(
+  /* -webkit-clip-path: polygon(
     0% 0%,
     100% 0%,
     100% 70%,
@@ -89,7 +90,7 @@ body {
     50% 100%,
     39% 70%,
     0 70%
-  );
+  ); */
 }
 
 form {
@@ -212,4 +213,9 @@ footer {
     width: 90%;
     display: inline-table;
   }
+}
+
+.container {
+  display: flex;
+  justify-content: center;
 }

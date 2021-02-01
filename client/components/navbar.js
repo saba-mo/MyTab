@@ -7,6 +7,8 @@ import {logout} from '../store'
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
     <div className="header">MyTab</div>
+    {/* <Link to="/login">Login</Link>
+          <Link to="/signup">Sign Up</Link> */}
     <nav>
       {isLoggedIn ? (
         <div>
@@ -18,20 +20,19 @@ const Navbar = ({handleClick, isLoggedIn}) => (
         </div>
       ) : (
         <div>
-          {/* The navbar will show these links before you log in */}
           <div className="signup">
             <h1>
               {' '}
               Upload your receipt and we’ll do the math. Split your bill now
               with MyTab!
             </h1>
-            {/* <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link> */}
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Sign Up</Link>
           </div>
         </div>
       )}
     </nav>
-    <hr />
+    <h1 />
   </div>
 )
 

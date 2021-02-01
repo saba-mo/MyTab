@@ -25,20 +25,21 @@ const AuthForm = (props) => {
           <input name="password" type="password" />
         </div>
         <div>
-          {/* <button type="submit">{displayName}</button> */}
-
-          <a href="/auth/amazon" id="LoginWithAmazon">
-            <img
-              border="0"
-              alt="Login with Amazon"
-              src="https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA_gold_156x32.png"
-              width="156"
-              height="32"
-            />
-          </a>
+          <button type="submit">{displayName}</button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
+      <div className="container">
+        <a href="/auth/amazon" id="LoginWithAmazon">
+          <img
+            border="0"
+            alt="Login with Amazon"
+            src="https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA_gold_156x32.png"
+            width="156"
+            height="32"
+          />
+        </a>
+      </div>
     </div>
   )
 }
