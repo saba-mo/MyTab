@@ -2,20 +2,20 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 const {User, Group} = require('./index')
 
-const User_Group = db.define('member_group', {
+const User_Group = db.define('user_group', {
   balance: {
     type: Sequelize.FLOAT,
     defaultValue: 0,
     allowNull: false,
   },
-  user_id: {
+  userId: {
     type: Sequelize.INTEGER,
     references: {
       model: User,
       key: 'id',
     },
   },
-  group_id: {
+  groupId: {
     type: Sequelize.INTEGER,
     references: {
       model: Group,

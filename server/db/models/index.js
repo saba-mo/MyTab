@@ -15,6 +15,9 @@ const User_Group = require('./user_group')
  * for example, we can say: const {User} = require('../db/models')
  * instead of: const User = require('../db/models/user')
  */
+
+Group.belongsToMany(User, {through: User_Group})
+
 module.exports = {
   User,
   Group,
