@@ -10,24 +10,25 @@
     <link rel="apple-touch-icon" href="/images/cupcake.png">
     <link rel="icon" href="/images/cupcake-small.png" />
     <script defer src="/bundle.js"></script>
-  </head>
-
-  <body>
-    <div id="app"></div>
-
-    <script type="module">
-      import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate'
-      const el = document.createElement('pwa-update')
-      document.body.appendChild(el)
-    </script>
-    <!-- Below is optional code to manually add a service worker, from next-steps.md -->
-    <!-- <script>
+    <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('./pwabuilder-sw.js');
+          navigator.serviceWorker.register('./pwabuilder-sw.js', {scope: "./"});
         })
       }
-    </script> -->
+    </script>
+    <script type="module">
+      // import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate'
+
+      // const el = document.createElement('pwa-update')
+      // document.body.appendChild(el)
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    
+    <!-- BBelow is optional code to manually add a service worker, from next-steps.md -->
+    
     <noscript>Your browser does not support JavaScript!</noscript>
     <footer>by Team ButterFingers</footer>
   </body>
