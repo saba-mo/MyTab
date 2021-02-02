@@ -6,9 +6,8 @@ const groupData = [
     {title: 'Broadway Melody of 1938'},
     {title: 'The Gardener'},
     {title: 'Deathwatch'},
+    {title: 'Rio'},
     {title: 'Confessor, The (a.k.a. The Good Shepherd)'},
-    {title: 'Ugly, The'},
-    {title: 'Beyond the Forest'},
   ],
 ]
 
