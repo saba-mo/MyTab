@@ -41,7 +41,7 @@ export class AllFriends extends React.Component {
                     to={{
                       pathname: '/friend',
                       state: {
-                        thisFriend: friendItem,
+                        friend: friendItem,
                       },
                     }}
                   >

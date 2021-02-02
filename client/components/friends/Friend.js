@@ -8,16 +8,13 @@ class Friend extends React.Component {
   }
 
   componentDidMount() {
-    console.log('PROPS: ', this.props)
-
     this.props.loadFriend(
       this.props.user.id,
-      this.props.thisFriend.Friends.friendId
+      this.props.location.state.friend.Friends.friendId
     )
   }
   render() {
-    console.log('PROPS: ', this.props)
-    const friend = this.props.thisFriend
+    const friend = this.props.location.state.friend
     return (
       <div className="friend-individual">
         <h4>
@@ -30,9 +27,7 @@ class Friend extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('STATE: ', state)
   return {
-    friend: state.friends,
     user: state.user,
   }
 }
