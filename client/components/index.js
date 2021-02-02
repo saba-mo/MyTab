@@ -6,5 +6,5 @@
 export {default as Navbar} from './navigation/navbar'
 export {default as UserHome} from './user/user-home'
 export {Login, Signup} from './user/auth-form'
-export {Friend} from './friends/Friend'
-export {AllFriends} from './friends/AllFriends'
+export {default as Friend} from './friends/Friend'
+export {default as AllFriends} from './friends/AllFriends'

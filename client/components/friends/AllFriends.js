@@ -1,7 +1,7 @@
 import React from 'react'
-import {Link} from 'reach-router-dom'
+import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {_loadFriends} from '../../store'
+import {_loadFriends} from '../../store/friends/friends'
 // , _deleteFriend
 
 export class AllFriends extends React.Component {
