@@ -21,18 +21,18 @@ const initialState = []
 
 /* THUNK CREATORS */
 
-export const _loadAFriend = (friendId) => async (dispatch) => {
+export const _loadAFriend = (userId, friendId) => async (dispatch) => {
   try {
-    const {data} = await axios.get(`/api/friends/${friendId}`)
+    const {data} = await axios.get(`/api/friends/${userId}/${friendId}`)
     dispatch(getAFriend(data))
   } catch (error) {
-    console.log('Can not friend your friend because: ', error)
+    console.log('Cannot find your friend because: ', error)
   }
 }
 
-export const _loadFriends = () => async (dispatch) => {
+export const _loadFriends = (userId) => async (dispatch) => {
   try {
-    const {data} = await axios.get('/api/friends')
+    const {data} = await axios.get(`/api/friends/${userId}`)
     dispatch(getFriends(data))
   } catch (error) {
     console.log(
@@ -47,7 +47,9 @@ const friendsReducer = (friends = initialState, action) => {
   switch (action.type) {
     case GET_A_FRIEND:
       friends = friends.filter(
-        (friend) => parseInt(friend.id) !== parseInt(action.friend.id)
+        (friend) =>
+          parseInt(friend.Friends.friendId) !==
+          parseInt(action.friend.Friends.friendId)
       )
       return friends.concat([action.friend])
     case GET_FRIENDS:

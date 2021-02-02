@@ -11,7 +11,7 @@ export class AllFriends extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadFriends()
+    this.props.loadFriends(this.props.user.id)
   }
 
   handleDelete = (friendToDelete) => {
@@ -29,16 +29,24 @@ export class AllFriends extends React.Component {
     return (
       <div>
         <main>
-          <h2>All the friends are belong to us</h2>
+          <h2>My Friends on MyTab</h2>
         </main>
         <div id="full-friend-list">
           {this.noFriends(friendList)}
           <ul>
             {friendList.map((friendItem) => {
               return (
-                <div key={`friend-${friendItem.id}`}>
-                  <Link to={`/friends/${friendItem.id}`}>
-                    {friendItem.firstName} {friendItem.lastName}
+                <div key={`friend-${friendItem.Friends.friendId}`}>
+                  <Link
+                    to={{
+                      pathname: '/friend',
+                      state: {
+                        thisFriend: friendItem,
+                      },
+                    }}
+                  >
+                    {friendItem.firstName} {friendItem.lastName}{' '}
+                    {friendItem.email}
                   </Link>
                 </div>
               )
@@ -51,11 +59,14 @@ export class AllFriends extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  return {friends: state.friends}
+  return {
+    friends: state.friends,
+    user: state.user,
+  }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  loadFriends: () => dispatch(_loadFriends()),
+  loadFriends: (userId) => dispatch(_loadFriends(userId)),
   deleteFriend: (friend) => dispatch(_deleteFriend(friend)),
 })
 
