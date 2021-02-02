@@ -21,10 +21,6 @@ const User_Expense = db.define('user_expense', {
       model: Expense,
       key: 'id',
     },
-    unique: true,
-    validate: {
-      unique: true,
-    },
   },
 })
 
