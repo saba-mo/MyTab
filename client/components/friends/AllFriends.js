@@ -1,7 +1,8 @@
 import React from 'react'
 import {Link} from 'reach-router-dom'
 import {connect} from 'react-redux'
-// import {fetchFriends, _deleteFriend} from '../../store'
+import {_loadFriends} from '../../store'
+// , _deleteFriend
 
 export class AllFriends extends React.Component {
   constructor(props) {
@@ -54,7 +55,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  loadFriends: () => dispatch(fetchFriends()),
+  loadFriends: () => dispatch(_loadFriends()),
   deleteFriend: (friend) => dispatch(_deleteFriend(friend)),
 })
 
