@@ -4,9 +4,8 @@ const User_Group = require('./user_group')
 const User_Expense = require('./user_expense')
 const Item = require('./item')
 const Expense = require('./expense')
-const Friend = require('./friend')
 
-User.belongsToMany(User, {as: 'friends', through: Friend})
+User.belongsToMany(User, {as: 'friends', through: 'Friends'})
 
 Group.belongsToMany(User, {through: User_Group, foreignKey: 'group_Id'})
 User.belongsToMany(Group, {through: User_Group, foreignKey: 'user_Id'})
@@ -27,5 +26,4 @@ module.exports = {
   Item,
   Expense,
   User_Expense,
-  Friend,
 }

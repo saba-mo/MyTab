@@ -1,18 +1,14 @@
 const router = require('express').Router()
-const {User, Friend} = require('../db/models')
+const {User} = require('../db/models')
 
 router.get('/:userId', async (req, res, next) => {
   try {
+    console.log('magic: ', Object.keys(User.prototype))
     const thisUser = await User.findByPk(req.params.userId)
-    const friends = await Friend.findAll({
-      where: {
-        userId: req.params.userId,
-      },
-      // explicitly select only the id and email fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
-      //   attributes: ['id', 'email']
+    const friends = await thisUser.getFriends({
+      attributes: ['firstName', 'lastName', 'email'],
     })
+
     res.json(friends)
   } catch (err) {
     next(err)
