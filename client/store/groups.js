@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-export const SET_GROUPS = 'SET_GROUPS'
+export const GET_GROUPS = 'GET_GROUPS'
 // export const SUBMIT_ROBOT = 'SUBMIT_ROBOT';
 // export const DELETE_ROBOT = 'DELETE_ROBOT';
 
 export const setGroups = (robots) => ({
-  type: SET_GROUPS,
+  type: GET_GROUPS,
   robots,
 })
 // export const submitRobot = (robot) => ({
@@ -48,7 +48,7 @@ const initialState = []
 
 const groupsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_GROUPS:
+    case GET_GROUPS:
       return action.groups
     // case SUBMIT_ROBOT:
     //   return [...state, action.robot]

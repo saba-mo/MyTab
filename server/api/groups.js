@@ -1,10 +1,24 @@
 const router = require('express').Router()
-const {Group} = require('../db/models')
+const {Group, User} = require('../db/models')
 
-router.get('/', async (req, res, next) => {
+//ORIGINAL GET ROUTE
+// router.get('/', async (req, res, next) => {
+//   try {
+//     const groups = await Group.findAll({
+//       include: [User]
+//     })
+//     res.send(groups)
+//   } catch (err) {
+//     next(err)
+//   }
+// })
+
+router.get('/:id', async (req, res, next) => {
   try {
-    const groups = await Group.findAll({})
-    res.send(groups)
+    const group = await User.findByPk(req.params.id, {
+      include: [{model: Group}],
+    })
+    res.json(group)
   } catch (err) {
     next(err)
   }
