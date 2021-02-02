@@ -3,6 +3,22 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const User = db.define('user', {
+  firstName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notNull: true,
+      notEmpty: true,
+    },
+  },
+  lastName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notNull: true,
+      notEmpty: true,
+    },
+  },
   email: {
     type: Sequelize.STRING,
     unique: true,
@@ -32,6 +48,13 @@ const User = db.define('user', {
   amazonId: {
     type: Sequelize.STRING,
   },
+})
+
+User.beforeCreate((user) => {
+  user.firstName = user.firstName[0]
+    .toUpperCase()
+    .concat(user.firstName.slice(1))
+  user.lastName = user.lastName[0].toUpperCase().concat(user.lastName.slice(1))
 })
 
 module.exports = User
