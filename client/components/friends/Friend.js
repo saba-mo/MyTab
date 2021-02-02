@@ -6,7 +6,6 @@ class Friend extends React.Component {
     return (
       <div className="friend-individual">
         <h4>
-          {' '}
           {friend.firstName} {friend.lastName}
         </h4>
         <h5>{friend.email}</h5>

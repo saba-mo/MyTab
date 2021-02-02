@@ -2,7 +2,6 @@ import React from 'react'
 import {Link} from 'reach-router-dom'
 import {connect} from 'react-redux'
 // import {fetchFriends, _deleteFriend} from '../../store'
-import Friend from './Friend'
 
 export class AllFriends extends React.Component {
   constructor(props) {
@@ -38,7 +37,7 @@ export class AllFriends extends React.Component {
               return (
                 <div key={`friend-${friendItem.id}`}>
                   <Link to={`/friends/${friendItem.id}`}>
-                    <Friend friend={friendItem} />
+                    {friendItem.firstName} {friendItem.lastName}
                   </Link>
                 </div>
               )
