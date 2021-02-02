@@ -1,11 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_getGroups} from '../store/groups'
+import {_getGroups} from '../../store/groups'
 import {Link} from 'react-router-dom'
 
 export class Groups extends React.Component {
   componentDidMount() {
-    this.props.getGroups()
+    this.props.getGroups(this.props.user.id)
   }
 
   render() {
@@ -16,8 +16,8 @@ export class Groups extends React.Component {
           {this.props.groups.map((group) => {
             return (
               <div key={group.id}>
-                <div>Group Name: {group.name}</div>
-                <img src={group.imageUrl} alt="Group Image" />
+                <div>Group Name: {group.title}</div>
+                {/* <img src={group.imageUrl} alt="Group Image" /> */}
                 {/* <Link to={`/groups/${group.id}`}>View Detail</Link> */}
                 {/* <button type="button" onClick={() => this.props.deleteGroup(group)}>X</button> */}
               </div>
@@ -39,12 +39,13 @@ export class Groups extends React.Component {
 const mapState = (state) => {
   return {
     groups: state.groups,
+    user: state.user,
   }
 }
 
 const mapDispatch = (dispatch) => {
   return {
-    getGroups: () => dispatch(_getGroups()),
+    getGroups: (userId) => dispatch(_getGroups(userId)),
     // deleteGroup: (group) => dispatch(_deleteGroup(group)),
   }
 }

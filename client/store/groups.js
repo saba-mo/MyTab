@@ -4,9 +4,9 @@ export const GET_GROUPS = 'GET_GROUPS'
 // export const SUBMIT_ROBOT = 'SUBMIT_ROBOT';
 // export const DELETE_ROBOT = 'DELETE_ROBOT';
 
-export const setGroups = (robots) => ({
+export const setGroups = (groups) => ({
   type: GET_GROUPS,
-  robots,
+  groups,
 })
 // export const submitRobot = (robot) => ({
 //   type: SUBMIT_ROBOT,
@@ -17,12 +17,13 @@ export const setGroups = (robots) => ({
 //   robot
 // });
 
-export const _getGroups = () => async (dispatch) => {
+export const _getGroups = (userId) => async (dispatch) => {
   try {
-    const {data} = await axios.get('/api/groups')
+    const {data} = await axios.get(`/api/groups/${userId}`)
+    console.log(data, 'this is data!')
     dispatch(setGroups(data))
   } catch (err) {
-    console.log(err)
+    console.log("can't get groups!", err)
   }
 }
 
@@ -49,6 +50,7 @@ const initialState = []
 const groupsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_GROUPS:
+      console.log(action)
       return action.groups
     // case SUBMIT_ROBOT:
     //   return [...state, action.robot]

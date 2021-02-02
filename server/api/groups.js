@@ -13,12 +13,12 @@ const {Group, User} = require('../db/models')
 //   }
 // })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:userId', async (req, res, next) => {
   try {
-    const group = await User.findByPk(req.params.id, {
+    const user = await User.findByPk(req.params.userId, {
       include: [{model: Group}],
     })
-    res.json(group)
+    res.json(user.groups)
   } catch (err) {
     next(err)
   }
