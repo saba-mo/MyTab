@@ -50,12 +50,12 @@ import Groups from './Groups'
 // })
 
 const UserHome = (props) => {
+  const {firstName} = props
   const {email} = props
 
   return (
     <div>
-      <h3>Welcome, {email}</h3>
-      {/* <Groups /> */}
+      {firstName ? <h3>Welcome, {firstName}!</h3> : <h3>Welcome, {email}!</h3>}
       <div className="wrapper">
         <form className="insert">
           <label id="totalL">
@@ -98,6 +98,7 @@ const UserHome = (props) => {
  */
 const mapState = (state) => {
   return {
+    firstName: state.user.firstName,
     email: state.user.email,
   }
 }
@@ -108,5 +109,6 @@ export default connect(mapState)(UserHome)
  * PROP TYPES
  */
 UserHome.propTypes = {
+  firstName: PropTypes.string,
   email: PropTypes.string,
 }
