@@ -38,10 +38,6 @@ export class AllFriends extends React.Component {
               return (
                 <div key={`friend-${friendItem.id}`}>
                   <Link to={`/friends/${friendItem.id}`}>
-                    <h4>
-                      {friendItem.firstName} {friendItem.lastName}
-                    </h4>
-                    <p />
                     <Friend friend={friendItem} />
                   </Link>
                 </div>
