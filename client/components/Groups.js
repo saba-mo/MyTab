@@ -1,8 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
-// import { fetchRobots, removeRobot } from '../redux/robots';
+import {_getGroups} from '../store/groups'
 import {Link} from 'react-router-dom'
-// import RobotForm from './RobotForm'
 
 export class Groups extends React.Component {
   componentDidMount() {
@@ -46,7 +45,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     getGroups: () => dispatch(_getGroups()),
-    deleteGroup: (group) => dispatch(_deleteGroup(group)),
+    // deleteGroup: (group) => dispatch(_deleteGroup(group)),
   }
 }
 

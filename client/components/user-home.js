@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import Groups from './Groups'
 
 /**
  * COMPONENT
@@ -54,6 +55,7 @@ const UserHome = (props) => {
   return (
     <div>
       <h3>Welcome, {email}</h3>
+      {/* <Groups /> */}
       <div className="wrapper">
         <form className="insert">
           <label id="totalL">
