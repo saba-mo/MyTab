@@ -4,6 +4,7 @@ import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Login, Signup, UserHome, AllFriends, Friend} from './components'
 import {me} from './store'
+import Groups from './components/group/Groups'
 
 /**
  * COMPONENT
@@ -27,6 +28,7 @@ class Routes extends Component {
             <Route path="/home" component={UserHome} />
             <Route path="/friends" component={AllFriends} />
             <Route path="/friend" component={Friend} />
+            <Route exact path="/groups/:userId" component={Groups} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

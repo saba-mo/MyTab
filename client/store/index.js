@@ -4,8 +4,13 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user/user'
 import friends from './friends/friends'
+import groups from './groups'
 
-const reducer = combineReducers({user, friends})
+const reducer = combineReducers({
+  user: user,
+  groups: groups,
+  friends: friends,
+})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )
