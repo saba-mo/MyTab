@@ -1,12 +1,23 @@
 import axios from 'axios'
 import history from '../../history'
 import {
-  getFriends,
-  addFriend,
+  ADD_FRIEND_REQUEST,
+  ADD_FRIEND_ERROR,
+  ADD_FRIEND_SUCCESS,
+  DELETE_FRIEND,
+  GET_FRIENDS,
+  INVITE_FRIEND,
+  INVALID_EMAIL,
+} from './friendTypes'
+import {
   addFriendError,
+  addFriendRequest,
   addFriendSuccess,
   deleteFriend,
-} from './friendTypes'
+  getFriends,
+  invalidEmail,
+  inviteFriend,
+} from './friendActions'
 
 /* INITIAL STATE */
 const initialState = []
@@ -26,9 +37,26 @@ export const _loadFriends = (userId) => async (dispatch) => {
 
 export const _addFriend = (userId, email) => async (dispatch) => {
   try {
-    // console.log('email ', email)
-    const {data} = await axios.post(`/api/friends/${userId}`, {email})
-    dispatch(addFriend(data))
+    if (!email.includes('@')) {
+      dispatch(invalidEmail({email}))
+    } else {
+      await axios
+        .post(`/api/friends/${userId}`, {email})
+        .then((response) => {
+          dispatch(addFriendSuccess(response.data))
+        })
+        .catch((error) => {
+          switch (error.response.status) {
+            case 404:
+              dispatch(inviteFriend({email}))
+              break
+            default:
+              console.log("Shit's busted, yo", error)
+              // dispatch(systemError(error))
+              break
+          }
+        })
+    }
   } catch (error) {
     console.log(
       'Your new friend should be here, but they are not because: ',
@@ -54,7 +82,7 @@ const friendsReducer = (friends = initialState, action) => {
   switch (action.type) {
     case GET_FRIENDS:
       return action.friends
-    case ADD_FRIEND:
+    case ADD_FRIEND_SUCCESS:
       return action.friend
     case DELETE_FRIEND:
       return [

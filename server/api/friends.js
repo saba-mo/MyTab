@@ -37,7 +37,7 @@ router.post('/:userId', async (req, res, next) => {
         email: req.body.email,
       },
     })
-    if (!thisFriend) return res.send('no friend').status(404)
+    if (!thisFriend) return res.sendStatus(404)
 
     thisUser.addFriend(thisFriend.id)
 

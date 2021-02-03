@@ -50,7 +50,7 @@ class AddFriend extends React.Component {
             />
           </div>
           <div>
-            <button type="submit">Add Friend</button>
+            <button type="submit">Add My Friend</button>
           </div>
         </form>
       </div>

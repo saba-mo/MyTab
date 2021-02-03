@@ -1,9 +1,11 @@
 import {
-  GET_FRIENDS,
-  ADD_FRIEND,
+  ADD_FRIEND_REQUEST,
   ADD_FRIEND_ERROR,
   ADD_FRIEND_SUCCESS,
   DELETE_FRIEND,
+  GET_FRIENDS,
+  INVITE_FRIEND,
+  INVALID_EMAIL,
 } from './friendTypes'
 
 /* ACTION CREATORS */
@@ -12,21 +14,26 @@ export const getFriends = (friends) => ({
   friends: friends,
 })
 
-export const addFriend = (friend) => ({
-  type: ADD_FRIEND,
+export const addFriendRequest = () => ({
+  type: ADD_FRIEND_REQUEST,
+})
+
+export const addFriendSuccess = (friend) => ({
+  type: ADD_FRIEND_SUCCESS,
   friend,
 })
 
 export const addFriendError = (error) => ({
   type: ADD_FRIEND_ERROR,
-  data: null,
   error: error,
 })
 
-export const addFriendSuccess = (results) => ({
-  type: ADD_FRIEND_SUCCESS,
-  data: results,
-  error: null,
+export const inviteFriend = () => ({
+  type: INVITE_FRIEND,
+})
+
+export const invalidEmail = () => ({
+  type: INVALID_EMAIL,
 })
 
 export const deleteFriend = (friendId) => ({
