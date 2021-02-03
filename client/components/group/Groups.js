@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_getGroups} from '../../store/groups'
+import {_getGroups} from '../../store/groups/groups'
 import {Link} from 'react-router-dom'
 
 export class Groups extends React.Component {
@@ -16,7 +16,9 @@ export class Groups extends React.Component {
           {this.props.groups.map((group) => {
             return (
               <div key={group.id}>
-                <div>Group Name: {group.title}</div>
+                <Link to={`/groups/singleGroup/${group.id}`}>
+                  <div>Group Name: {group.title}</div>
+                </Link>
                 {/* <img src={group.imageUrl} alt="Group Image" /> */}
                 {/* <Link to={`/groups/${group.id}`}>View Detail</Link> */}
                 {/* <button type="button" onClick={() => this.props.deleteGroup(group)}>X</button> */}
