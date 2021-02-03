@@ -4,7 +4,6 @@ const {User} = require('../db/models')
 // GET all of user's friends
 router.get('/:userId', async (req, res, next) => {
   try {
-    console.log('magic: ', Object.keys(User.prototype))
     const id = parseInt(req.params.userId)
     if (isNaN(id)) return res.sendStatus(404)
 
