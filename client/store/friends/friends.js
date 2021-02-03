@@ -1,26 +1,12 @@
 import axios from 'axios'
 import history from '../../history'
-
-/* ACTION TYPES */
-const GET_FRIENDS = 'GET_FRIENDS'
-const ADD_FRIEND = 'ADD_FRIEND'
-const DELETE_FRIEND = 'DELETE_FRIEND'
-
-/* ACTION CREATORS */
-const getFriends = (friends) => ({
-  type: GET_FRIENDS,
-  friends: friends,
-})
-
-const addFriend = (friend) => ({
-  type: ADD_FRIEND,
-  friend,
-})
-
-const deleteFriend = (friendId) => ({
-  type: DELETE_FRIEND,
-  friendId,
-})
+import {
+  getFriends,
+  addFriend,
+  addFriendError,
+  addFriendSuccess,
+  deleteFriend,
+} from './friendTypes'
 
 /* INITIAL STATE */
 const initialState = []
@@ -40,6 +26,7 @@ export const _loadFriends = (userId) => async (dispatch) => {
 
 export const _addFriend = (userId, email) => async (dispatch) => {
   try {
+    // console.log('email ', email)
     const {data} = await axios.post(`/api/friends/${userId}`, {email})
     dispatch(addFriend(data))
   } catch (error) {

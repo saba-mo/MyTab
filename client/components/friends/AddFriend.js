@@ -21,7 +21,6 @@ class AddFriend extends React.Component {
     event.preventDefault()
     try {
       this.props.addFriend(this.props.user.id, this.state.email)
-      //need to add a failure or success message here
       this.setState(defaultState)
     } catch (error) {
       console.log('Hmm, having a hard time with this.', error)
