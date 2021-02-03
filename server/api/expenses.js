@@ -10,14 +10,9 @@ router.get('/:userId', async (req, res, next) => {
     const thisUser = await User.findByPk(id)
     if (!thisUser) return res.sendStatus(404)
 
-    const expenses = await thisUser.getExpenses({
+    let expenses = await thisUser.getExpenses({
       attributes: ['name', 'totalCost', 'groupId'],
     })
-
-    // // trying to add group name to each expense object
-    // expenses.forEach(async function (expense) {
-    //   expense.groupName = await Group.findByPk(expense.groupId)
-    // })
 
     res.json(expenses)
   } catch (err) {
@@ -25,7 +20,7 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
-// GET individual expense
+// GET individual expense and show its group name
 router.get('/:userId/:expenseId', async (req, res, next) => {
   try {
     const expenseId = parseInt(req.params.expenseId)
@@ -33,6 +28,10 @@ router.get('/:userId/:expenseId', async (req, res, next) => {
 
     const thisExpense = await Expense.findByPk(expenseId, {
       attributes: ['id', 'name', 'totalCost', 'groupId'],
+      include: {
+        model: Group,
+        attributes: ['title'],
+      },
     })
     if (!thisExpense) return res.sendStatus(404)
 
