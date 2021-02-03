@@ -5,13 +5,15 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user/user'
 import friends from './friends/friends'
 import singleFriend from './friends/singleFriend'
+import groups from './groups/groups'
+import singleGroup from './groups/SingleGroup'
 import expenses from './expenses/expenses'
 import singleExpense from './expenses/singleExpense'
-import groups from './groups'
 
 const reducer = combineReducers({
   user: user,
   groups: groups,
+  singleGroup: singleGroup,
   friends: friends,
   singleFriend: singleFriend,
   expenses: expenses,
@@ -26,5 +28,7 @@ export default store
 export * from './user/user'
 export * from './friends/friends'
 export * from './friends/singleFriend'
+export * from './groups/groups'
+export * from './groups/SingleGroup'
 export * from './expenses/expenses'
 export * from './expenses/singleExpense'

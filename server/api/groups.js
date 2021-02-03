@@ -24,6 +24,15 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
+router.get('/singleGroup/:groupId', async (req, res, next) => {
+  try {
+    const group = await Group.findByPk(req.params.groupId)
+    res.json(group)
+  } catch (error) {
+    next(error)
+  }
+})
+
 // router.post('/', (req, res, next) => {
 //   try {
 //     Robot.create(req.body)
