@@ -25,14 +25,14 @@ const UserHome = (props) => {
         {/* <Groups /> */}
       </div>
       <div className="wrapper">
-        <img
-          className="groupImg"
-          src="images/friendsImage.png"
-          alt="Second slide"
-          height="400px"
-          width="407.406px"
-        />
         <Link src="images/friendsImage.png" to="/friends">
+          <img
+            className="groupImg"
+            src="images/friendsImage.png"
+            alt="Second slide"
+            height="400px"
+            width="407.406px"
+          />
           View Friends
         </Link>
       </div>
