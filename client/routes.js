@@ -2,7 +2,14 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, UserHome, AllFriends, Friend} from './components'
+import {
+  Login,
+  Signup,
+  UserHome,
+  AllFriends,
+  Friend,
+  AddFriend,
+} from './components'
 import {me} from './store'
 import Groups from './components/group/Groups'
 
@@ -27,6 +34,7 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
             <Route path="/friends" component={AllFriends} />
+            <Route path="/friend/add" component={AddFriend} />
             <Route path="/friend/:friendId" component={Friend} />
             <Route exact path="/groups/:userId" component={Groups} />
           </Switch>
