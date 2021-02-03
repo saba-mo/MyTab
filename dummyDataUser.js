@@ -26,7 +26,7 @@ const userData = [
     },
     {
       firstName: 'Sal',
-      latName: 'Tamas',
+      lastName: 'Tamas',
       email: 'stamas4@goo.gl',
       password: 'ATHiUsPn',
     },
