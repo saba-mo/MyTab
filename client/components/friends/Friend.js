@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_loadAFriend} from '../../store/friends/friends'
+import {_loadAFriend} from '../../store/friends/singleFriend'
 
 class Friend extends React.Component {
   constructor() {
@@ -10,9 +10,9 @@ class Friend extends React.Component {
   componentDidMount() {
     this.props.loadFriend(this.props.user.id, this.props.match.params.friendId)
   }
+
   render() {
-    const friend = this.props.location.state.friend
-    console.log(this.props)
+    const {friend} = this.props
     return (
       <div className="friend-individual">
         <h4>
@@ -27,6 +27,7 @@ class Friend extends React.Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    friend: state.singleFriend,
   }
 }
 

@@ -37,14 +37,7 @@ export class AllFriends extends React.Component {
             {friendList.map((friendItem) => {
               return (
                 <div key={`friend-${friendItem.Friends.friendId}`}>
-                  <Link
-                    to={{
-                      pathname: `/friend/${friendItem.Friends.friendId}`,
-                      state: {
-                        friend: friendItem,
-                      },
-                    }}
-                  >
+                  <Link to={`/friend/${friendItem.Friends.friendId}`}>
                     {friendItem.firstName} {friendItem.lastName}{' '}
                     {friendItem.email}
                   </Link>
