@@ -65,11 +65,22 @@ router.get('/:userId/:friendId', async (req, res, next) => {
 })
 
 // DELETE a friend
-// router.delete('/:userId/:friendId', async (req, res, next) => {
-//   try {
-//   } catch (err) {
-//     next(err)
-//   }
-// })
+router.delete('/:userId/:friendId', async (req, res, next) => {
+  try {
+    const friendId = parseInt(req.params.friendId)
+    if (isNaN(friendId)) return res.sendStatus(404)
+
+    const id = parseInt(req.params.userId)
+    if (isNaN(id)) return res.sendStatus(404)
+
+    const thisUser = await User.findByPk(id)
+    if (!thisUser) return res.sendStatus(404)
+
+    thisUser.removeFriend(friendId)
+    res.sendStatus(204)
+  } catch (err) {
+    next(err)
+  }
+})
 
 module.exports = router
