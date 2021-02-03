@@ -8,13 +8,11 @@ class Friend extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadFriend(
-      this.props.user.id,
-      this.props.location.state.friend.Friends.friendId
-    )
+    this.props.loadFriend(this.props.user.id, this.props.match.params.friendId)
   }
   render() {
     const friend = this.props.location.state.friend
+    console.log(this.props)
     return (
       <div className="friend-individual">
         <h4>

@@ -24,6 +24,8 @@ const initialState = []
 export const _loadAFriend = (userId, friendId) => async (dispatch) => {
   try {
     const {data} = await axios.get(`/api/friends/${userId}/${friendId}`)
+    data.id = friendId
+    console.log('data: ', data)
     dispatch(getAFriend(data))
   } catch (error) {
     console.log('Cannot find your friend because: ', error)
@@ -48,8 +50,7 @@ const friendsReducer = (friends = initialState, action) => {
     case GET_A_FRIEND:
       friends = friends.filter(
         (friend) =>
-          parseInt(friend.Friends.friendId) !==
-          parseInt(action.friend.Friends.friendId)
+          parseInt(friend.Friends.friendId) !== parseInt(action.friend.id)
       )
       return friends.concat([action.friend])
     case GET_FRIENDS:

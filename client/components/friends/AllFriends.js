@@ -39,7 +39,7 @@ export class AllFriends extends React.Component {
                 <div key={`friend-${friendItem.Friends.friendId}`}>
                   <Link
                     to={{
-                      pathname: '/friend',
+                      pathname: `/friend/${friendItem.Friends.friendId}`,
                       state: {
                         friend: friendItem,
                       },
