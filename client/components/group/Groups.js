@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {_getGroups} from '../../store/groups/groups'
 import {Link} from 'react-router-dom'
+import CreateGroupForm from './CreateGroupForm'
 
 export class Groups extends React.Component {
   componentDidMount() {
@@ -12,7 +13,7 @@ export class Groups extends React.Component {
     if (this.props.groups.length > 0) {
       return (
         <div>
-          {/* <RobotForm /> */}
+          <CreateGroupForm />
           {this.props.groups.map((group) => {
             return (
               <div key={group.id}>
@@ -31,7 +32,7 @@ export class Groups extends React.Component {
       return (
         <div>
           <p>No groups, want to add one?</p>
-          {/* <RobotForm /> */}
+          <CreateGroupForm />
         </div>
       )
     }
