@@ -22,7 +22,7 @@ export class SingleGroup extends React.Component {
               {' '}
               Members
               <Link
-                to={`/groups/singleGroup/${this.props.match.params.groupId}`}
+                to={`/groups/singleGroup/${this.props.match.params.groupId}/expenses`}
               >
                 Expenses
               </Link>

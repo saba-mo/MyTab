@@ -3,13 +3,13 @@ import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {_loadGroupExpenses} from '../../store/expenses/expenses'
 
-export class AllExpenses extends React.Component {
+export class GroupExpenses extends React.Component {
   constructor() {
     super()
   }
 
   componentDidMount() {
-    this.props.loadGroupExpenses(this.props.user.id)
+    this.props.loadGroupExpenses(this.props.match.params.groupId)
   }
 
   noExpenses = (expenseList) => {
@@ -19,22 +19,20 @@ export class AllExpenses extends React.Component {
   }
 
   render() {
-    const expenseList = this.props.expenses
+    const {groupExpenses} = this.props
+
     return (
       <div>
         <main>
-          <h2>My Expenses on MyTab</h2>
+          <h2>Group's Expenses</h2>
         </main>
         <div id="full-expense-list">
-          {this.noExpenses(expenseList)}
+          {this.noExpenses(groupExpenses)}
           <ul>
-            {expenseList.map((expense) => {
+            {groupExpenses.map((expense) => {
               return (
-                <div key={`expense-${expense.user_expense.expense_Id}`}>
-                  <Link to={`/expenses/${expense.user_expense.expense_Id}`}>
-                    {expense.name}
-                  </Link>
-                  ${expense.totalCost}
+                <div key={`expense-${expense.id}`}>
+                  {expense.name}${expense.totalCost}
                 </div>
               )
             })}
@@ -56,4 +54,4 @@ const mapDispatchToProps = (dispatch) => ({
   loadGroupExpenses: (userId) => dispatch(_loadGroupExpenses(userId)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllExpenses)
+export default connect(mapStateToProps, mapDispatchToProps)(GroupExpenses)

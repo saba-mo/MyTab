@@ -7,9 +7,11 @@ const getAnExpense = (expense) => ({
   expense,
 })
 
-export const _loadAnExpense = (userId, expenseId) => async (dispatch) => {
+export const _loadAnExpense = (groupId, expenseId) => async (dispatch) => {
   try {
-    const {data} = await axios.get(`/api/expenses/${userId}/${expenseId}`)
+    const {data} = await axios.get(
+      `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`
+    )
     dispatch(getAnExpense(data))
   } catch (error) {
     console.log('Cannot find your expense because: ', error)

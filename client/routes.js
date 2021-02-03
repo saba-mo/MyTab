@@ -9,7 +9,6 @@ import {
   AllFriends,
   Friend,
   GroupExpenses,
-  SingleExpense,
   AddFriend,
 } from './components'
 import {me} from './store'
@@ -47,13 +46,8 @@ class Routes extends Component {
             />
             <Route
               exact
-              path="/groups.singleGroup/:groupId/expenses"
+              path="/groups/singleGroup/:groupId/expenses"
               component={GroupExpenses}
-            />
-            <Route
-              exact
-              path="/expenses/:expenseId"
-              component={SingleExpense}
             />
           </Switch>
         )}
