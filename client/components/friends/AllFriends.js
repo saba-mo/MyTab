@@ -31,8 +31,19 @@ export class AllFriends extends React.Component {
         <main>
           <h2>My Friends on MyTab</h2>
         </main>
+        {this.noFriends(friendList)}
+        <div id="add-friend">
+          <Link to="/friend/add">
+            <img
+              className="groupImg"
+              src="images/friendAdd.png"
+              alt="Second slide"
+              height="200px"
+              width="200px"
+            />
+          </Link>
+        </div>
         <div id="full-friend-list">
-          {this.noFriends(friendList)}
           <ul>
             {friendList.map((friendItem) => {
               return (
