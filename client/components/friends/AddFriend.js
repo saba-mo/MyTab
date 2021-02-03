@@ -1,42 +1,60 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
+import {connect} from 'react-redux'
+import {_addFriend} from '../../store/'
 
-const required = (value) => (value ? undefined : 'Required')
-
-const display = ({input, label, type, meta: {touched, error, warning}}) => (
-  <div>
-    <div>{label}</div>
-    <input {...input} type={type} />
-    {touched &&
-      ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-  </div>
-)
-
-let AddFriend = (props) => {
-  const {handleSubmit, pristine, submitting, reset} = props
-  return (
-    <form id="addFriend-form" onSubmit={handleSubmit}>
-      <div>
-        <Field
-          name="email"
-          type="text"
-          component={display}
-          validate={[required]}
-        />
-      </div>
-      <p />
-      <div>
-        <button type="submit" disabled={pristine || submitting}>
-          Submit
-        </button>
-        <button type="button" disabled={pristine || submitting} onClick={reset}>
-          Clear
-        </button>
-      </div>
-    </form>
-  )
+const defaultState = {
+  email: '',
 }
 
-export default reduxForm({
-  form: 'AddingFriend',
-})(AddFriend)
+class AddFriend extends React.Component {
+  constructor() {
+    super()
+    this.state = defaultState
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value})
+  }
+  handleSubmit(event) {
+    event.preventDefault()
+    try {
+      this.props.addFriend(this.state.userId, this.state.email)
+      this.setState(defaultState)
+    } catch (error) {
+      console.log('Hmm, having a hard time with this.', error)
+    }
+  }
+
+  render() {
+    const {userId, email} = this.state
+    console.log('state', this.state)
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <div>
+            <label htmlFor="email">
+              <small>What is your friend's email address?</small>
+            </label>
+            <input
+              name="email"
+              type="text"
+              value={email}
+              onChange={this.handleChange}
+            />
+          </div>
+          <div>
+            <button type="submit">Add Friend</button>
+          </div>
+        </form>
+      </div>
+    )
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  addFriend: (userId, email) => dispatch(_addFriend(userId, email)),
+})
+
+export default connect(null, mapDispatchToProps)(AddFriend)
