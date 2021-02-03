@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {_loadExpenses} from '../../store/expenses/expenses'
+import {_loadGroupExpenses} from '../../store/expenses/expenses'
 
 export class AllExpenses extends React.Component {
   constructor() {
@@ -9,7 +9,7 @@ export class AllExpenses extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadExpenses(this.props.user.id)
+    this.props.loadGroupExpenses(this.props.user.id)
   }
 
   noExpenses = (expenseList) => {
@@ -47,13 +47,13 @@ export class AllExpenses extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    expenses: state.expenses,
+    groupExpenses: state.groupExpenses,
     user: state.user,
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  loadExpenses: (userId) => dispatch(_loadExpenses(userId)),
+  loadGroupExpenses: (userId) => dispatch(_loadGroupExpenses(userId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllExpenses)

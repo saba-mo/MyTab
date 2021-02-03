@@ -8,8 +8,8 @@ import {
   UserHome,
   AllFriends,
   Friend,
-  AllExpenses,
-  Expense,
+  GroupExpenses,
+  SingleExpense,
   AddFriend,
 } from './components'
 import {me} from './store'
@@ -45,8 +45,16 @@ class Routes extends Component {
               path="/groups/singleGroup/:groupId"
               component={SingleGroups}
             />
-            <Route exact path="/expenses" component={AllExpenses} />
-            <Route exact path="/expenses/:expenseId" component={Expense} />
+            <Route
+              exact
+              path="/groups.singleGroup/:groupId/expenses"
+              component={GroupExpenses}
+            />
+            <Route
+              exact
+              path="/expenses/:expenseId"
+              component={SingleExpense}
+            />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

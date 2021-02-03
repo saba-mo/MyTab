@@ -55,4 +55,23 @@ router.get('/singleGroup/:groupId', async (req, res, next) => {
 //   }
 // })
 
+// GET all of group's expenses
+router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
+  try {
+    const groupId = parseInt(req.params.groupId)
+    if (isNaN(groupId)) return res.sendStatus(404)
+
+    const thisGroup = await Group.findByPk(groupId)
+    if (!thisGroup) res.sendStatus(404)
+
+    const groupExpenses = await thisGroup.getExpenses({
+      attributes: ['id', 'name', 'totalCost', 'groupId'],
+    })
+
+    res.json(groupExpenses)
+  } catch (err) {
+    next(err)
+  }
+})
+
 module.exports = router

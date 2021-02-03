@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import {_getSingleGroup} from '../../store/groups/singleGroup'
 
 export class SingleGroup extends React.Component {
@@ -17,6 +18,16 @@ export class SingleGroup extends React.Component {
         <main>
           <div>
             {this.props.singleGroup.title}
+            <nav>
+              {' '}
+              Members
+              <Link
+                to={`/groups/singleGroup/${this.props.match.params.groupId}`}
+              >
+                Expenses
+              </Link>
+              Balances
+            </nav>
             {/* <img className = "main-image" src={robot.imageUrl} />
             <p> name: {robot.name}</p>
             <p> fuelType: {robot.fuelType}</p>

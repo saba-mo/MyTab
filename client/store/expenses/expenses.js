@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 /* ACTION TYPES */
-const GET_EXPENSES = 'GET_EXPENSES'
+const GET_GROUP_EXPENSES = 'GET_GROUP_EXPENSES'
 
 /* ACTION CREATORS */
-const getExpenses = (expenses) => ({
-  type: GET_EXPENSES,
+const getGroupExpenses = (expenses) => ({
+  type: GET_GROUP_EXPENSES,
   expenses,
 })
 
@@ -13,22 +13,24 @@ const getExpenses = (expenses) => ({
 const initialState = []
 
 /* THUNK CREATORS */
-export const _loadExpenses = (userId) => async (dispatch) => {
+export const _loadGroupExpenses = (groupId) => async (dispatch) => {
   try {
-    const {data} = await axios.get(`/api/expenses/${userId}`)
-    dispatch(getExpenses(data))
+    const {data} = await axios.get(
+      `/api/groups/singleGroup/${groupId}/expenses`
+    )
+    dispatch(getGroupExpenses(data))
   } catch (error) {
     console.log(
-      'All your expenses should be here, but they are not because: ',
+      "All the group's expenses should be here, but they are not because: ",
       error
     )
   }
 }
 
 /* REDUCER */
-const expensesReducer = (state = initialState, action) => {
+const groupExpensesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_EXPENSES:
+    case GET_GROUP_EXPENSES:
       return action.expenses
     default:
       return state
@@ -36,4 +38,4 @@ const expensesReducer = (state = initialState, action) => {
 }
 
 /* EXPORT */
-export default expensesReducer
+export default groupExpensesReducer
