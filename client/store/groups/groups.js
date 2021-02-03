@@ -8,14 +8,6 @@ export const setGroups = (groups) => ({
   type: GET_GROUPS,
   groups,
 })
-// export const submitRobot = (robot) => ({
-//   type: SUBMIT_ROBOT,
-//   robot
-// });
-// export const deleteRobot = (robot) => ({
-//   type: DELETE_ROBOT,
-//   robot
-// });
 
 export const _getGroups = (userId) => async (dispatch) => {
   try {
@@ -26,6 +18,15 @@ export const _getGroups = (userId) => async (dispatch) => {
     console.log("can't get groups!", err)
   }
 }
+
+// export const submitRobot = (robot) => ({
+//   type: SUBMIT_ROBOT,
+//   robot
+// });
+// export const deleteRobot = (robot) => ({
+//   type: DELETE_ROBOT,
+//   robot
+// });
 
 // export const addRobot = (newRobot) => async (dispatch) => {
 //   try {
@@ -50,10 +51,7 @@ const initialState = []
 const groupsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_GROUPS:
-      console.log(action)
       return action.groups
-    // case SUBMIT_ROBOT:
-    //   return [...state, action.robot]
     // case DELETE_ROBOT:
     //   return state.filter((robot) => robot.id !== action.robot.id);
     default:
