@@ -4,6 +4,7 @@ import history from '../../history'
 /* ACTION TYPES */
 const GET_FRIENDS = 'GET_FRIENDS'
 const ADD_FRIEND = 'ADD_FRIEND'
+const DELETE_FRIEND = 'DELETE_FRIEND'
 
 /* ACTION CREATORS */
 const getFriends = (friends) => ({
@@ -14,6 +15,11 @@ const getFriends = (friends) => ({
 const addFriend = (friend) => ({
   type: ADD_FRIEND,
   friend,
+})
+
+const deleteFriend = (friendId) => ({
+  type: DELETE_FRIEND,
+  friendId,
 })
 
 /* INITIAL STATE */
@@ -44,6 +50,18 @@ export const _addFriend = (userId, email) => async (dispatch) => {
   }
 }
 
+export const _deleteFriend = (userId, friendId) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/friends/${userId}/${friendId}`)
+    dispatch(deleteFriend(friendId))
+  } catch (error) {
+    console.log(
+      'Your friend should have been deleted, but they are not because: ',
+      error
+    )
+  }
+}
+
 /* REDUCER */
 const friendsReducer = (friends = initialState, action) => {
   switch (action.type) {
@@ -51,6 +69,13 @@ const friendsReducer = (friends = initialState, action) => {
       return action.friends
     case ADD_FRIEND:
       return action.friend
+    case DELETE_FRIEND:
+      return [
+        ...friends.filter(
+          (friend) =>
+            parseInt(friend.Friends.friendId) !== parseInt(action.friendId)
+        ),
+      ]
     default:
       return friends
   }
