@@ -20,7 +20,8 @@ class AddFriend extends React.Component {
   handleSubmit(event) {
     event.preventDefault()
     try {
-      this.props.addFriend(this.state.userId, this.state.email)
+      this.props.addFriend(this.props.user.id, this.state.email)
+      //need to add a failure or success message here
       this.setState(defaultState)
     } catch (error) {
       console.log('Hmm, having a hard time with this.', error)
@@ -28,8 +29,13 @@ class AddFriend extends React.Component {
   }
 
   render() {
-    const {userId, email} = this.state
-    console.log('state', this.state)
+    const {email} = this.state
+    /*
+    *
+    delete this console.log once complete
+    *
+    */
+    console.log('state in add', this.state)
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -53,8 +59,14 @@ class AddFriend extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  }
+}
+
 const mapDispatchToProps = (dispatch) => ({
   addFriend: (userId, email) => dispatch(_addFriend(userId, email)),
 })
 
-export default connect(null, mapDispatchToProps)(AddFriend)
+export default connect(mapStateToProps, mapDispatchToProps)(AddFriend)
