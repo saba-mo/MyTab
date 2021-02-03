@@ -31,8 +31,10 @@ export class AllExpenses extends React.Component {
             {expenseList.map((expense) => {
               return (
                 <div key={`expense-${expense.user_expense.expense_Id}`}>
-                  {/* <Link to={`/expenses/${expense.user_exepnse.expense_Id}`}> */}
-                  {expense.name} ${expense.totalCost} {/* </Link> */}
+                  <Link to={`/expenses/${expense.user_expense.expense_Id}`}>
+                    {expense.name}
+                  </Link>
+                  ${expense.totalCost}
                 </div>
               )
             })}
