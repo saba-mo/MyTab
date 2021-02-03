@@ -29,8 +29,9 @@ router.get('route to indivdiual group', async (req, res, next) => {
 
     const thisGroup = await Group.findByPk(groupId)
 
+    // filter attributes
     const groupExpenses = await thisGroup.getExpenses()
-
+    // will it send back an empty array if there are no expenses?
     res.json(groupExpenses)
   } catch (err) {
     next(err)
