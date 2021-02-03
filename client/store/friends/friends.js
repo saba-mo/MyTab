@@ -1,7 +1,6 @@
 import axios from 'axios'
 import history from '../../history'
 import {
-  ADD_FRIEND_REQUEST,
   ADD_FRIEND_ERROR,
   ADD_FRIEND_SUCCESS,
   DELETE_FRIEND,
@@ -11,16 +10,12 @@ import {
 } from './friendTypes'
 import {
   addFriendError,
-  addFriendRequest,
   addFriendSuccess,
   deleteFriend,
   getFriends,
   invalidEmail,
   inviteFriend,
 } from './friendActions'
-
-/* INITIAL STATE */
-const initialState = []
 
 /* THUNK CREATORS */
 export const _loadFriends = (userId) => async (dispatch) => {
@@ -38,7 +33,7 @@ export const _loadFriends = (userId) => async (dispatch) => {
 export const _addFriend = (userId, email) => async (dispatch) => {
   try {
     if (!email.includes('@')) {
-      dispatch(invalidEmail({email}))
+      dispatch(invalidEmail(email))
     } else {
       await axios
         .post(`/api/friends/${userId}`, {email})
@@ -48,6 +43,9 @@ export const _addFriend = (userId, email) => async (dispatch) => {
         .catch((error) => {
           switch (error.response.status) {
             case 404:
+              // console.log('{email}', {email})
+              // console.log('email', email)
+
               dispatch(inviteFriend({email}))
               break
             default:
@@ -76,6 +74,9 @@ export const _deleteFriend = (userId, friendId) => async (dispatch) => {
     )
   }
 }
+/* INITIAL STATE */
+const initialState = []
+const initErrorState = {error: null}
 
 /* REDUCER */
 const friendsReducer = (friends = initialState, action) => {
@@ -95,6 +96,30 @@ const friendsReducer = (friends = initialState, action) => {
       return friends
   }
 }
+
+export function friendsErrorReducer(state = initErrorState, action) {
+  const {error} = action
+
+  if (error) {
+    return {
+      error: error,
+    }
+  }
+
+  return state
+}
+
+// export const friendsErrorReducer = (state = initErrorState, action) => {
+//   const {error} = action
+//   switch (action.type) {
+//     case INVITE_FRIEND:
+//       return error: error
+//     case INVALID_EMAIL:
+//       return error: error
+//     default:
+//       return state
+//   }
+// }
 
 /* EXPORT */
 export default friendsReducer
