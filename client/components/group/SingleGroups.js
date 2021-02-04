@@ -9,7 +9,7 @@ export class SingleGroup extends React.Component {
     this.state = {tabName: 'expenses'}
 
     this.tabChange = this.tabChange.bind(this)
-    this.renderTabe = this.renderTab.bind(this)
+    this.renderTab = this.renderTab.bind(this)
   }
 
   tabChange(tabName) {
