@@ -2,6 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {_loadGroupExpenses} from '../../store/expenses/expenses'
+import {CreateGroupExpenseForm} from '../index'
 
 export class GroupExpenses extends React.Component {
   constructor() {
@@ -23,6 +24,7 @@ export class GroupExpenses extends React.Component {
 
     return (
       <div>
+        <CreateGroupExpenseForm />
         <div id="full-expense-list">
           {this.noExpenses(groupExpenses)}
           <ul>
@@ -39,7 +41,6 @@ export class GroupExpenses extends React.Component {
               )
             })}
           </ul>
-          <button type="submit">Add an Expense</button>
         </div>
       </div>
     )
