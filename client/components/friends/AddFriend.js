@@ -21,12 +21,8 @@ class AddFriend extends React.Component {
     event.preventDefault()
     try {
       await this.props.addFriend(this.props.user.id, this.state.email)
-      // const msg = this.state.friendsErrorReducer.error
-      // if (msg) window.alert(msg)
-      // // if (this.state. redux store has error message then alert with error, otherwise continue)
       this.setState(defaultState)
     } catch (error) {
-      // window.alert(`nope`)
       console.log('Hmm, having a hard time with this.', error)
     }
   }

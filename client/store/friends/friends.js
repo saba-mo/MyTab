@@ -1,13 +1,6 @@
 import axios from 'axios'
 import history from '../../history'
-import {
-  ADD_FRIEND_ERROR,
-  ADD_FRIEND_SUCCESS,
-  DELETE_FRIEND,
-  GET_FRIENDS,
-  INVITE_FRIEND,
-  INVALID_EMAIL,
-} from './friendTypes'
+import {ADD_FRIEND_SUCCESS, DELETE_FRIEND, GET_FRIENDS} from './friendTypes'
 import {
   addFriendError,
   addFriendSuccess,
@@ -46,8 +39,7 @@ export const _addFriend = (userId, email) => async (dispatch) => {
               dispatch(inviteFriend({email}))
               break
             default:
-              console.log("Shit's busted, yo", error)
-              // dispatch(systemError(error))
+              console.log('Something is busted in the _addFriend thunk', error)
               break
           }
         })
@@ -71,7 +63,8 @@ export const _deleteFriend = (userId, friendId) => async (dispatch) => {
     )
   }
 }
-/* INITIAL STATE */
+
+/* INITIAL STATES FOR REDUCERS */
 const initialState = []
 const initErrorState = {error: null}
 
@@ -104,18 +97,6 @@ export function friendsErrorReducer(state = initErrorState, action) {
 
   return state
 }
-
-// export const friendsErrorReducer = (state = initErrorState, action) => {
-//   const {error} = action
-//   switch (action.type) {
-//     case INVITE_FRIEND:
-//       return error: error
-//     case INVALID_EMAIL:
-//       return error: error
-//     default:
-//       return state
-//   }
-// }
 
 /* EXPORT */
 export default friendsReducer

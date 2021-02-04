@@ -13,7 +13,6 @@ router.get('/:userId', async (req, res, next) => {
     const friends = await thisUser.getFriends({
       attributes: ['firstName', 'lastName', 'email', 'id'],
     })
-    console.log('friends api: ', friends)
 
     res.json(friends)
   } catch (err) {

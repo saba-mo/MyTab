@@ -1,8 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {_loadFriends} from '../../store/friends/friends'
-// , _deleteFriend
+import {_loadFriends, _deleteFriend} from '../../store'
 
 export class AllFriends extends React.Component {
   constructor(props) {
