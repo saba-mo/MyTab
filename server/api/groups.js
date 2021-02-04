@@ -75,6 +75,25 @@ router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
   }
 })
 
+// POST a new group expense
+router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
+  try {
+    console.log(req.body)
+    const expenseCost = parseInt(req.body.totalCost)
+    const expenseName = req.body.name
+    const newExpense = await Expense.create({
+      name: expenseName,
+      totalCost: expenseCost,
+    })
+    const thisGroup = await Group.findByPk(req.params.groupId)
+    await thisGroup.addExpense(newExpense.id)
+    // will want to assign expense to user(s) once we have assign to friend built in
+    res.json(newExpense)
+  } catch (err) {
+    next(err)
+  }
+})
+
 // GET single group expense
 router.get(
   '/singleGroup/:groupId/expenses/:expenseId',
