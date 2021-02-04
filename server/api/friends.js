@@ -11,7 +11,7 @@ router.get('/:userId', async (req, res, next) => {
     if (!thisUser) return res.sendStatus(404)
 
     const friends = await thisUser.getFriends({
-      attributes: ['firstName', 'lastName', 'email'],
+      attributes: ['firstName', 'lastName', 'email', 'id'],
     })
 
     res.json(friends)
