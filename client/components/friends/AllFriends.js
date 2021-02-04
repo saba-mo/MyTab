@@ -13,8 +13,11 @@ export class AllFriends extends React.Component {
     this.props.loadFriends(this.props.user.id)
   }
 
-  handleDelete = (friendToDelete) => {
-    this.props.deleteFriend(friendToDelete)
+  handleDelete = (userId, friendToDelete) => {
+    // console.log('user', userId)
+    // console.log('user', friendToDelete)
+
+    this.props.deleteFriend(userId, friendToDelete)
   }
 
   noFriends = (friendList) => {
@@ -25,6 +28,7 @@ export class AllFriends extends React.Component {
 
   render() {
     const friendList = this.props.friends
+    const user = this.props.user.id
     return (
       <div>
         <main>
@@ -48,9 +52,14 @@ export class AllFriends extends React.Component {
               return (
                 <div key={`friend-${friendItem.id}`}>
                   <Link to={`/friend/${friendItem.id}`}>
-                    {friendItem.firstName} {friendItem.lastName}{' '}
-                    {friendItem.email}
+                    {friendItem.firstName} {friendItem.lastName}
                   </Link>
+                  <button
+                    type="button"
+                    onClick={() => this.handleDelete(user, friendItem.id)}
+                  >
+                    Remove Friend Connection
+                  </button>
                 </div>
               )
             })}
@@ -70,7 +79,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   loadFriends: (userId) => dispatch(_loadFriends(userId)),
-  deleteFriend: (friend) => dispatch(_deleteFriend(friend)),
+  deleteFriend: (userId, friend) => dispatch(_deleteFriend(userId, friend)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllFriends)
