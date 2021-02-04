@@ -36,6 +36,7 @@ router.get('/singleGroup/:groupId', async (req, res, next) => {
 router.post('/', async function (req, res, next) {
   try {
     const newGroup = await Group.create(req.body)
+    await newGroup.addUsers([req.user])
     res.send(newGroup)
   } catch (err) {
     next(err)
