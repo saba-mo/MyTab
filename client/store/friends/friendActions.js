@@ -25,11 +25,12 @@ export const addFriendError = (error) => ({
 
 export const inviteFriend = (email) => ({
   type: INVITE_FRIEND,
+  // make alert to send this friend an invite
 })
 
 export const invalidEmail = (email) => ({
   type: INVALID_EMAIL,
-  // alert(`send this friend an invite`)
+  // make alert to notify user this isn't valid email address
 })
 
 export const deleteFriend = (friendId) => ({

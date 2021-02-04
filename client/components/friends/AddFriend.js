@@ -29,12 +29,6 @@ class AddFriend extends React.Component {
 
   render() {
     const {email} = this.state
-    /*
-    *
-    delete this console.log once complete
-    *
-    */
-    console.log('state in add', this.state)
     return (
       <div>
         <form onSubmit={this.handleSubmit}>

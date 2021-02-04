@@ -6,7 +6,7 @@ import user from './user/user'
 import {default as friends, friendsErrorReducer} from './friends/friends'
 import singleFriend from './friends/singleFriend'
 import groups from './groups/groups'
-import singleGroup from './groups/SingleGroup'
+import singleGroup from './groups/singleGroup'
 
 const reducer = combineReducers({
   user: user,
@@ -26,4 +26,4 @@ export * from './user/user'
 export * from './friends/friends'
 export * from './friends/singleFriend'
 export * from './groups/groups'
-export * from './groups/SingleGroup'
+export * from './groups/singleGroup'

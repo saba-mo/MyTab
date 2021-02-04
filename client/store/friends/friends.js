@@ -43,9 +43,6 @@ export const _addFriend = (userId, email) => async (dispatch) => {
         .catch((error) => {
           switch (error.response.status) {
             case 404:
-              // console.log('{email}', {email})
-              // console.log('email', email)
-
               dispatch(inviteFriend({email}))
               break
             default:
@@ -84,7 +81,7 @@ const friendsReducer = (friends = initialState, action) => {
     case GET_FRIENDS:
       return action.friends
     case ADD_FRIEND_SUCCESS:
-      return action.friend
+      return [...friends, action.friend]
     case DELETE_FRIEND:
       return [
         ...friends.filter(
@@ -99,7 +96,6 @@ const friendsReducer = (friends = initialState, action) => {
 
 export function friendsErrorReducer(state = initErrorState, action) {
   const {error} = action
-
   if (error) {
     return {
       error: error,
