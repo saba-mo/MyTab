@@ -9,7 +9,7 @@ eager loading - includes
 curl -d "groupId=2&title="Kat"" -X POST http://localhost:8080/api/groups
 
 //update number of orderItems
-curl -d "quantity=8" -X PUT http://localhost:8080/api/order_items/8
+curl -d "title="manny"" -X PUT http://localhost:8080/api/groups/53
 //update active or inactive after checking out order
 curl -d "isActive= true" -X PUT http://localhost:8080/api/orders/2
 curl -d "isActive= false" -X PUT http://localhost:8080/api/orders/2
