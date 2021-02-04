@@ -1,11 +1,38 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_getSingleGroup} from '../../store/groups/singleGroup'
+import GroupExpenses from '../expenses/GroupExpenses'
 
 export class SingleGroup extends React.Component {
+  constructor() {
+    super()
+    this.state = {tabName: 'expenses'}
+
+    this.tabChange = this.tabChange.bind(this)
+    this.renderTab = this.renderTab.bind(this)
+  }
+
+  tabChange(tabName) {
+    this.setState({tabName})
+  }
+
+  renderTab() {
+    switch (this.state.tabName) {
+      // case 'members':
+      //   return <GroupMembers />
+      case 'expenses':
+        return <GroupExpenses groupId={this.props.match.params.groupId} />
+      // case 'balances':
+      //   return <GroupBalances />
+      default:
+        return this.state
+    }
+  }
+
   componentDidMount() {
     this.props.getSingleGroup(this.props.match.params.groupId)
   }
+
   render() {
     const singleGroup = this.props.singleGroup || {}
 
@@ -16,7 +43,33 @@ export class SingleGroup extends React.Component {
         {/* <Navigation pageName = "Single Robots" /> */}
         <main>
           <div>
-            {this.props.singleGroup.title}
+            <h3>{this.props.singleGroup.title}</h3>
+            <div>
+              <div className="tab_buttons_div">
+                <a
+                  className="grp_tab_btns"
+                  onClick={this.tabChange.bind(this, 'members')}
+                >
+                  {' '}
+                  Members |{' '}
+                </a>
+                <a
+                  className="grp_tab_btns"
+                  onClick={this.tabChange.bind(this, 'expenses')}
+                >
+                  {' '}
+                  Expenses |{' '}
+                </a>
+                <a
+                  className="grp_tab_btns"
+                  onClick={this.tabChange.bind(this, 'balances')}
+                >
+                  {' '}
+                  Balances{' '}
+                </a>
+              </div>
+              {this.renderTab()}
+            </div>
             {/* <img className = "main-image" src={robot.imageUrl} />
             <p> name: {robot.name}</p>
             <p> fuelType: {robot.fuelType}</p>
