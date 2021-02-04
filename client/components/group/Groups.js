@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_getGroups} from '../../store/groups/groups'
+import {_getGroups, _deleteGroup} from '../../store/groups/groups'
 import {Link} from 'react-router-dom'
 import CreateGroupForm from './CreateGroupForm'
 
@@ -20,6 +20,12 @@ export class Groups extends React.Component {
                 <Link to={`/groups/singleGroup/${group.id}`}>
                   <div>Group Name: {group.title}</div>
                 </Link>
+                <button
+                  type="button"
+                  onClick={() => this.props.deleteGroup(group.id)}
+                >
+                  X
+                </button>
                 {/* <img src={group.imageUrl} alt="Group Image" /> */}
                 {/* <Link to={`/groups/${group.id}`}>View Detail</Link> */}
                 {/* <button type="button" onClick={() => this.props.deleteGroup(group)}>X</button> */}
@@ -49,7 +55,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     getGroups: (userId) => dispatch(_getGroups(userId)),
-    // deleteGroup: (group) => dispatch(_deleteGroup(group)),
+    deleteGroup: (groupId) => dispatch(_deleteGroup(groupId)),
   }
 }
 
