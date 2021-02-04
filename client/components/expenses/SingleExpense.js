@@ -18,6 +18,8 @@ class SingleExpense extends React.Component {
 
   render() {
     const {expense} = this.props
+    // remove console log
+    console.log('single expense props: ', this.props)
     return (
       <div className="expense-individual">
         <div className="single-expense-navbar">
