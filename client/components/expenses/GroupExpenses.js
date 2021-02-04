@@ -20,7 +20,6 @@ export class GroupExpenses extends React.Component {
 
   render() {
     const {groupExpenses} = this.props
-    console.log('ge: ', groupExpenses)
 
     return (
       <div>

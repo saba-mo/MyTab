@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import {_loadAnExpense} from '../../store/expenses/singleExpense'
 
 class Expense extends React.Component {
@@ -18,6 +19,11 @@ class Expense extends React.Component {
     const {expense} = this.props
     return (
       <div className="expense-individual">
+        <div className="single-expense-navbar">
+          <Link to={`/groups/singleGroup/${expense.groupId}`}>
+            <h3>Back to Expenses </h3>
+          </Link>
+        </div>
         <h4>
           {expense.name} ${expense.totalCost}
         </h4>
