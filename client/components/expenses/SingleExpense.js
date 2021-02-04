@@ -1,8 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {_loadAnExpense} from '../../store/expenses/singleExpense'
-import {_deleteGroupExpense} from '../../store/expenses/expenses'
+// import {_loadAnExpense} from '../../store/expenses/singleExpense'
+// import {_deleteGroupExpense} from '../../store/expenses/expenses'
+import {_loadAnExpense, _deleteGroupExpense} from '../../store/'
 
 class SingleExpense extends React.Component {
   constructor() {
@@ -22,9 +23,9 @@ class SingleExpense extends React.Component {
     console.log('single expense props: ', this.props)
     return (
       <div className="expense-individual">
-        <div className="single-expense-navbar">
+        <div className="pages-view-navbar">
           <Link to={`/groups/singleGroup/${expense.groupId}`}>
-            <h3>Back to Expenses </h3>
+            <h3>Back to Group Expenses </h3>
           </Link>
         </div>
         <h4>
