@@ -9,7 +9,8 @@ export class GroupExpenses extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadGroupExpenses(this.props.match.params.groupId)
+    console.log(this.props)
+    this.props.loadGroupExpenses(this.props.groupId)
   }
 
   noExpenses = (expenseList) => {
@@ -23,20 +24,18 @@ export class GroupExpenses extends React.Component {
 
     return (
       <div>
-        <main>
-          <h2>Group's Expenses</h2>
-        </main>
         <div id="full-expense-list">
           {this.noExpenses(groupExpenses)}
           <ul>
             {groupExpenses.map((expense) => {
               return (
                 <div key={`expense-${expense.id}`}>
-                  {expense.name}${expense.totalCost}
+                  {expense.name} Paid by: (name to come) ${expense.totalCost}
                 </div>
               )
             })}
           </ul>
+          <button type="submit">Add an Expense</button>
         </div>
       </div>
     )
@@ -51,7 +50,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  loadGroupExpenses: (userId) => dispatch(_loadGroupExpenses(userId)),
+  loadGroupExpenses: (groupId) => dispatch(_loadGroupExpenses(groupId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupExpenses)

@@ -185,6 +185,11 @@ input:focus {
   color: #61a3ee;
 }
 
+.tab_buttons_div {
+  background-color: #61a3ee;
+  text-align: center;
+}
+
 footer {
   padding-top: 2rem;
   text-align: center;
