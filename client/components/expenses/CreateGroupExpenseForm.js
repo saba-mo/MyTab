@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-// import {_createGroup} from '../../store/groups/groups'
+import {_addGroupExpense} from '../../store/expenses/expenses'
 import {Link} from 'react-router-dom'
 
 export class CreateGroupExpenseForm extends React.Component {
@@ -8,7 +8,7 @@ export class CreateGroupExpenseForm extends React.Component {
     super()
     this.state = {
       name: '',
-      totalCost: '$',
+      totalCost: '',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -22,10 +22,10 @@ export class CreateGroupExpenseForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    // this.props.createExpense(this.state)
+    this.props.addGroupExpense(this.props.groupId, this.state)
     this.setState({
       name: '',
-      totalCost: '$',
+      totalCost: '',
     })
   }
 
@@ -53,16 +53,16 @@ export class CreateGroupExpenseForm extends React.Component {
 }
 
 // is this necessary?
-// const mapState = (state) => {
-//   return {
-//     groupExpenses: state.groupExpenses,
-//   }
-// }
-// const mapDispatch = (dispatch) => {
-//   return {
-//     createGroupExpense: (newExpense) =>
-//       dispatch(_createGroupExpense(newExpense)),
-//   }
-// }
-// export default connect(mapState, mapDispatch)(CreateGroupExpenseForm)
-export default CreateGroupExpenseForm
+const mapState = (state) => {
+  return {
+    groupExpenses: state.groupExpenses,
+  }
+}
+const mapDispatch = (dispatch) => {
+  return {
+    addGroupExpense: (groupId, newExpense) =>
+      dispatch(_addGroupExpense(groupId, newExpense)),
+  }
+}
+export default connect(mapState, mapDispatch)(CreateGroupExpenseForm)
+// export default CreateGroupExpenseForm

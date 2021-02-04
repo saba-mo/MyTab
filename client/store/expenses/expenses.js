@@ -36,7 +36,7 @@ export const _loadGroupExpenses = (groupId) => async (dispatch) => {
 export const _addGroupExpense = (groupId, expense) => async (dispatch) => {
   try {
     const {data} = await axios.post(
-      `/api/groups/singleGroup/${groupId}`,
+      `/api/groups/singleGroup/${groupId}/expenses`,
       expense
     )
     dispatch(addGroupExpense(data))

@@ -24,7 +24,7 @@ export class GroupExpenses extends React.Component {
 
     return (
       <div>
-        <CreateGroupExpenseForm />
+        <CreateGroupExpenseForm groupId={this.props.groupId} />
         <div id="full-expense-list">
           {this.noExpenses(groupExpenses)}
           <ul>
