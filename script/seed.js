@@ -31,7 +31,7 @@ async function seed() {
 // this function is first finding things already in the database, then associating them
 async function associations() {
   // gives an array of objects that are newly created users that meet the where condition
-  // added where condition that includes @ so currently it finds all the Users. We can change this at will
+  // this where condition includes @ so currently it finds all the Users. We can change this at will
   let usersToAssoc = await User.findAll({
     where: {
       email: {

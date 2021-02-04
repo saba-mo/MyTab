@@ -1,8 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {_loadFriends} from '../../store/friends/friends'
-// , _deleteFriend
+import {_loadFriends, _deleteFriend} from '../../store'
 
 export class AllFriends extends React.Component {
   constructor(props) {
@@ -47,8 +46,8 @@ export class AllFriends extends React.Component {
           <ul>
             {friendList.map((friendItem) => {
               return (
-                <div key={`friend-${friendItem.Friends.friendId}`}>
-                  <Link to={`/friend/${friendItem.Friends.friendId}`}>
+                <div key={`friend-${friendItem.id}`}>
+                  <Link to={`/friend/${friendItem.id}`}>
                     {friendItem.firstName} {friendItem.lastName}{' '}
                     {friendItem.email}
                   </Link>
