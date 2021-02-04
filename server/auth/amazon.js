@@ -33,20 +33,19 @@ if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET) {
       console.log('profile', profile)
       const amazonId = profile.id
       const email = profile.emails[0].value
-      console.log('email', email)
-      // const imgUrl = profile.photos.value
-      const name = profile.name
-      // const lastName = profile.name.familyName
-      const userId = profile.user_id
+      const name = profile.displayName
+      const firstName = name.split(' ')[0]
+      const lastName = name.split(' ')[1]
 
       User.findOrCreate({
         where: {amazonId},
-        defaults: {email, name, userId},
+        defaults: {email, firstName, lastName},
       })
         .then(([user]) => done(null, user))
         .catch(done)
     }
   )
+  //amazon
 
   passport.use(strategy)
 
