@@ -43,18 +43,18 @@ router.post('/', async function (req, res, next) {
   }
 })
 
-// router.delete('/:id', (req, res, next) => {
-//   try {
-//     Robot.destroy({
-//       where: {
-//         id: req.params.id
-//       }
-//     })
-//     res.status(204).end()
-//   } catch (err) {
-//     next(err)
-//   }
-// })
+router.delete('/:groupId', (req, res, next) => {
+  try {
+    Group.destroy({
+      where: {
+        id: req.params.groupId,
+      },
+    })
+    res.status(204).end()
+  } catch (err) {
+    next(err)
+  }
+})
 
 // GET all of group's expenses
 router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {

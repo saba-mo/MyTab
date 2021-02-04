@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const GET_GROUPS = 'GET_GROUPS'
 export const CREATE_GROUP = 'CREATE_GROUP'
-// export const DELETE_ROBOT = 'DELETE_ROBOT';
+export const DELETE_GROUP = 'DELETE_GROUP'
 
 export const setGroups = (groups) => ({
   type: GET_GROUPS,
@@ -12,6 +12,11 @@ export const setGroups = (groups) => ({
 export const createGroup = (group) => ({
   type: CREATE_GROUP,
   group,
+})
+
+export const deleteGroup = (groupId) => ({
+  type: DELETE_GROUP,
+  groupId,
 })
 
 export const _getGroups = (userId) => async (dispatch) => {
@@ -32,19 +37,14 @@ export const _createGroup = (newGroup) => async (dispatch) => {
   }
 }
 
-// export const deleteRobot = (robot) => ({
-//   type: DELETE_ROBOT,
-//   robot
-// });
-
-// export const removeRobot = (robot) => async (dispatch) => {
-//   try {
-//     await axios.delete(`/api/robots/${robot.id}`)
-//     dispatch(deleteRobot(robot))
-//   } catch (err) {
-//     console.log(err)
-//   }
-// };
+export const _deleteGroup = (groupId) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/groups/${groupId}`)
+    dispatch(deleteGroup(groupId))
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 const initialState = []
 
@@ -54,8 +54,8 @@ const groupsReducer = (state = initialState, action) => {
       return action.groups
     case CREATE_GROUP:
       return [...state, action.group]
-    // case DELETE_ROBOT:
-    //   return state.filter((robot) => robot.id !== action.robot.id);
+    case DELETE_GROUP:
+      return state.filter((group) => group.id !== action.groupId)
     default:
       return state
   }
