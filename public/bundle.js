@@ -351,7 +351,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var _store_expenses_singleExpense__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store/expenses/singleExpense */ "./client/store/expenses/singleExpense.js");
+/* harmony import */ var _store___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store/ */ "./client/store/index.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -398,10 +398,10 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "expense-individual"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "single-expense-navbar"
+        className: "pages-view-navbar"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
         to: "/groups/singleGroup/".concat(expense.groupId)
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Back to Expenses "))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, expense.name, " $", expense.totalCost), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Back to Group Expenses "))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, expense.name, " $", expense.totalCost), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit"
       }, "Settle"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit"
@@ -426,7 +426,7 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     loadAnExpense: function loadAnExpense(groupId, expenseId) {
-      return dispatch(Object(_store_expenses_singleExpense__WEBPACK_IMPORTED_MODULE_3__["_loadAnExpense"])(groupId, expenseId));
+      return dispatch(Object(_store___WEBPACK_IMPORTED_MODULE_3__["_loadAnExpense"])(groupId, expenseId));
     }
   };
 };
@@ -435,10 +435,10 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 /***/ }),
 
-/***/ "./client/components/friends/AddFriend.js":
-/*!************************************************!*\
-  !*** ./client/components/friends/AddFriend.js ***!
-  \************************************************/
+/***/ "./client/components/friends/AddFriendForm.js":
+/*!****************************************************!*\
+  !*** ./client/components/friends/AddFriendForm.js ***!
+  \****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -447,7 +447,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _store___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/ */ "./client/store/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store */ "./client/store/index.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -475,28 +475,27 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var defaultState = {
-  email: ''
-};
 
-var AddFriend =
+var AddFriendForm =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(AddFriend, _React$Component);
+  _inherits(AddFriendForm, _React$Component);
 
-  function AddFriend() {
+  function AddFriendForm() {
     var _this;
 
-    _classCallCheck(this, AddFriend);
+    _classCallCheck(this, AddFriendForm);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(AddFriend).call(this));
-    _this.state = defaultState;
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(AddFriendForm).call(this));
+    _this.state = {
+      email: ''
+    };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(AddFriend, [{
+  _createClass(AddFriendForm, [{
     key: "handleChange",
     value: function handleChange(event) {
       this.setState(_defineProperty({}, event.target.name, event.target.value));
@@ -517,7 +516,9 @@ function (_React$Component) {
                 return this.props.addFriend(this.props.user.id, this.state.email);
 
               case 4:
-                this.setState(defaultState);
+                this.setState({
+                  email: ''
+                });
                 _context.next = 10;
                 break;
 
@@ -548,9 +549,9 @@ function (_React$Component) {
         onSubmit: this.handleSubmit
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "email"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "What is your friend's email address?")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "Add your friends here by entering their email address")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "email",
-        type: "text",
+        type: "email",
         value: email,
         onChange: this.handleChange
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -559,7 +560,7 @@ function (_React$Component) {
     }
   }]);
 
-  return AddFriend;
+  return AddFriendForm;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -571,12 +572,12 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     addFriend: function addFriend(userId, email) {
-      return dispatch(Object(_store___WEBPACK_IMPORTED_MODULE_2__["_addFriend"])(userId, email));
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_addFriend"])(userId, email));
     }
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(AddFriend));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(AddFriendForm));
 
 /***/ }),
 
@@ -595,6 +596,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store */ "./client/store/index.js");
+/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components */ "./client/components/index.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -614,6 +616,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -658,16 +661,6 @@ function (_React$Component) {
       var friendList = this.props.friends;
       var user = this.props.user.id;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "My Friends on MyTab")), this.noFriends(friendList), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        id: "add-friend"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
-        to: "/friend/add"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        className: "groupImg",
-        src: "images/friendAdd.png",
-        alt: "Second slide",
-        height: "200px",
-        width: "200px"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "full-friend-list"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, friendList.map(function (friendItem) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -679,8 +672,10 @@ function (_React$Component) {
           onClick: function onClick() {
             return _this2.handleDelete(user, friendItem.id);
           }
-        }, "Remove Friend Connection"));
-      }))));
+        }, "Remove"));
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "add-friend"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components__WEBPACK_IMPORTED_MODULE_4__["AddFriendForm"], null)));
     }
   }]);
 
@@ -721,7 +716,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _store_friends_singleFriend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/friends/singleFriend */ "./client/store/friends/singleFriend.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _store___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store/ */ "./client/store/index.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -732,13 +728,16 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -750,9 +749,20 @@ function (_React$Component) {
   _inherits(Friend, _React$Component);
 
   function Friend() {
+    var _this;
+
     _classCallCheck(this, Friend);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Friend).call(this));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Friend).call(this));
+
+    _defineProperty(_assertThisInitialized(_this), "handleDelete", function (userId, friendToDelete) {
+      _this.props.deleteFriend(userId, friendToDelete);
+
+      window.location = '/friends';
+    });
+
+    _this.handleDelete = _this.handleDelete.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(Friend, [{
@@ -763,10 +773,23 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var friend = this.props.friend;
+      var user = this.props.user.id;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "friend-individual"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, friend.firstName, " ", friend.lastName), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, friend.email));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "pages-view-navbar"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+        to: "/friends"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Back to All Friends "))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, friend.firstName, " ", friend.lastName), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, friend.email), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        id: "remove-friend",
+        type: "button",
+        onClick: function onClick() {
+          return _this2.handleDelete(user, friend.id);
+        }
+      }, "Remove Friend Connection"));
     }
   }]);
 
@@ -783,7 +806,10 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     loadFriend: function loadFriend(userId, friendId) {
-      return dispatch(Object(_store_friends_singleFriend__WEBPACK_IMPORTED_MODULE_2__["_loadAFriend"])(userId, friendId));
+      return dispatch(Object(_store___WEBPACK_IMPORTED_MODULE_3__["_loadAFriend"])(userId, friendId));
+    },
+    deleteFriend: function deleteFriend(userId, friend) {
+      return dispatch(Object(_store___WEBPACK_IMPORTED_MODULE_3__["_deleteFriend"])(userId, friend));
     }
   };
 };
@@ -961,13 +987,20 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this = this;
+
       if (this.props.groups.length > 0) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CreateGroupForm__WEBPACK_IMPORTED_MODULE_4__["default"], null), this.props.groups.map(function (group) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             key: group.id
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
             to: "/groups/singleGroup/".concat(group.id)
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Group Name: ", group.title)));
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Group Name: ", group.title)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            type: "button",
+            onClick: function onClick() {
+              return _this.props.deleteGroup(group.id);
+            }
+          }, "X"));
         }));
       } else {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "No groups, want to add one?"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CreateGroupForm__WEBPACK_IMPORTED_MODULE_4__["default"], null));
@@ -989,8 +1022,10 @@ var mapDispatch = function mapDispatch(dispatch) {
   return {
     getGroups: function getGroups(userId) {
       return dispatch(Object(_store_groups_groups__WEBPACK_IMPORTED_MODULE_2__["_getGroups"])(userId));
-    } // deleteGroup: (group) => dispatch(_deleteGroup(group)),
-
+    },
+    deleteGroup: function deleteGroup(groupId) {
+      return dispatch(Object(_store_groups_groups__WEBPACK_IMPORTED_MODULE_2__["_deleteGroup"])(groupId));
+    }
   };
 };
 
@@ -1128,7 +1163,7 @@ var mapDispatch = function mapDispatch(dispatch) {
 /*!************************************!*\
   !*** ./client/components/index.js ***!
   \************************************/
-/*! exports provided: Navbar, UserHome, Login, Signup, Groups, AllFriends, GroupExpenses, SingleExpense, Friend, AddFriend, CreateGroupExpenseForm */
+/*! exports provided: Navbar, UserHome, Login, Signup, Groups, AllFriends, GroupExpenses, SingleExpense, Friend, AddFriendForm, CreateGroupExpenseForm */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1159,8 +1194,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _friends_Friend__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./friends/Friend */ "./client/components/friends/Friend.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Friend", function() { return _friends_Friend__WEBPACK_IMPORTED_MODULE_7__["default"]; });
 
-/* harmony import */ var _friends_AddFriend__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./friends/AddFriend */ "./client/components/friends/AddFriend.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AddFriend", function() { return _friends_AddFriend__WEBPACK_IMPORTED_MODULE_8__["default"]; });
+/* harmony import */ var _friends_AddFriendForm__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./friends/AddFriendForm */ "./client/components/friends/AddFriendForm.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AddFriendForm", function() { return _friends_AddFriendForm__WEBPACK_IMPORTED_MODULE_8__["default"]; });
 
 /* harmony import */ var _expenses_CreateGroupExpenseForm__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./expenses/CreateGroupExpenseForm */ "./client/components/expenses/CreateGroupExpenseForm.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CreateGroupExpenseForm", function() { return _expenses_CreateGroupExpenseForm__WEBPACK_IMPORTED_MODULE_9__["default"]; });
@@ -2617,7 +2652,7 @@ var singleGroupReducer = function singleGroupReducer() {
 /*!*******************************!*\
   !*** ./client/store/index.js ***!
   \*******************************/
-/*! exports provided: default, me, authSignUp, auth, logout, _loadFriends, _addFriend, _deleteFriend, friendsErrorReducer, _loadAFriend, _loadGroupExpenses, _addGroupExpense, _loadAnExpense, GET_SINGLE_GROUP, _getSingleGroup, GET_GROUPS, CREATE_GROUP, DELETE_GROUP, setGroups, createGroup, deleteGroup, _getGroups, _createGroup, _deleteGroup */
+/*! exports provided: default, me, authSignUp, auth, logout, _loadFriends, _addFriend, _deleteFriend, friendsErrorReducer, _loadAFriend, GET_GROUPS, CREATE_GROUP, DELETE_GROUP, setGroups, createGroup, deleteGroup, _getGroups, _createGroup, _deleteGroup, _loadGroupExpenses, _addGroupExpense, _loadAnExpense, GET_SINGLE_GROUP, _getSingleGroup */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
