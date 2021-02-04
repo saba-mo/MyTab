@@ -54,7 +54,7 @@ router.get('/:userId/:friendId', async (req, res, next) => {
     if (isNaN(friendId)) return res.sendStatus(404)
 
     const thisFriend = await User.findByPk(friendId, {
-      attributes: ['firstName', 'lastName', 'email'],
+      attributes: ['firstName', 'lastName', 'email', 'id'],
     })
     if (!thisFriend) return res.sendStatus(404)
 

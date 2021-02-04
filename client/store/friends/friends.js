@@ -1,5 +1,4 @@
 import axios from 'axios'
-import history from '../../history'
 import {ADD_FRIEND_SUCCESS, DELETE_FRIEND, GET_FRIENDS} from './friendTypes'
 import {
   addFriendError,
@@ -78,8 +77,7 @@ const friendsReducer = (friends = initialState, action) => {
     case DELETE_FRIEND:
       return [
         ...friends.filter(
-          (friend) =>
-            parseInt(friend.Friends.friendId) !== parseInt(action.friendId)
+          (friend) => parseInt(friend.id) !== parseInt(action.friendId)
         ),
       ]
     default:
