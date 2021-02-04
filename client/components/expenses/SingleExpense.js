@@ -27,6 +27,10 @@ class Expense extends React.Component {
         <h4>
           {expense.name} ${expense.totalCost}
         </h4>
+        <button type="submit">Settle</button>
+        <button type="submit">Assign</button>
+        <button type="submit">Edit</button>
+        <button type="submit">Remove</button>
       </div>
     )
   }
