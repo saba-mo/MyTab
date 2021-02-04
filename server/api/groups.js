@@ -113,5 +113,20 @@ router.get(
     }
   }
 )
+// DELETE single group expense
+router.delete(
+  '/singleGroup/:groupId/expenses/:expenseId',
+  async (req, res, next) => {
+    try {
+      const expenseId = parseInt(req.params.expenseId)
+      const thisExpense = await Expense.findByPk(expenseId)
+      if (!thisExpense) res.sendStatus(404)
+      await thisExpense.destroy()
+      res.sendStatus(204)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
 
 module.exports = router

@@ -2,8 +2,9 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {_loadAnExpense} from '../../store/expenses/singleExpense'
+import {_deleteGroupExpense} from '../../store/expenses/expenses'
 
-class Expense extends React.Component {
+class SingleExpense extends React.Component {
   constructor() {
     super()
   }
@@ -28,9 +29,20 @@ class Expense extends React.Component {
           {expense.name} ${expense.totalCost}
         </h4>
         <button type="submit">Settle</button>
-        <button type="submit">Assign</button>
         <button type="submit">Edit</button>
-        <button type="submit">Remove</button>
+        <button
+          type="submit"
+          onClick={
+            () =>
+              this.props.deleteGroupExpense(
+                this.props.match.params.groupId,
+                expense.id
+              )
+            // return to group expense list...use history?
+          }
+        >
+          Remove
+        </button>
       </div>
     )
   }
@@ -44,8 +56,10 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+  deleteGroupExpense: (groupId, expenseId) =>
+    dispatch(_deleteGroupExpense(groupId, expenseId)),
   loadAnExpense: (groupId, expenseId) =>
     dispatch(_loadAnExpense(groupId, expenseId)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Expense)
+export default connect(mapStateToProps, mapDispatchToProps)(SingleExpense)

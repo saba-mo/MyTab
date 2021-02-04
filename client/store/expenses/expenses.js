@@ -3,6 +3,7 @@ import axios from 'axios'
 /* ACTION TYPES */
 const GET_GROUP_EXPENSES = 'GET_GROUP_EXPENSES'
 const ADD_GROUP_EXPENSE = 'ADD_GROUP_EXPENSE'
+const DELETE_GROUP_EXPENSE = 'DELETE_GROUP_EXPENSE'
 
 /* ACTION CREATORS */
 const getGroupExpenses = (expenses) => ({
@@ -13,6 +14,11 @@ const getGroupExpenses = (expenses) => ({
 const addGroupExpense = (expense) => ({
   type: ADD_GROUP_EXPENSE,
   expense,
+})
+
+const deleteGroupExpense = (expenseId) => ({
+  type: DELETE_GROUP_EXPENSE,
+  expenseId,
 })
 
 /* INITIAL STATE */
@@ -48,6 +54,19 @@ export const _addGroupExpense = (groupId, expense) => async (dispatch) => {
   }
 }
 
+export const _deleteGroupExpense = (groupId, expenseId) => async (dispatch) => {
+  try {
+    await axios.delete(
+      `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`
+    )
+    dispatch(deleteGroupExpense(expenseId))
+  } catch (error) {
+    console.log(
+      'Your group expense should have been deleted, but it was not because: ',
+      error
+    )
+  }
+}
 /* REDUCER */
 const groupExpensesReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -55,6 +74,8 @@ const groupExpensesReducer = (state = initialState, action) => {
       return action.expenses
     case ADD_GROUP_EXPENSE:
       return [...state, action.expense]
+    case DELETE_GROUP_EXPENSE:
+      return [...state.filter((expense) => expense.id !== action.expenseId)]
     default:
       return state
   }
