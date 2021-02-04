@@ -78,7 +78,8 @@ router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
 // POST a new group expense
 router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
   try {
-    const expenseCost = parseFloat(req.body.totalCost)
+    let expenseCost = req.body.totalCost.replace(/^\D+/g, '')
+    expenseCost = parseFloat(expenseCost)
     const expenseName = req.body.name
     const newExpense = await Expense.create({
       name: expenseName,

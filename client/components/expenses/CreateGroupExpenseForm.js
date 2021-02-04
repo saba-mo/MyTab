@@ -41,6 +41,7 @@ export class CreateGroupExpenseForm extends React.Component {
         />
         <label htmlFor="totalCost">Amount:</label>
         <input
+          className="form-state"
           type="text"
           name="totalCost"
           value={this.state.totalCost}
