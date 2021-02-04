@@ -14,9 +14,6 @@ export class AllFriends extends React.Component {
   }
 
   handleDelete = (userId, friendToDelete) => {
-    // console.log('user', userId)
-    // console.log('user', friendToDelete)
-
     this.props.deleteFriend(userId, friendToDelete)
   }
 
