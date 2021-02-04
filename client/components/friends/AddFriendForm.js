@@ -1,15 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_addFriend} from '../../store/'
+import {_addFriend} from '../../store'
 
-const defaultState = {
-  email: '',
-}
-
-class AddFriend extends React.Component {
+class AddFriendForm extends React.Component {
   constructor() {
     super()
-    this.state = defaultState
+    this.state = {email: ''}
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -17,11 +13,12 @@ class AddFriend extends React.Component {
   handleChange(event) {
     this.setState({[event.target.name]: event.target.value})
   }
+
   async handleSubmit(event) {
     event.preventDefault()
     try {
       await this.props.addFriend(this.props.user.id, this.state.email)
-      this.setState(defaultState)
+      this.setState({email: ''})
     } catch (error) {
       console.log('Hmm, having a hard time with this.', error)
     }
@@ -34,11 +31,13 @@ class AddFriend extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <div>
             <label htmlFor="email">
-              <small>What is your friend's email address?</small>
+              <small>
+                Add your friends here by entering their email address
+              </small>
             </label>
             <input
               name="email"
-              type="text"
+              type="email"
               value={email}
               onChange={this.handleChange}
             />
@@ -62,4 +61,4 @@ const mapDispatchToProps = (dispatch) => ({
   addFriend: (userId, email) => dispatch(_addFriend(userId, email)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddFriend)
+export default connect(mapStateToProps, mapDispatchToProps)(AddFriendForm)

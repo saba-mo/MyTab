@@ -2,6 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {_loadFriends, _deleteFriend} from '../../store'
+import {AddFriendForm} from '../../components'
 
 export class AllFriends extends React.Component {
   constructor(props) {
@@ -32,17 +33,6 @@ export class AllFriends extends React.Component {
           <h2>My Friends on MyTab</h2>
         </main>
         {this.noFriends(friendList)}
-        <div id="add-friend">
-          <Link to="/friend/add">
-            <img
-              className="groupImg"
-              src="images/friendAdd.png"
-              alt="Second slide"
-              height="200px"
-              width="200px"
-            />
-          </Link>
-        </div>
         <div id="full-friend-list">
           <ul>
             {friendList.map((friendItem) => {
@@ -55,12 +45,15 @@ export class AllFriends extends React.Component {
                     type="button"
                     onClick={() => this.handleDelete(user, friendItem.id)}
                   >
-                    Remove Friend Connection
+                    Remove
                   </button>
                 </div>
               )
             })}
           </ul>
+        </div>
+        <div id="add-friend">
+          <AddFriendForm />
         </div>
       </div>
     )
