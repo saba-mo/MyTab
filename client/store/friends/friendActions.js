@@ -25,11 +25,12 @@ export const addFriendError = (error) => ({
 
 export const inviteFriend = (email) => ({
   type: INVITE_FRIEND,
-  // make alert to send this friend an invite
+  error: `${email} no in database`,
 })
 
-export const invalidEmail = (email) => ({
+export const invalidEmail = (email, error) => ({
   type: INVALID_EMAIL,
+  error: error,
   // make alert to notify user this isn't valid email address
 })
 

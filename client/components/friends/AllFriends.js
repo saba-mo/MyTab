@@ -47,16 +47,12 @@ export class AllFriends extends React.Component {
           <ul>
             {friendList.map((friendItem) => {
               return (
-                console.log('mapped item: ', friendItem),
-                console.log('mapped item.Friends: ', friendItem.Friends),
-                (
-                  <div key={`friend-${friendItem.Friends.friendId}`}>
-                    <Link to={`/friend/${friendItem.Friends.friendId}`}>
-                      {friendItem.firstName} {friendItem.lastName}{' '}
-                      {friendItem.email}
-                    </Link>
-                  </div>
-                )
+                <div key={`friend-${friendItem.id}`}>
+                  <Link to={`/friend/${friendItem.id}`}>
+                    {friendItem.firstName} {friendItem.lastName}{' '}
+                    {friendItem.email}
+                  </Link>
+                </div>
               )
             })}
           </ul>

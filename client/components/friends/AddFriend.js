@@ -17,12 +17,16 @@ class AddFriend extends React.Component {
   handleChange(event) {
     this.setState({[event.target.name]: event.target.value})
   }
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault()
     try {
-      this.props.addFriend(this.props.user.id, this.state.email)
+      await this.props.addFriend(this.props.user.id, this.state.email)
+      // const msg = this.state.friendsErrorReducer.error
+      // if (msg) window.alert(msg)
+      // // if (this.state. redux store has error message then alert with error, otherwise continue)
       this.setState(defaultState)
     } catch (error) {
+      // window.alert(`nope`)
       console.log('Hmm, having a hard time with this.', error)
     }
   }

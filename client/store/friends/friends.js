@@ -33,7 +33,7 @@ export const _loadFriends = (userId) => async (dispatch) => {
 export const _addFriend = (userId, email) => async (dispatch) => {
   try {
     if (!email.includes('@')) {
-      dispatch(invalidEmail(email))
+      dispatch(invalidEmail(email, 'invalid email error'))
     } else {
       await axios
         .post(`/api/friends/${userId}`, {email})
