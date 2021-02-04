@@ -2,11 +2,17 @@ import axios from 'axios'
 
 /* ACTION TYPES */
 const GET_GROUP_EXPENSES = 'GET_GROUP_EXPENSES'
+const ADD_GROUP_EXPENSE = 'ADD_GROUP_EXPENSE'
 
 /* ACTION CREATORS */
 const getGroupExpenses = (expenses) => ({
   type: GET_GROUP_EXPENSES,
   expenses,
+})
+
+const addGroupExpense = (expense) => ({
+  type: ADD_GROUP_EXPENSE,
+  expense,
 })
 
 /* INITIAL STATE */
@@ -27,11 +33,28 @@ export const _loadGroupExpenses = (groupId) => async (dispatch) => {
   }
 }
 
+export const _addGroupExpense = (groupId, expense) => async (dispatch) => {
+  try {
+    const {data} = await axios.post(
+      `/api/groups/singleGroup/${groupId}`,
+      expense
+    )
+    dispatch(addGroupExpense(data))
+  } catch (error) {
+    console.log(
+      "Your expense should have been added to the group, but it wasn't because: ",
+      error
+    )
+  }
+}
+
 /* REDUCER */
 const groupExpensesReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_GROUP_EXPENSES:
       return action.expenses
+    case ADD_GROUP_EXPENSE:
+      return [...state, action.expense]
     default:
       return state
   }
