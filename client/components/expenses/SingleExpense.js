@@ -9,7 +9,7 @@ class Expense extends React.Component {
 
   componentDidMount() {
     this.props.loadAnExpense(
-      this.props.user.id,
+      this.props.match.params.groupId,
       this.props.match.params.expenseId
     )
   }
@@ -34,8 +34,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  loadAnExpense: (userId, expenseId) =>
-    dispatch(_loadAnExpense(userId, expenseId)),
+  loadAnExpense: (groupId, expenseId) =>
+    dispatch(_loadAnExpense(groupId, expenseId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Expense)

@@ -9,18 +9,18 @@ export class GroupExpenses extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
     this.props.loadGroupExpenses(this.props.groupId)
   }
 
   noExpenses = (expenseList) => {
     if (expenseList.length < 1) {
-      return 'Add your expenses to MyTab'
+      return 'Add your expenses here.'
     }
   }
 
   render() {
     const {groupExpenses} = this.props
+    console.log('ge: ', groupExpenses)
 
     return (
       <div>
@@ -30,7 +30,12 @@ export class GroupExpenses extends React.Component {
             {groupExpenses.map((expense) => {
               return (
                 <div key={`expense-${expense.id}`}>
-                  {expense.name} Paid by: (name to come) ${expense.totalCost}
+                  <Link
+                    to={`/groups/singleGroup/${expense.groupId}/expenses/${expense.id}`}
+                  >
+                    {expense.name}
+                  </Link>{' '}
+                  Paid by: (name to come) ${expense.totalCost}
                 </div>
               )
             })}

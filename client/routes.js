@@ -9,6 +9,7 @@ import {
   AllFriends,
   Friend,
   AddFriend,
+  SingleExpense,
 } from './components'
 import {me} from './store'
 import Groups from './components/group/Groups'
@@ -42,6 +43,11 @@ class Routes extends Component {
               exact
               path="/groups/singleGroup/:groupId"
               component={SingleGroups}
+            />
+            <Route
+              exact
+              path="/groups/singleGroup/:groupId/expenses/:expenseId"
+              component={SingleExpense}
             />
           </Switch>
         )}

@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Group, User} = require('../db/models')
+const {Group, User, Expense} = require('../db/models')
 
 //ORIGINAL GET ROUTE
 // router.get('/', async (req, res, next) => {
@@ -79,17 +79,15 @@ router.get(
   '/singleGroup/:groupId/expenses/:expenseId',
   async (req, res, next) => {
     try {
-      const groupId = parseInt(req.params.groupId)
-      if (isNaN(groupId)) return res.sendStatus(404)
+      const expenseId = parseInt(req.params.expenseId)
+      if (isNaN(expenseId)) return res.sendStatus(404)
 
-      // const thisGroup = await Group.findByPk(groupId)
-      // if (!thisGroup) res.sendStatus(404)
+      const thisExpense = await Expense.findByPk(expenseId, {
+        attributes: ['id', 'name', 'totalCost', 'groupId'],
+      })
+      if (!thisExpense) res.sendStatus(404)
 
-      // const groupExpenses = await thisGroup.getExpenses({
-      //   attributes: ['id', 'name', 'totalCost', 'groupId'],
-      // })
-
-      // res.json(groupExpenses)
+      res.json(thisExpense)
     } catch (err) {
       next(err)
     }

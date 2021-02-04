@@ -43,16 +43,6 @@ const UserHome = (props) => {
           />
         </Link>
       </div>
-      <div className="wrapper">
-        <img
-          className="groupImg"
-          src="images/expenses.png"
-          alt="Second slide"
-          height="400px"
-          width="407.406px"
-        />
-        <Link to="/expenses">View Expenses</Link>
-      </div>
     </div>
   )
 }
