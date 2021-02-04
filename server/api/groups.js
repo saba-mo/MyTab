@@ -33,14 +33,14 @@ router.get('/singleGroup/:groupId', async (req, res, next) => {
   }
 })
 
-// router.post('/', (req, res, next) => {
-//   try {
-//     Robot.create(req.body)
-//     .then(robot => res.json(robot))
-//   } catch (err) {
-//     next(err)
-//   }
-// })
+router.post('/', async function (req, res, next) {
+  try {
+    const newGroup = await Group.create(req.body)
+    res.send(newGroup)
+  } catch (err) {
+    next(err)
+  }
+})
 
 // router.delete('/:id', (req, res, next) => {
 //   try {
