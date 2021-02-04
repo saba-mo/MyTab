@@ -185,6 +185,17 @@ input:focus {
   color: #61a3ee;
 }
 
+.tab_buttons_div {
+  background-color: #61a3ee;
+  text-align: center;
+}
+
+.single-expense-navbar {
+  display: flex;
+  background-color: #61a3ee;
+  justify-content: space-evenly;
+}
+
 footer {
   padding-top: 2rem;
   text-align: center;
