@@ -2,13 +2,15 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {_addGroupExpense} from '../../store/expenses/expenses'
 
+const defaultState = {
+  name: '',
+  totalCost: '',
+}
+
 export class CreateGroupExpenseForm extends React.Component {
   constructor() {
     super()
-    this.state = {
-      name: '',
-      totalCost: '',
-    }
+    this.state = defaultState
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -20,24 +22,40 @@ export class CreateGroupExpenseForm extends React.Component {
   }
 
   handleSubmit(event) {
-    if (!this.state.name || !this.state.totalCost) {
-      event.preventDefault()
-      alert('A required field is missing.')
-      return
-    }
-
-    if (!Number(this.state.totalCost)) {
-      event.preventDefault()
-      alert('Cost must be a number.')
-      return
-    }
-
     event.preventDefault()
-    this.props.addGroupExpense(this.props.groupId, this.state)
-    this.setState({
-      name: '',
-      totalCost: '',
-    })
+    try {
+      if (!this.state.name || !this.state.totalCost) {
+        event.preventDefault()
+        alert('A required field is missing.')
+        return
+      }
+      if (!Number(this.state.totalCost)) {
+        event.preventDefault()
+        alert('Cost must be a number.')
+        return
+      }
+
+      console.log(
+        'FORM: state.cost in group expense form',
+        this.state.totalCost
+      )
+      console.log('FORM: initial type of ', typeof this.state.totalCost)
+
+      // console.log('FORM: type of ', typeof this.state.totalCost)
+
+      console.log('sending to thunk ', this.props.groupId)
+      console.log('sending to thunk ', this.state.name)
+      console.log('sending to thunk ', this.state.totalCost)
+
+      this.props.addGroupExpense(
+        this.props.groupId,
+        this.state.name,
+        this.state.totalCost
+      )
+      this.setState(defaultState)
+    } catch (error) {
+      console.log('Failed to handle expense submission due to: ', error)
+    }
   }
 
   render() {
@@ -73,8 +91,8 @@ const mapState = (state) => {
 }
 const mapDispatch = (dispatch) => {
   return {
-    addGroupExpense: (groupId, newExpense) =>
-      dispatch(_addGroupExpense(groupId, newExpense)),
+    addGroupExpense: (groupId, newExpenseName, newExpenseCost) =>
+      dispatch(_addGroupExpense(groupId, newExpenseName, newExpenseCost)),
   }
 }
 export default connect(mapState, mapDispatch)(CreateGroupExpenseForm)

@@ -39,11 +39,30 @@ export const _loadGroupExpenses = (groupId) => async (dispatch) => {
   }
 }
 
-export const _addGroupExpense = (groupId, expense) => async (dispatch) => {
+export const _addGroupExpense = (groupId, expenseName, expenseCost) => async (
+  dispatch
+) => {
   try {
+    console.log('THUNK: _addGroupExpense variables: ', expenseName, expenseCost)
+    console.log('THUNK: type of cost: ', typeof expenseCost)
+
+    // console.log('THUNK: _addGroupExpense after *100 ', expense)
+
+    const expenseObject = {
+      name: expenseName,
+      totalCost: expenseCost,
+    }
+    console.log('THUNK: _addGroupExpense new object to add ', expenseObject)
+
+    // tested:
+    // totalCost: new Number(expense.totalCost)
+    // totalCost: expense.totalCost * 1
+    // totalCost: parseInt(expense.totalCost)
+    // name and cost as variables, then made into an object for the axios request
+
     const {data} = await axios.post(
       `/api/groups/singleGroup/${groupId}/expenses`,
-      expense
+      expenseObject
     )
     dispatch(addGroupExpense(data))
   } catch (error) {
