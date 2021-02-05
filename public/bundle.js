@@ -125,7 +125,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _store_expenses_expenses__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/expenses/expenses */ "./client/store/expenses/expenses.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -145,7 +144,6 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 
 
 
@@ -178,6 +176,18 @@ function (_React$Component) {
   }, {
     key: "handleSubmit",
     value: function handleSubmit(event) {
+      if (!this.state.name || !this.state.totalCost) {
+        event.preventDefault();
+        alert('A required field is missing.');
+        return;
+      }
+
+      if (!Number(this.state.totalCost)) {
+        event.preventDefault();
+        alert('Cost must be a number.');
+        return;
+      }
+
       event.preventDefault();
       this.props.addGroupExpense(this.props.groupId, this.state);
       this.setState({
@@ -192,19 +202,22 @@ function (_React$Component) {
         onSubmit: this.handleSubmit
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "name"
-      }, "Expense Name:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, "Expense Name*"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
         name: "name",
         value: this.state.name,
         onChange: this.handleChange
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "totalCost"
-      }, "Amount:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, "Cost*"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "form-state",
         type: "text",
         name: "totalCost",
         value: this.state.totalCost,
         onChange: this.handleChange
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
+        className: "required"
+      }, "* Required field"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit"
       }, "Create Expense"));
     }
@@ -227,7 +240,7 @@ var mapDispatch = function mapDispatch(dispatch) {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapState, mapDispatch)(CreateGroupExpenseForm)); // export default CreateGroupExpenseForm
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapState, mapDispatch)(CreateGroupExpenseForm));
 
 /***/ }),
 
@@ -362,9 +375,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -375,21 +388,37 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var Expense =
+var SingleExpense =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(Expense, _React$Component);
+  _inherits(SingleExpense, _React$Component);
 
-  function Expense() {
-    _classCallCheck(this, Expense);
+  function SingleExpense() {
+    var _this;
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Expense).call(this));
+    _classCallCheck(this, SingleExpense);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(SingleExpense).call(this));
+    _this.deleteAndGoBack = _this.deleteAndGoBack.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
-  _createClass(Expense, [{
+  _createClass(SingleExpense, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.props.loadAnExpense(this.props.match.params.groupId, this.props.match.params.expenseId);
+      var _this$props$match$par = this.props.match.params,
+          groupId = _this$props$match$par.groupId,
+          expenseId = _this$props$match$par.expenseId;
+      this.props.loadAnExpense(groupId, expenseId);
+    }
+  }, {
+    key: "deleteAndGoBack",
+    value: function deleteAndGoBack() {
+      var _this$props$expense = this.props.expense,
+          groupId = _this$props$expense.groupId,
+          id = _this$props$expense.id;
+      this.props.deleteGroupExpense(groupId, id);
+      window.location.href = "/groups/singleGroup/".concat(groupId);
     }
   }, {
     key: "render",
@@ -405,15 +434,14 @@ function (_React$Component) {
         type: "submit"
       }, "Settle"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit"
-      }, "Assign"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "submit"
       }, "Edit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "submit"
+        type: "submit",
+        onClick: this.deleteAndGoBack
       }, "Remove"));
     }
   }]);
 
-  return Expense;
+  return SingleExpense;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -425,13 +453,16 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
+    deleteGroupExpense: function deleteGroupExpense(groupId, expenseId) {
+      return dispatch(Object(_store___WEBPACK_IMPORTED_MODULE_3__["_deleteGroupExpense"])(groupId, expenseId));
+    },
     loadAnExpense: function loadAnExpense(groupId, expenseId) {
       return dispatch(Object(_store___WEBPACK_IMPORTED_MODULE_3__["_loadAnExpense"])(groupId, expenseId));
     }
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(Expense));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(SingleExpense));
 
 /***/ }),
 
@@ -1048,6 +1079,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _store_groups_singleGroup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/groups/singleGroup */ "./client/store/groups/singleGroup.js");
 /* harmony import */ var _expenses_GroupExpenses__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../expenses/GroupExpenses */ "./client/components/expenses/GroupExpenses.js");
+/* harmony import */ var _UpdateGroupForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UpdateGroupForm */ "./client/components/group/UpdateGroupForm.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1065,6 +1097,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -1123,7 +1156,7 @@ function (_React$Component) {
     value: function render() {
       var singleGroup = this.props.singleGroup || {};
       if (!singleGroup) return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "LOADING");
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.singleGroup.title), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UpdateGroupForm__WEBPACK_IMPORTED_MODULE_4__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.singleGroup.title), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tab_buttons_div"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         className: "grp_tab_btns",
@@ -1143,7 +1176,8 @@ function (_React$Component) {
 
 var mapState = function mapState(state) {
   return {
-    singleGroup: state.singleGroup
+    singleGroup: state.singleGroup,
+    groups: state.groups
   };
 };
 
@@ -1151,11 +1185,128 @@ var mapDispatch = function mapDispatch(dispatch) {
   return {
     getSingleGroup: function getSingleGroup(groupId) {
       return dispatch(Object(_store_groups_singleGroup__WEBPACK_IMPORTED_MODULE_2__["_getSingleGroup"])(groupId));
+    },
+    updateGroup: function updateGroup(groupId, group) {
+      return dispatch(Object(_store_groups_singleGroup__WEBPACK_IMPORTED_MODULE_2__["_updateGroup"])(groupId, group));
     }
   };
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapState, mapDispatch)(SingleGroup));
+
+/***/ }),
+
+/***/ "./client/components/group/UpdateGroupForm.js":
+/*!****************************************************!*\
+  !*** ./client/components/group/UpdateGroupForm.js ***!
+  \****************************************************/
+/*! exports provided: UpdateGroupForm, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UpdateGroupForm", function() { return UpdateGroupForm; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store_groups_singleGroup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/groups/singleGroup */ "./client/store/groups/singleGroup.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var UpdateGroupForm =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(UpdateGroupForm, _React$Component);
+
+  function UpdateGroupForm() {
+    var _this;
+
+    _classCallCheck(this, UpdateGroupForm);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(UpdateGroupForm).call(this));
+    _this.state = {
+      title: ''
+    };
+    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(UpdateGroupForm, [{
+    key: "handleChange",
+    value: function handleChange(event) {
+      this.setState(_defineProperty({}, event.target.name, event.target.value));
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      event.preventDefault();
+      this.props.updateGroup(this.props.singleGroup.id, {
+        title: this.state.title
+      });
+      this.setState({
+        title: ''
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "name"
+      }, "Update Group Name:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        name: "title",
+        value: this.state.title,
+        onChange: this.handleChange
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "submit"
+      }, "Edit"));
+    }
+  }]);
+
+  return UpdateGroupForm;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+var mapState = function mapState(state) {
+  return {
+    singleGroup: state.singleGroup,
+    groups: state.groups
+  };
+};
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {
+    updateGroup: function updateGroup(groupId, group) {
+      return dispatch(Object(_store_groups_singleGroup__WEBPACK_IMPORTED_MODULE_2__["_updateGroup"])(groupId, group));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapState, mapDispatch)(UpdateGroupForm));
 
 /***/ }),
 
@@ -1707,13 +1858,14 @@ socket.on('connect', function () {
 /*!*******************************************!*\
   !*** ./client/store/expenses/expenses.js ***!
   \*******************************************/
-/*! exports provided: _loadGroupExpenses, _addGroupExpense, default */
+/*! exports provided: _loadGroupExpenses, _addGroupExpense, _deleteGroupExpense, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_loadGroupExpenses", function() { return _loadGroupExpenses; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_addGroupExpense", function() { return _addGroupExpense; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_deleteGroupExpense", function() { return _deleteGroupExpense; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -1733,6 +1885,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var GET_GROUP_EXPENSES = 'GET_GROUP_EXPENSES';
 var ADD_GROUP_EXPENSE = 'ADD_GROUP_EXPENSE';
+var DELETE_GROUP_EXPENSE = 'DELETE_GROUP_EXPENSE';
 /* ACTION CREATORS */
 
 var getGroupExpenses = function getGroupExpenses(expenses) {
@@ -1746,6 +1899,13 @@ var addGroupExpense = function addGroupExpense(expense) {
   return {
     type: ADD_GROUP_EXPENSE,
     expense: expense
+  };
+};
+
+var deleteGroupExpense = function deleteGroupExpense(expenseId) {
+  return {
+    type: DELETE_GROUP_EXPENSE,
+    expenseId: expenseId
   };
 };
 /* INITIAL STATE */
@@ -1840,6 +2000,45 @@ var _addGroupExpense = function _addGroupExpense(groupId, expense) {
     }()
   );
 };
+var _deleteGroupExpense = function _deleteGroupExpense(groupId, expenseId) {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref5 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee3(dispatch) {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                _context3.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/groups/singleGroup/".concat(groupId, "/expenses/").concat(expenseId));
+
+              case 3:
+                dispatch(deleteGroupExpense(expenseId));
+                _context3.next = 9;
+                break;
+
+              case 6:
+                _context3.prev = 6;
+                _context3.t0 = _context3["catch"](0);
+                console.log('Your group expense should have been deleted, but it was not because: ', _context3.t0);
+
+              case 9:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 6]]);
+      }));
+
+      return function (_x3) {
+        return _ref5.apply(this, arguments);
+      };
+    }()
+  );
+};
 /* REDUCER */
 
 var groupExpensesReducer = function groupExpensesReducer() {
@@ -1852,6 +2051,11 @@ var groupExpensesReducer = function groupExpensesReducer() {
 
     case ADD_GROUP_EXPENSE:
       return [].concat(_toConsumableArray(state), [action.expense]);
+
+    case DELETE_GROUP_EXPENSE:
+      return _toConsumableArray(state.filter(function (expense) {
+        return expense.id !== action.expenseId;
+      }));
 
     default:
       return state;
@@ -2563,29 +2767,44 @@ var groupsReducer = function groupsReducer() {
 /*!********************************************!*\
   !*** ./client/store/groups/singleGroup.js ***!
   \********************************************/
-/*! exports provided: GET_SINGLE_GROUP, _getSingleGroup, default */
+/*! exports provided: GET_SINGLE_GROUP, UPDATE_GROUP, updateGroup, setSingleGroup, _getSingleGroup, _updateGroup, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_SINGLE_GROUP", function() { return GET_SINGLE_GROUP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATE_GROUP", function() { return UPDATE_GROUP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateGroup", function() { return updateGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setSingleGroup", function() { return setSingleGroup; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_getSingleGroup", function() { return _getSingleGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_updateGroup", function() { return _updateGroup; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
 var GET_SINGLE_GROUP = 'GET_SINGLE_GROUP';
-
+var UPDATE_GROUP = 'UPDATE_GROUP';
+var updateGroup = function updateGroup(group) {
+  return {
+    type: UPDATE_GROUP,
+    group: group
+  };
+};
 var setSingleGroup = function setSingleGroup(group) {
   return {
     type: GET_SINGLE_GROUP,
     group: group
   };
 };
-
 var _getSingleGroup = function _getSingleGroup(groupId) {
   return (
     /*#__PURE__*/
@@ -2629,6 +2848,49 @@ var _getSingleGroup = function _getSingleGroup(groupId) {
     }()
   );
 };
+var _updateGroup = function _updateGroup(groupId, group) {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref3 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2(dispatch) {
+        var _ref4, data;
+
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/groups/singleGroup/".concat(groupId), group);
+
+              case 3:
+                _ref4 = _context2.sent;
+                data = _ref4.data;
+                dispatch(updateGroup(data));
+                _context2.next = 11;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 8]]);
+      }));
+
+      return function (_x2) {
+        return _ref3.apply(this, arguments);
+      };
+    }()
+  );
+};
 var initialState = {};
 
 var singleGroupReducer = function singleGroupReducer() {
@@ -2638,6 +2900,9 @@ var singleGroupReducer = function singleGroupReducer() {
   switch (action.type) {
     case GET_SINGLE_GROUP:
       return action.group;
+
+    case UPDATE_GROUP:
+      return _objectSpread({}, state, {}, action.group);
 
     default:
       return state;
@@ -2652,7 +2917,7 @@ var singleGroupReducer = function singleGroupReducer() {
 /*!*******************************!*\
   !*** ./client/store/index.js ***!
   \*******************************/
-/*! exports provided: default, me, authSignUp, auth, logout, _loadFriends, _addFriend, _deleteFriend, friendsErrorReducer, _loadAFriend, GET_GROUPS, CREATE_GROUP, DELETE_GROUP, setGroups, createGroup, deleteGroup, _getGroups, _createGroup, _deleteGroup, _loadGroupExpenses, _addGroupExpense, _loadAnExpense, GET_SINGLE_GROUP, _getSingleGroup */
+/*! exports provided: default, me, authSignUp, auth, logout, _loadFriends, _addFriend, _deleteFriend, friendsErrorReducer, _loadAFriend, GET_GROUPS, CREATE_GROUP, DELETE_GROUP, setGroups, createGroup, deleteGroup, _getGroups, _createGroup, _deleteGroup, _loadAnExpense, _loadGroupExpenses, _addGroupExpense, _deleteGroupExpense, GET_SINGLE_GROUP, UPDATE_GROUP, updateGroup, setSingleGroup, _getSingleGroup, _updateGroup */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2710,11 +2975,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_addGroupExpense", function() { return _expenses_expenses__WEBPACK_IMPORTED_MODULE_8__["_addGroupExpense"]; });
 
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_deleteGroupExpense", function() { return _expenses_expenses__WEBPACK_IMPORTED_MODULE_8__["_deleteGroupExpense"]; });
+
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_loadAnExpense", function() { return _expenses_singleExpense__WEBPACK_IMPORTED_MODULE_9__["_loadAnExpense"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GET_SINGLE_GROUP", function() { return _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__["GET_SINGLE_GROUP"]; });
 
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "UPDATE_GROUP", function() { return _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__["UPDATE_GROUP"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "updateGroup", function() { return _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__["updateGroup"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "setSingleGroup", function() { return _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__["setSingleGroup"]; });
+
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_getSingleGroup", function() { return _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__["_getSingleGroup"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_updateGroup", function() { return _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__["_updateGroup"]; });
 
 
 
