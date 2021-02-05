@@ -11,7 +11,11 @@ const defaultState = {
 export class CreateGroupExpenseForm extends React.Component {
   constructor() {
     super()
-    this.state = defaultState
+    this.state = {
+      name: '',
+      totalCost: '',
+      members: [],
+    }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -36,17 +40,30 @@ export class CreateGroupExpenseForm extends React.Component {
         return
       }
 
+      console.log('FORM: cost in group expense form', this.state.totalCost)
+      console.log('FORM: initial type of cost', typeof this.state.totalCost)
+
+      parseFloat(event.target.totalCost)
+
+      this.setState({
+        name: event.target.name,
+        totalCost: event.target.totalCost,
+        members: [],
+      })
+
+      // before sending totatCost to the function addGroupExpense I think I need to convert the dollars and cents that the user entered into an integer of pennies for our database
+
+      // tested:
+      // before setState: parseFloat, parseInt
+      // within setState: parseFloat, parseInt
+
+      console.log('FORM: sending to thunk groupId', this.props.groupId)
+      console.log('FORM: sending to thunk ExName', this.state.name)
+      console.log('FORM: sending to thunk Cost', this.state.totalCost)
       console.log(
-        'FORM: state.cost in group expense form',
-        this.state.totalCost
+        'FORM: after setState type of cost',
+        typeof this.state.totalCost
       )
-      console.log('FORM: initial type of ', typeof this.state.totalCost)
-
-      // console.log('FORM: type of ', typeof this.state.totalCost)
-
-      console.log('sending to thunk groupId', this.props.groupId)
-      console.log('sending to thunk ExName', this.state.name)
-      console.log('sending to thunk Cost', this.state.totalCost)
 
       this.props.addGroupExpense(
         this.props.groupId,
