@@ -140,4 +140,23 @@ router.delete(
   }
 )
 
+// GET all of group's members
+router.get('/singleGroup/:groupId/members', async (req, res, next) => {
+  try {
+    const groupId = parseInt(req.params.groupId)
+    if (isNaN(groupId)) return res.sendStatus(404)
+
+    const thisGroup = await Group.findByPk(groupId)
+    if (!thisGroup) res.sendStatus(404)
+
+    const groupMembers = await thisGroup.getUsers({
+      attributes: ['id', 'email', 'firstName', 'lastName'],
+    })
+
+    res.json(groupMembers)
+  } catch (err) {
+    next(err)
+  }
+})
+
 module.exports = router
