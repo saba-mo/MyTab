@@ -1,7 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_getSingleGroup} from '../../store/groups/singleGroup'
+import {_getSingleGroup, _updateGroup} from '../../store/groups/singleGroup'
 import GroupExpenses from '../expenses/GroupExpenses'
+import UpdateGroupForm from './UpdateGroupForm'
 
 export class SingleGroup extends React.Component {
   constructor() {
@@ -40,6 +41,7 @@ export class SingleGroup extends React.Component {
 
     return (
       <div>
+        <UpdateGroupForm />
         {/* <Navigation pageName = "Single Robots" /> */}
         <main>
           <div>
@@ -97,12 +99,14 @@ export class SingleGroup extends React.Component {
 const mapState = (state) => {
   return {
     singleGroup: state.singleGroup,
+    groups: state.groups,
   }
 }
 
 const mapDispatch = (dispatch) => {
   return {
     getSingleGroup: (groupId) => dispatch(_getSingleGroup(groupId)),
+    updateGroup: (groupId, group) => dispatch(_updateGroup(groupId, group)),
   }
 }
 
