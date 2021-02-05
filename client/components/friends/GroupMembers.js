@@ -19,7 +19,6 @@ export class GroupMembers extends React.Component {
   }
 
   render() {
-    console.log('gm props: ', this.props)
     const {groupMembers} = this.props
 
     return (
