@@ -3,14 +3,20 @@ import {connect} from 'react-redux'
 import {_getSingleGroup, _updateGroup} from '../../store/groups/singleGroup'
 import GroupExpenses from '../expenses/GroupExpenses'
 import UpdateGroupForm from './UpdateGroupForm'
+import {Link} from 'react-router-dom'
 
 export class SingleGroup extends React.Component {
   constructor() {
     super()
-    this.state = {tabName: 'expenses'}
+    this.state = {tabName: 'expenses', showForm: false}
 
     this.tabChange = this.tabChange.bind(this)
+    this.toggleShowForm = this.toggleShowForm.bind(this)
     this.renderTab = this.renderTab.bind(this)
+  }
+
+  toggleShowForm() {
+    this.setState({showForm: !this.state.showForm})
   }
 
   tabChange(tabName) {
@@ -41,11 +47,23 @@ export class SingleGroup extends React.Component {
 
     return (
       <div>
-        <UpdateGroupForm />
         {/* <Navigation pageName = "Single Robots" /> */}
         <main>
           <div>
-            <h3>{this.props.singleGroup.title}</h3>
+            <div className="editGroupPencil">
+              <h3>{this.props.singleGroup.title}</h3>
+              {this.state.showForm ? (
+                <UpdateGroupForm toggleForm={this.toggleShowForm} />
+              ) : (
+                <img
+                  className="groupImg"
+                  src="/images/pencil.png"
+                  // height="400px"
+                  // width="407.406px"
+                  onClick={this.toggleShowForm}
+                />
+              )}
+            </div>
             <div>
               <div className="tab_buttons_div">
                 <a
