@@ -196,6 +196,10 @@ input:focus {
   justify-content: space-evenly;
 }
 
+.required {
+  text-align: right;
+}
+
 footer {
   padding-top: 2rem;
   text-align: center;

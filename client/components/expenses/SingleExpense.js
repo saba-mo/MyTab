@@ -11,10 +11,8 @@ class SingleExpense extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadAnExpense(
-      this.props.match.params.groupId,
-      this.props.match.params.expenseId
-    )
+    const {groupId, expenseId} = this.props.match.params
+    this.props.loadAnExpense(groupId, expenseId)
   }
 
   deleteAndGoBack() {
