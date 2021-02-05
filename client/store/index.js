@@ -9,6 +9,7 @@ import groups from './groups/groups'
 import groupExpenses from './expenses/expenses'
 import singleExpense from './expenses/singleExpense'
 import singleGroup from './groups/singleGroup'
+import groupMembers from './groups/groupMembers'
 
 const reducer = combineReducers({
   user: user,
@@ -19,6 +20,7 @@ const reducer = combineReducers({
   groupExpenses: groupExpenses,
   singleExpense: singleExpense,
   friendsErrorReducer: friendsErrorReducer,
+  groupMembers: groupMembers,
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
@@ -33,3 +35,4 @@ export * from './groups/groups'
 export * from './expenses/expenses'
 export * from './expenses/singleExpense'
 export * from './groups/singleGroup'
+export * from './groups/groupMembers'

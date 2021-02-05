@@ -8,7 +8,7 @@ import {
   UserHome,
   AllFriends,
   Friend,
-  AddFriend,
+  AddFriendForm,
   SingleExpense,
 } from './components'
 import {me} from './store'
@@ -36,7 +36,7 @@ class Routes extends Component {
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
             <Route path="/friends" component={AllFriends} />
-            <Route path="/friend/add" component={AddFriend} />
+            <Route path="/friend/add" component={AddFriendForm} />
             <Route path="/friend/:friendId" component={Friend} />
             <Route exact path="/groups/:userId" component={Groups} />
             <Route
