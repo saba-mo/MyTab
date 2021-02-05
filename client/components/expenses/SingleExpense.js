@@ -1,18 +1,24 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {_loadAnExpense} from '../../store/'
+import {_loadAnExpense, _deleteGroupExpense} from '../../store/'
 
-class Expense extends React.Component {
+class SingleExpense extends React.Component {
   constructor() {
     super()
+
+    this.deleteAndGoBack = this.deleteAndGoBack.bind(this)
   }
 
   componentDidMount() {
-    this.props.loadAnExpense(
-      this.props.match.params.groupId,
-      this.props.match.params.expenseId
-    )
+    const {groupId, expenseId} = this.props.match.params
+    this.props.loadAnExpense(groupId, expenseId)
+  }
+
+  deleteAndGoBack() {
+    const {groupId, id} = this.props.expense
+    this.props.deleteGroupExpense(groupId, id)
+    window.location.href = `/groups/singleGroup/${groupId}`
   }
 
   render() {
@@ -28,9 +34,10 @@ class Expense extends React.Component {
           {expense.name} ${expense.totalCost}
         </h4>
         <button type="submit">Settle</button>
-        <button type="submit">Assign</button>
         <button type="submit">Edit</button>
-        <button type="submit">Remove</button>
+        <button type="submit" onClick={this.deleteAndGoBack}>
+          Remove
+        </button>
       </div>
     )
   }
@@ -44,8 +51,10 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+  deleteGroupExpense: (groupId, expenseId) =>
+    dispatch(_deleteGroupExpense(groupId, expenseId)),
   loadAnExpense: (groupId, expenseId) =>
     dispatch(_loadAnExpense(groupId, expenseId)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Expense)
+export default connect(mapStateToProps, mapDispatchToProps)(SingleExpense)

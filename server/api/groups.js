@@ -56,6 +56,17 @@ router.delete('/:groupId', (req, res, next) => {
   }
 })
 
+//Edit groups
+router.put('/singleGroup/:groupId', async (req, res, next) => {
+  try {
+    const data = await Group.findByPk(req.params.groupId)
+    const group = await data.update(req.body)
+    res.json(group)
+  } catch (err) {
+    next(err)
+  }
+})
+
 // GET all of group's expenses
 router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
   try {
@@ -78,7 +89,8 @@ router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
 // POST a new group expense
 router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
   try {
-    const expenseCost = parseInt(req.body.totalCost)
+    let expenseCost = req.body.totalCost.replace(/^\D+/g, '')
+    expenseCost = parseFloat(expenseCost)
     const expenseName = req.body.name
     const newExpense = await Expense.create({
       name: expenseName,
@@ -107,6 +119,21 @@ router.get(
       if (!thisExpense) res.sendStatus(404)
 
       res.json(thisExpense)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+// DELETE single group expense
+router.delete(
+  '/singleGroup/:groupId/expenses/:expenseId',
+  async (req, res, next) => {
+    try {
+      const expenseId = parseInt(req.params.expenseId)
+      const thisExpense = await Expense.findByPk(expenseId)
+      if (!thisExpense) res.sendStatus(404)
+      await thisExpense.destroy()
+      res.sendStatus(204)
     } catch (err) {
       next(err)
     }

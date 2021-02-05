@@ -40,6 +40,7 @@ router.post('/:userId', async (req, res, next) => {
     if (!thisFriend) return res.sendStatus(404)
 
     thisUser.addFriend(thisFriend.id)
+    thisFriend.addFriend(thisUser.id)
 
     res.json(thisFriend)
   } catch (err) {
