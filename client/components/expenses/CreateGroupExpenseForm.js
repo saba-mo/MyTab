@@ -8,6 +8,7 @@ export class CreateGroupExpenseForm extends React.Component {
     this.state = {
       name: '',
       totalCost: '',
+      members: [],
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -37,6 +38,7 @@ export class CreateGroupExpenseForm extends React.Component {
     this.setState({
       name: '',
       totalCost: '',
+      members: [],
     })
   }
 
@@ -58,6 +60,20 @@ export class CreateGroupExpenseForm extends React.Component {
           value={this.state.totalCost}
           onChange={this.handleChange}
         />
+        <label htmlFor="members">Assign to*</label>
+
+        <select
+          value={this.state.members}
+          onChange={this.handleChange}
+          name="members"
+          multiple
+        >
+          {/*this is where i'll map over the group members  */}
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="mercedes">Mercedes</option>
+          <option value="audi">Audi</option>
+        </select>
         <h6 className="required">* Required field</h6>
         <button type="submit">Create Expense</button>
       </form>
