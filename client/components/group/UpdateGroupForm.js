@@ -19,6 +19,7 @@ export class UpdateGroupForm extends React.Component {
   }
   handleSubmit(event) {
     event.preventDefault()
+    this.props.toggleForm()
     this.props.updateGroup(this.props.singleGroup.id, {title: this.state.title})
     this.setState({
       title: '',
