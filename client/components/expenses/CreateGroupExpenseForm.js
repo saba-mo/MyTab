@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_addGroupExpense} from '../../store/expenses/expenses'
+import {_addGroupExpense, _loadGroupMembers} from '../../store'
 
 export class CreateGroupExpenseForm extends React.Component {
   constructor() {
@@ -12,28 +12,43 @@ export class CreateGroupExpenseForm extends React.Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.validateForm = this.validateForm.bind(this)
+  }
+
+  componentDidMount() {
+    this.props.loadGroupMembers(this.props.groupId)
+  }
+
+  validateForm(event, str) {
+    event.preventDefault()
+    alert(str)
   }
 
   handleChange(event) {
     this.setState({
+      // does this take members array into account?
       [event.target.name]: event.target.value,
     })
   }
 
   handleSubmit(event) {
     if (!this.state.name || !this.state.totalCost) {
-      event.preventDefault()
-      alert('A required field is missing.')
+      this.validateForm(event, 'A required field is missing.')
       return
     }
 
     if (!Number(this.state.totalCost)) {
-      event.preventDefault()
-      alert('Cost must be a number.')
+      this.validateForm(event, 'Cost must be a number.')
+      return
+    }
+
+    if (this.state.members.length < 1) {
+      this.validateForm(event, 'Please select at least one group member.')
       return
     }
 
     event.preventDefault()
+    console.log('state: ', this.state)
     this.props.addGroupExpense(this.props.groupId, this.state)
     this.setState({
       name: '',
@@ -68,11 +83,12 @@ export class CreateGroupExpenseForm extends React.Component {
           name="members"
           multiple
         >
-          {/*this is where i'll map over the group members  */}
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="mercedes">Mercedes</option>
-          <option value="audi">Audi</option>
+          {this.props.groupMembers.map((member) => (
+            // should value be member.id?
+            <option key={`member-${member.id}`} value={member.firstName}>
+              {member.firstName}
+            </option>
+          ))}
         </select>
         <h6 className="required">* Required field</h6>
         <button type="submit">Create Expense</button>
@@ -85,12 +101,14 @@ export class CreateGroupExpenseForm extends React.Component {
 const mapState = (state) => {
   return {
     groupExpenses: state.groupExpenses,
+    groupMembers: state.groupMembers,
   }
 }
 const mapDispatch = (dispatch) => {
   return {
     addGroupExpense: (groupId, newExpense) =>
       dispatch(_addGroupExpense(groupId, newExpense)),
+    loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
   }
 }
 export default connect(mapState, mapDispatch)(CreateGroupExpenseForm)
