@@ -9,7 +9,7 @@ const User_Group = db.define('user_group', {
     autoIncrement: true,
   },
   balance: {
-    type: Sequelize.FLOAT,
+    type: Sequelize.INTEGER,
     defaultValue: 0,
     allowNull: false,
   },
