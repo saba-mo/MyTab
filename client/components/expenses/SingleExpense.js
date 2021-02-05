@@ -1,13 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-// import {_loadAnExpense} from '../../store/expenses/singleExpense'
-// import {_deleteGroupExpense} from '../../store/expenses/expenses'
 import {_loadAnExpense, _deleteGroupExpense} from '../../store/'
 
 class SingleExpense extends React.Component {
   constructor() {
     super()
+
+    this.deleteAndGoBack = this.deleteAndGoBack.bind(this)
   }
 
   componentDidMount() {
@@ -15,6 +15,14 @@ class SingleExpense extends React.Component {
       this.props.match.params.groupId,
       this.props.match.params.expenseId
     )
+  }
+
+  deleteAndGoBack() {
+    this.props.deleteGroupExpense(
+      this.props.match.params.groupId,
+      this.props.expense.id
+    )
+    window.location.href = `/groups/singleGroup/${this.props.match.params.groupId}`
   }
 
   render() {
@@ -35,14 +43,15 @@ class SingleExpense extends React.Component {
         <button type="submit">Edit</button>
         <button
           type="submit"
-          onClick={
-            () =>
-              this.props.deleteGroupExpense(
-                this.props.match.params.groupId,
-                expense.id
-              )
-            // return to group expense list...use history?
-          }
+          // onClick={
+          //   () =>
+          //     this.props.deleteGroupExpense(
+          //       this.props.match.params.groupId,
+          //       expense.id
+          //     )
+          //   // return to group expense list...use history?
+          // }
+          onClick={this.deleteAndGoBack}
         >
           Remove
         </button>
