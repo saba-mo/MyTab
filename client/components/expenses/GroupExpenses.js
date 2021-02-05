@@ -22,6 +22,11 @@ export class GroupExpenses extends React.Component {
   render() {
     const {groupExpenses} = this.props
 
+    const groupTotal = groupExpenses.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.totalCost,
+      0
+    )
+
     return (
       <div>
         <CreateGroupExpenseForm groupId={this.props.groupId} />
@@ -41,6 +46,7 @@ export class GroupExpenses extends React.Component {
               )
             })}
           </ul>
+          <h3>Total: {groupTotal.toFixed(2)}</h3>
         </div>
       </div>
     )
