@@ -152,7 +152,6 @@ router.get('/singleGroup/:groupId/members', async (req, res, next) => {
     const groupMembers = await thisGroup.getUsers({
       attributes: ['id', 'email', 'firstName', 'lastName'],
     })
-
     res.json(groupMembers)
   } catch (err) {
     next(err)

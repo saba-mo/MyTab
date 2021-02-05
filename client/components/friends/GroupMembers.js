@@ -1,7 +1,6 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-// import {_loadGroupMembers} from '../../store/expenses/expenses'
+import {_loadGroupMembers} from '../../store'
 // import {AddMemberForm} from '../index'
 
 export class GroupMembers extends React.Component {
@@ -10,7 +9,7 @@ export class GroupMembers extends React.Component {
   }
 
   componentDidMount() {
-    // this.props.loadGroupMembers(this.props.groupId)
+    this.props.loadGroupMembers(this.props.groupId)
   }
 
   noMembers = (memberList) => {
@@ -20,6 +19,7 @@ export class GroupMembers extends React.Component {
   }
 
   render() {
+    console.log('gm props: ', this.props)
     const {groupMembers} = this.props
 
     return (
@@ -31,11 +31,7 @@ export class GroupMembers extends React.Component {
             {groupMembers.map((member) => {
               return (
                 <div key={`member-${member.id}`}>
-                  {/* <Link
-                    to={`/groups/singleGroup/${expense.groupId}/expenses/${expense.id}`}
-                  > */}
                   {member.firstName} {member.lastName}
-                  {/* </Link>{' '} */}
                 </div>
               )
             })}

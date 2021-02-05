@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {_getSingleGroup, _updateGroup} from '../../store/groups/singleGroup'
 import GroupExpenses from '../expenses/GroupExpenses'
 import UpdateGroupForm from './UpdateGroupForm'
+import {GroupMembers} from '../../components'
 
 export class SingleGroup extends React.Component {
   constructor() {
@@ -19,8 +20,8 @@ export class SingleGroup extends React.Component {
 
   renderTab() {
     switch (this.state.tabName) {
-      // case 'members':
-      //   return <GroupMembers />
+      case 'members':
+        return <GroupMembers groupId={this.props.match.params.groupId} />
       case 'expenses':
         return <GroupExpenses groupId={this.props.match.params.groupId} />
       // case 'balances':
