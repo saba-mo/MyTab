@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_addGroupExpense} from '../../store/expenses/expenses'
-import {Link} from 'react-router-dom'
 
 export class CreateGroupExpenseForm extends React.Component {
   constructor() {
@@ -41,6 +40,7 @@ export class CreateGroupExpenseForm extends React.Component {
         />
         <label htmlFor="totalCost">Amount:</label>
         <input
+          className="form-state"
           type="text"
           name="totalCost"
           value={this.state.totalCost}
@@ -65,4 +65,3 @@ const mapDispatch = (dispatch) => {
   }
 }
 export default connect(mapState, mapDispatch)(CreateGroupExpenseForm)
-// export default CreateGroupExpenseForm

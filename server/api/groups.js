@@ -78,7 +78,8 @@ router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
 // POST a new group expense
 router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
   try {
-    const expenseCost = parseInt(req.body.totalCost)
+    let expenseCost = req.body.totalCost.replace(/^\D+/g, '')
+    expenseCost = parseFloat(expenseCost)
     const expenseName = req.body.name
     const newExpense = await Expense.create({
       name: expenseName,
@@ -107,6 +108,21 @@ router.get(
       if (!thisExpense) res.sendStatus(404)
 
       res.json(thisExpense)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+// DELETE single group expense
+router.delete(
+  '/singleGroup/:groupId/expenses/:expenseId',
+  async (req, res, next) => {
+    try {
+      const expenseId = parseInt(req.params.expenseId)
+      const thisExpense = await Expense.findByPk(expenseId)
+      if (!thisExpense) res.sendStatus(404)
+      await thisExpense.destroy()
+      res.sendStatus(204)
     } catch (err) {
       next(err)
     }
