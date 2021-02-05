@@ -8,42 +8,32 @@ export class CreateGroupExpenseForm extends React.Component {
     this.state = {
       name: '',
       totalCost: '',
-      members: '',
+      paidBy: '',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.validateForm = this.validateForm.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
   }
 
-  validateForm(event, str) {
-    event.preventDefault()
-    alert(str)
-  }
-
   handleChange(event) {
     this.setState({
-      // does this take members array into account?
       [event.target.name]: event.target.value,
     })
   }
 
   handleSubmit(event) {
-    if (!this.state.name || !this.state.totalCost) {
-      this.validateForm(event, 'A required field is missing.')
+    if (!this.state.name || !this.state.totalCost || !this.state.paidBy) {
+      event.preventDefault()
+      alert('A required field is missing.')
       return
     }
 
     if (!Number(this.state.totalCost)) {
-      this.validateForm(event, 'Cost must be a number.')
-      return
-    }
-
-    if (this.state.members.length < 1) {
-      this.validateForm(event, 'Please select at least one group member.')
+      event.preventDefault()
+      alert('Cost must be a number.')
       return
     }
 
@@ -53,7 +43,7 @@ export class CreateGroupExpenseForm extends React.Component {
     this.setState({
       name: '',
       totalCost: '',
-      members: '',
+      paidBy: '',
     })
   }
 
@@ -75,14 +65,14 @@ export class CreateGroupExpenseForm extends React.Component {
           value={this.state.totalCost}
           onChange={this.handleChange}
         />
-        <label htmlFor="members">Paid by*</label>
+        <label htmlFor="paidBy">Paid by*</label>
 
         <select
-          value={this.state.members}
+          value={this.state.paidBy}
           onChange={this.handleChange}
-          name="members"
-          // multiple
+          name="paidBy"
         >
+          <option value="member">select group member</option>
           {this.props.groupMembers.map((member) => (
             // should value be member.id?
             <option key={`member-${member.id}`} value={member.firstName}>
@@ -97,7 +87,6 @@ export class CreateGroupExpenseForm extends React.Component {
   }
 }
 
-// is this necessary?
 const mapState = (state) => {
   return {
     groupExpenses: state.groupExpenses,
