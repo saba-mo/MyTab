@@ -7,10 +7,15 @@ import UpdateGroupForm from './UpdateGroupForm'
 export class SingleGroup extends React.Component {
   constructor() {
     super()
-    this.state = {tabName: 'expenses'}
+    this.state = {tabName: 'expenses', showForm: false}
 
     this.tabChange = this.tabChange.bind(this)
+    this.toggleShowForm = this.toggleShowForm.bind(this)
     this.renderTab = this.renderTab.bind(this)
+  }
+
+  toggleShowForm() {
+    this.setState({showForm: !this.state.showForm})
   }
 
   tabChange(tabName) {
@@ -41,7 +46,18 @@ export class SingleGroup extends React.Component {
 
     return (
       <div>
-        <UpdateGroupForm />
+        {this.state.showForm ? (
+          <UpdateGroupForm />
+        ) : (
+          <img
+            className="groupImg"
+            src="/images/pencil.png"
+            height="400px"
+            width="407.406px"
+            onClick={this.toggleShowForm}
+          />
+        )}
+
         {/* <Navigation pageName = "Single Robots" /> */}
         <main>
           <div>
