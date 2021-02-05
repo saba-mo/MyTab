@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_addGroupExpense} from '../../store/expenses/expenses'
-import {Link} from 'react-router-dom'
 
 export class CreateGroupExpenseForm extends React.Component {
   constructor() {

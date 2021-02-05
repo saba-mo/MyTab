@@ -18,17 +18,13 @@ class SingleExpense extends React.Component {
   }
 
   deleteAndGoBack() {
-    this.props.deleteGroupExpense(
-      this.props.match.params.groupId,
-      this.props.expense.id
-    )
-    window.location.href = `/groups/singleGroup/${this.props.match.params.groupId}`
+    const {groupId, id} = this.props.expense
+    this.props.deleteGroupExpense(groupId, id)
+    window.location.href = `/groups/singleGroup/${groupId}`
   }
 
   render() {
     const {expense} = this.props
-    // remove console log
-    console.log('single expense props: ', this.props)
     return (
       <div className="expense-individual">
         <div className="pages-view-navbar">
@@ -41,18 +37,7 @@ class SingleExpense extends React.Component {
         </h4>
         <button type="submit">Settle</button>
         <button type="submit">Edit</button>
-        <button
-          type="submit"
-          // onClick={
-          //   () =>
-          //     this.props.deleteGroupExpense(
-          //       this.props.match.params.groupId,
-          //       expense.id
-          //     )
-          //   // return to group expense list...use history?
-          // }
-          onClick={this.deleteAndGoBack}
-        >
+        <button type="submit" onClick={this.deleteAndGoBack}>
           Remove
         </button>
       </div>
