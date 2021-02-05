@@ -75,8 +75,8 @@ export class CreateGroupExpenseForm extends React.Component {
           <option value="member">select group member</option>
           {this.props.groupMembers.map((member) => (
             // should value be member.id?
-            <option key={`member-${member.id}`} value={member.firstName}>
-              {member.firstName}
+            <option key={`member-${member.id}`} value={member.id}>
+              {member.firstName} {member.lastName}
             </option>
           ))}
         </select>

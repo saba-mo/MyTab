@@ -95,10 +95,15 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
     const newExpense = await Expense.create({
       name: expenseName,
       totalCost: expenseCost,
+      groupId: req.params.groupId,
     })
-    const thisGroup = await Group.findByPk(req.params.groupId)
-    await thisGroup.addExpense(newExpense.id)
-    // will want to assign expense to user(s) once we have assign to friend built in
+    // find user linked to who paid, and body includes their userId
+    const userId = Number(req.body.paidBy)
+    await newExpense.addUser(userId)
+
+    // check to see if these two lines are unncessary by just adding groupId in expense.create
+    // const thisGroup = await Group.findByPk(req.params.groupId)
+    // await thisGroup.addExpense(newExpense.id)
     res.json(newExpense)
   } catch (err) {
     next(err)
