@@ -2,57 +2,57 @@ const expenseData = [
   [
     {
       name: 'Phascogale',
-      totalCost: 89.73,
+      totalCost: 8973,
       groupId: 8,
     },
     {
       name: 'Flycatcher',
-      totalCost: 18.42,
+      totalCost: 1842,
       groupId: 5,
     },
     {
       name: 'Rhea',
-      totalCost: 18.68,
+      totalCost: 1868,
       groupId: 7,
     },
     {
       name: 'Bush dog',
-      totalCost: 52.14,
+      totalCost: 5214,
       groupId: 1,
     },
     {
       name: 'Fisher',
-      totalCost: 89.8,
+      totalCost: 898,
       groupId: 1,
     },
     {
       name: 'Brazilian otter',
-      totalCost: 31.17,
+      totalCost: 3117,
       groupId: 2,
     },
     {
       name: 'Bateleur eagle',
-      totalCost: 90.62,
+      totalCost: 9062,
       groupId: 7,
     },
     {
       name: 'Great Egret',
-      totalCost: 87.75,
+      totalCost: 8775,
       groupId: 1,
     },
     {
       name: 'Bleeding heart monkey',
-      totalCost: 75.16,
+      totalCost: 7516,
       groupId: 8,
     },
     {
       name: `Gambel's quail`,
-      totalCost: 88.84,
+      totalCost: 8884,
       groupId: 1,
     },
     {
       name: `House Cat`,
-      totalCost: 5.21,
+      totalCost: 521,
       groupId: 1,
     },
   ],

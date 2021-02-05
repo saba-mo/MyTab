@@ -5,6 +5,7 @@ import {_addGroupExpense} from '../../store/expenses/expenses'
 const defaultState = {
   name: '',
   totalCost: '',
+  members: [],
 }
 
 export class CreateGroupExpenseForm extends React.Component {
@@ -43,9 +44,9 @@ export class CreateGroupExpenseForm extends React.Component {
 
       // console.log('FORM: type of ', typeof this.state.totalCost)
 
-      console.log('sending to thunk ', this.props.groupId)
-      console.log('sending to thunk ', this.state.name)
-      console.log('sending to thunk ', this.state.totalCost)
+      console.log('sending to thunk groupId', this.props.groupId)
+      console.log('sending to thunk ExName', this.state.name)
+      console.log('sending to thunk Cost', this.state.totalCost)
 
       this.props.addGroupExpense(
         this.props.groupId,
@@ -76,6 +77,20 @@ export class CreateGroupExpenseForm extends React.Component {
           value={this.state.totalCost}
           onChange={this.handleChange}
         />
+        <label htmlFor="members">Assign to*</label>
+
+        <select
+          value={this.state.members}
+          onChange={this.handleChange}
+          name="members"
+          multiple
+        >
+          {/*this is where i'll map over the group members  */}
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="mercedes">Mercedes</option>
+          <option value="audi">Audi</option>
+        </select>
         <h6 className="required">* Required field</h6>
         <button type="submit">Create Expense</button>
       </form>
