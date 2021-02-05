@@ -7,7 +7,7 @@ const Item = db.define('item', {
   },
 
   cost: {
-    type: Sequelize.FLOAT,
+    type: Sequelize.INTEGER,
     validate: {
       min: 0,
     },

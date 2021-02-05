@@ -12,7 +12,7 @@ const Expense = db.define('expense', {
   },
 
   totalCost: {
-    type: Sequelize.FLOAT,
+    type: Sequelize.INTEGER,
     validate: {
       min: 0,
     },
