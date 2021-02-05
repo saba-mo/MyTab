@@ -57,7 +57,7 @@ router.delete('/:groupId', (req, res, next) => {
 })
 
 //Edit groups
-router.put('/:groupId', async (req, res, next) => {
+router.put('/singleGroup/:groupId', async (req, res, next) => {
   try {
     const data = await Group.findByPk(req.params.groupId)
     const group = await data.update(req.body)
