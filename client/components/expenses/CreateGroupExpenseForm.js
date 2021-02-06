@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_addGroupExpense} from '../../store/expenses/expenses'
+import {_addGroupExpense, _loadGroupMembers} from '../../store'
 
 const defaultState = {
   name: '',
@@ -14,10 +14,14 @@ export class CreateGroupExpenseForm extends React.Component {
     this.state = {
       name: '',
       totalCost: '',
-      members: [],
+      paidBy: '',
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  componentDidMount() {
+    this.props.loadGroupMembers(this.props.groupId)
   }
 
   handleChange(event) {
@@ -39,6 +43,16 @@ export class CreateGroupExpenseForm extends React.Component {
         alert('Cost must be a number.')
         return
       }
+      // if (
+      //   !this.state.name ||
+      //   !this.state.totalCost ||
+      //   !this.state.paidBy ||
+      //   this.state.paidBy === 'select'
+      // ) {
+      //   event.preventDefault()
+      //   alert('A required field is missing.')
+      //   return
+      // }
 
       console.log('FORM: cost in group expense form', this.state.totalCost)
       console.log('FORM: initial type of cost', typeof this.state.totalCost)
@@ -74,6 +88,13 @@ export class CreateGroupExpenseForm extends React.Component {
     } catch (error) {
       console.log('Failed to handle expense submission due to: ', error)
     }
+    // event.preventDefault()
+    // this.props.addGroupExpense(this.props.groupId, this.state)
+    // this.setState({
+    //   name: '',
+    //   totalCost: '',
+    //   paidBy: '',
+    // })
   }
 
   render() {
@@ -87,6 +108,7 @@ export class CreateGroupExpenseForm extends React.Component {
           onChange={this.handleChange}
         />
         <label htmlFor="totalCost">Cost*</label>
+        <div>$</div>
         <input
           className="form-state"
           type="text"
@@ -94,19 +116,18 @@ export class CreateGroupExpenseForm extends React.Component {
           value={this.state.totalCost}
           onChange={this.handleChange}
         />
-        <label htmlFor="members">Assign to*</label>
-
+        <label htmlFor="paidBy">Paid by*</label>
         <select
-          value={this.state.members}
+          value={this.state.paidBy}
           onChange={this.handleChange}
-          name="members"
-          multiple
+          name="paidBy"
         >
-          {/*this is where i'll map over the group members  */}
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="mercedes">Mercedes</option>
-          <option value="audi">Audi</option>
+          <option value="member">select</option>
+          {this.props.groupMembers.map((member) => (
+            <option key={`member-${member.id}`} value={member.id}>
+              {member.firstName} {member.lastName}
+            </option>
+          ))}
         </select>
         <h6 className="required">* Required field</h6>
         <button type="submit">Create Expense</button>
@@ -115,16 +136,17 @@ export class CreateGroupExpenseForm extends React.Component {
   }
 }
 
-// is this necessary?
 const mapState = (state) => {
   return {
     groupExpenses: state.groupExpenses,
+    groupMembers: state.groupMembers,
   }
 }
 const mapDispatch = (dispatch) => {
   return {
     addGroupExpense: (groupId, newExpenseName, newExpenseCost) =>
       dispatch(_addGroupExpense(groupId, newExpenseName, newExpenseCost)),
+    loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
   }
 }
 export default connect(mapState, mapDispatch)(CreateGroupExpenseForm)
