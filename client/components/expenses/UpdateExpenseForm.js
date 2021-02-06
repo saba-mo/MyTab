@@ -1,15 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
-// import {_updateExpense} from '../../store'
-import {_loadGroupMembers} from '../../store'
-// import {Link} from 'react-router-dom'
+import {_loadGroupMembers, _updateExpense} from '../../store'
 
 export class UpdateExpenseForm extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
-      name: '',
-      totalCost: '',
+      name: props.expense.name,
+      totalCost: props.expense.totalCost,
       paidBy: '',
     }
 
@@ -26,16 +24,29 @@ export class UpdateExpenseForm extends React.Component {
       [event.target.name]: event.target.value,
     })
   }
+
   handleSubmit(event) {
+    if (!this.state.name || !this.state.totalCost || !this.state.paidBy) {
+      event.preventDefault()
+      alert('A required field is missing.')
+      return
+    }
+
+    if (!Number(this.state.totalCost)) {
+      event.preventDefault()
+      alert('Cost must be a number.')
+      return
+    }
+
     event.preventDefault()
     this.props.toggleForm()
-    // this.props.updateExpense(this.props.singleGroup.id, {title: this.state.title})
-    this.setState({
-      name: '',
-      totalCost: '',
-      paidBy: '',
-    })
+    this.props.updateExpense(
+      this.props.groupId,
+      this.props.expense.id,
+      this.state
+    )
   }
+
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -53,7 +64,7 @@ export class UpdateExpenseForm extends React.Component {
           value={this.state.totalCost}
           onChange={this.handleChange}
         />
-        <label htmlFor="paidBy">Paid by</label>
+        <label htmlFor="paidBy">Paid by*</label>
         <select
           value={this.state.paidBy}
           onChange={this.handleChange}
@@ -66,9 +77,8 @@ export class UpdateExpenseForm extends React.Component {
             </option>
           ))}
         </select>
-        <div>
-          <button type="submit">Edit</button>
-        </div>
+        <h6 className="required">* Required field</h6>
+        <button type="submit">Save</button>
       </form>
     )
   }
@@ -76,13 +86,16 @@ export class UpdateExpenseForm extends React.Component {
 const mapState = (state) => {
   return {
     groupMembers: state.groupMembers,
+    expense: state.singleExpense,
   }
 }
 
 const mapDispatch = (dispatch) => {
   return {
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
-    // updateExpense: (groupId, group) => dispatch(_updateExpense(groupId, group)),
+    updateExpense: (groupId, expenseId, expense) =>
+      dispatch(_updateExpense(groupId, expenseId, expense)),
   }
 }
+
 export default connect(mapState, mapDispatch)(UpdateExpenseForm)
