@@ -39,30 +39,37 @@ export const _loadGroupExpenses = (groupId) => async (dispatch) => {
   }
 }
 
-export const _addGroupExpense = (groupId, expenseName, expenseCost) => async (
-  dispatch
-) => {
+export const _addGroupExpense = (groupId, expense) => async (dispatch) => {
   try {
-    console.log('THUNK: _addGroupExpense variables: ', expenseName, expenseCost)
-    console.log('THUNK: type of cost: ', typeof expenseCost)
+    // console.log(
+    //   'THUNK: _addGroupExpense variables: name: ',
+    //   expenseName,
+    //   'and expense: ',
+    //   expenseCost
+    // )
+    // console.log('THUNK: type of cost: ', typeof expenseCost)
 
-    // console.log('THUNK: _addGroupExpense after *100 ', expense)
+    // // console.log('THUNK: _addGroupExpense after *100 ', expense)
+    // let num1 = expenseCost * 1 * 100
+    // let num2 = parseInt(expenseCost * 100)
+    // let num3 = new Number(expenseCost).toFixed(2)
 
-    const expenseObject = {
-      name: expenseName,
-      totalCost: expenseCost,
-    }
-    console.log('THUNK: _addGroupExpense new object to add ', expenseObject)
+    // const expenseObject = {
+    //   name: expenseName,
+    //   totalCost: expenseCost,
+    // }
+    // console.log('THUNK: _addGroupExpense new object to add ', expenseObject)
 
     // tested:
-    // totalCost: new Number(expense.totalCost)
-    // totalCost: expense.totalCost * 1
-    // totalCost: parseInt(expense.totalCost)
+
     // name and cost as variables, then made into an object for the axios request
+
+    // console.log('[conversion] method: toFixed', num3, typeof num3)
+    // console.log('[conversion] method: parseInt', num2, typeof num2)
 
     const {data} = await axios.post(
       `/api/groups/singleGroup/${groupId}/expenses`,
-      expenseObject
+      expense
     )
     dispatch(addGroupExpense(data))
   } catch (error) {

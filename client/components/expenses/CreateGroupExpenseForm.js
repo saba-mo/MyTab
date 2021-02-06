@@ -1,21 +1,18 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_addGroupExpense, _loadGroupMembers} from '../../store'
+import currency from 'currency.js'
 
 const defaultState = {
   name: '',
-  totalCost: '',
-  members: [],
+  totalCost: undefined,
+  paidBy: '',
 }
 
 export class CreateGroupExpenseForm extends React.Component {
   constructor() {
     super()
-    this.state = {
-      name: '',
-      totalCost: '',
-      paidBy: '',
-    }
+    this.state = defaultState
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -25,15 +22,27 @@ export class CreateGroupExpenseForm extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    })
+    let newState = {}
+    switch (event.target.name) {
+      case 'totalCost':
+        newState = {[event.target.name]: currency(event.target.value).value}
+        break
+      default:
+        newState = {[event.target.name]: event.target.value}
+        break
+    }
+    this.setState(newState)
   }
 
   handleSubmit(event) {
     event.preventDefault()
     try {
-      if (!this.state.name || !this.state.totalCost) {
+      if (
+        !this.state.name ||
+        !this.state.totalCost ||
+        !this.state.paidBy ||
+        this.state.paidBy === 'select'
+      ) {
         event.preventDefault()
         alert('A required field is missing.')
         return
@@ -43,58 +52,20 @@ export class CreateGroupExpenseForm extends React.Component {
         alert('Cost must be a number.')
         return
       }
-      // if (
-      //   !this.state.name ||
-      //   !this.state.totalCost ||
-      //   !this.state.paidBy ||
-      //   this.state.paidBy === 'select'
-      // ) {
-      //   event.preventDefault()
-      //   alert('A required field is missing.')
-      //   return
-      // }
 
-      console.log('FORM: cost in group expense form', this.state.totalCost)
-      console.log('FORM: initial type of cost', typeof this.state.totalCost)
-
-      parseFloat(event.target.totalCost)
-
-      this.setState({
-        name: event.target.name,
-        totalCost: event.target.totalCost,
-        members: [],
-      })
+      // console.log('FORM: type of cost:', typeof this.state.totalCost)
+      // console.log('FORM: sending to thunk Cost:', this.state.totalCost)
 
       // before sending totatCost to the function addGroupExpense I think I need to convert the dollars and cents that the user entered into an integer of pennies for our database
 
-      // tested:
-      // before setState: parseFloat, parseInt
-      // within setState: parseFloat, parseInt
-
-      console.log('FORM: sending to thunk groupId', this.props.groupId)
-      console.log('FORM: sending to thunk ExName', this.state.name)
-      console.log('FORM: sending to thunk Cost', this.state.totalCost)
-      console.log(
-        'FORM: after setState typeofCost',
-        typeof this.state.totalCost
-      )
-
-      this.props.addGroupExpense(
-        this.props.groupId,
-        this.state.name,
-        this.state.totalCost
-      )
+      this.props.addGroupExpense(this.props.groupId, {
+        name: this.state.name,
+        totalCost: currency(this.state.totalCost).value,
+      })
       this.setState(defaultState)
     } catch (error) {
       console.log('Failed to handle expense submission due to: ', error)
     }
-    // event.preventDefault()
-    // this.props.addGroupExpense(this.props.groupId, this.state)
-    // this.setState({
-    //   name: '',
-    //   totalCost: '',
-    //   paidBy: '',
-    // })
   }
 
   render() {
