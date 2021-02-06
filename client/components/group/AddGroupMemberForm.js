@@ -1,18 +1,19 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_loadFriends, _loadGroupMembers} from '../../store'
+import {_loadFriends, _loadGroupMembers, _addGroupMember} from '../../store'
 
 class AddGroupMemberForm extends React.Component {
   constructor() {
     super()
-    this.state = {memberId: ''}
+    // does member need to be empty object if we want to send the whole friend?
+    this.state = {member: ''}
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.availableFriends = this.availableFriends.bind(this)
+    this.friendsNotInGroup = this.friendsNotInGroup.bind(this)
   }
 
   // filters out user's friends that are already in group so they don't appear in dropdown menu
-  availableFriends(friends, groupMembers) {
+  friendsNotInGroup(friends, groupMembers) {
     let availableFriends
     for (let i = 0; i < groupMembers.length; i++) {
       let member = groupMembers[i]
@@ -22,14 +23,26 @@ class AddGroupMemberForm extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({[event.target.name]: event.target.value})
+    console.log('value: ', event.target.value)
+    // this.setState({
+    //   member: event.target.member,
+    // })
+    this.setState({
+      [event.target.name]: event.target.value,
+    })
+    console.log('state: ', this.state)
   }
 
   async handleSubmit(event) {
+    if (!this.state.member) {
+      event.preventDefault()
+      alert('A required field is missing.')
+      return
+    }
     event.preventDefault()
     try {
-      // await this.props.addFriend(this.props.user.id, this.state.email)
-      this.setState({memberId: ''})
+      await this.props.addGroupMember(this.props.groupId, this.state)
+      this.setState({member: ''})
     } catch (error) {
       console.log('Unable to add group member, because: ', error)
     }
@@ -41,35 +54,29 @@ class AddGroupMemberForm extends React.Component {
   }
 
   render() {
-    const availableFriends = this.availableFriends(
+    const friendsNotInGroup = this.friendsNotInGroup(
       this.props.friends,
       this.props.groupMembers
     )
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="memberId">Add a friend to this group</label>
-            <select
-              value={this.state.memberId}
-              onChange={this.handleChange}
-              name="memberId"
-            >
-              <option value="member">select</option>
-              {/* how to filter list to not show who is already in this group */}
-              {availableFriends.map((friend) => (
-                <option key={`friend-${friend.id}`} value={friend.id}>
-                  {friend.firstName} {friend.lastName}
-                </option>
-              ))}
-            </select>
-            <h6 className="required">* Required field</h6>
-          </div>
-          <div>
-            <button type="submit">Add</button>
-          </div>
-        </form>
-      </div>
+      <form onSubmit={this.handleSubmit}>
+        <label htmlFor="member">Add a friend to this group*</label>
+        {/* something is wrong and not allowing state to change */}
+        <select
+          value={this.state.member}
+          onChange={this.handleChange}
+          name="member"
+        >
+          <option value="member">select</option>
+          {friendsNotInGroup.map((friend) => (
+            <option key={`friend-${friend.id}`} value={friend.firstName}>
+              {friend.firstName} {friend.lastName}
+            </option>
+          ))}
+        </select>
+        <h6 className="required">* Required field</h6>
+        <button type="submit">Add</button>
+      </form>
     )
   }
 }
@@ -83,7 +90,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  // addFriend: (userId, email) => dispatch(_addFriend(userId, email)),
+  addGroupMember: (groupId, memberId) =>
+    dispatch(_addGroupMember(groupId, memberId)),
   loadFriends: (userId) => dispatch(_loadFriends(userId)),
   loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
 })
