@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_loadGroupMembers} from '../../store'
-// import {AddMemberForm} from '../index'
+import {AddGroupMemberForm} from '../index'
 
 export class GroupMembers extends React.Component {
   constructor() {
@@ -24,6 +24,7 @@ export class GroupMembers extends React.Component {
     return (
       <div>
         {/* <CreateGroupExpenseForm groupId={this.props.groupId} /> */}
+        <AddGroupMemberForm />
         <div id="full-member-list">
           {this.noMembers(groupMembers)}
           <ul>
