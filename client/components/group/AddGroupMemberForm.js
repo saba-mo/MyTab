@@ -17,8 +17,8 @@ class AddGroupMemberForm extends React.Component {
   }
 
   // filters out user's friends that are already in group so they don't appear in dropdown menu
-  // BUG: when you add a friend to the group, it removes them from the dropdown but replaces it with a friend who is already in the group...
   friendsNotInGroup(friends, groupMembers) {
+    // Problem (not breaking anything): when you add a friend to the group, it removes them from the dropdown but replaces it with a friend who is already in the group...
     let availableFriends
     for (let i = 0; i < groupMembers.length; i++) {
       let member = groupMembers[i]
@@ -47,10 +47,9 @@ class AddGroupMemberForm extends React.Component {
 
   render() {
     const friendsNotInGroup = this.friendsNotInGroup(
-      this.props.friends,
-      this.props.groupMembers
+      this.props.friends || [],
+      this.props.groupMembers || []
     )
-    console.log('friends array: ', friendsNotInGroup)
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="member">Add a friend to this group*</label>
