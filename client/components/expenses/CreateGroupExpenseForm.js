@@ -25,7 +25,12 @@ export class CreateGroupExpenseForm extends React.Component {
   }
 
   handleSubmit(event) {
-    if (!this.state.name || !this.state.totalCost || !this.state.paidBy) {
+    if (
+      !this.state.name ||
+      !this.state.totalCost ||
+      !this.state.paidBy ||
+      this.state.paidBy === 'select'
+    ) {
       event.preventDefault()
       alert('A required field is missing.')
       return
@@ -57,6 +62,7 @@ export class CreateGroupExpenseForm extends React.Component {
           onChange={this.handleChange}
         />
         <label htmlFor="totalCost">Cost*</label>
+        <div>$</div>
         <input
           className="form-state"
           type="text"
@@ -65,7 +71,6 @@ export class CreateGroupExpenseForm extends React.Component {
           onChange={this.handleChange}
         />
         <label htmlFor="paidBy">Paid by*</label>
-
         <select
           value={this.state.paidBy}
           onChange={this.handleChange}
