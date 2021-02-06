@@ -151,9 +151,11 @@ router.put(
   async (req, res, next) => {
     try {
       const thisExpense = await Expense.findByPk(req.params.expenseId)
-      const updatedExpense = await thisExpense.update(req.body)
-      // need to update user_expense association as well
-      // need to make sure we are only updating the fields that were sent
+      const updatedExpense = await thisExpense.update({
+        name: req.body.name,
+        totalCost: req.body.totalCost,
+      })
+      await updatedExpense.setUsers([req.body.paidBy])
       res.json(updatedExpense)
     } catch (err) {
       next(err)
