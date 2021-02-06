@@ -12,6 +12,11 @@ class AddGroupMemberForm extends React.Component {
     this.friendsNotInGroup = this.friendsNotInGroup.bind(this)
   }
 
+  componentDidMount() {
+    this.props.loadFriends(this.props.user.id)
+    this.props.loadGroupMembers(this.props.groupId)
+  }
+
   // filters out user's friends that are already in group so they don't appear in dropdown menu
   friendsNotInGroup(friends, groupMembers) {
     let availableFriends
@@ -33,24 +38,15 @@ class AddGroupMemberForm extends React.Component {
     console.log('state: ', this.state)
   }
 
-  async handleSubmit(event) {
+  handleSubmit(event) {
     if (!this.state.member) {
       event.preventDefault()
       alert('A required field is missing.')
       return
     }
     event.preventDefault()
-    try {
-      await this.props.addGroupMember(this.props.groupId, this.state)
-      this.setState({member: ''})
-    } catch (error) {
-      console.log('Unable to add group member, because: ', error)
-    }
-  }
-
-  componentDidMount() {
-    this.props.loadFriends(this.props.user.id)
-    this.props.loadGroupMembers(this.props.groupId)
+    this.props.addGroupMember(this.props.groupId, {member: this.state.member})
+    this.setState({member: ''})
   }
 
   render() {
@@ -58,6 +54,7 @@ class AddGroupMemberForm extends React.Component {
       this.props.friends,
       this.props.groupMembers
     )
+    console.log('friends array: ', friendsNotInGroup)
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="member">Add a friend to this group*</label>
@@ -69,7 +66,7 @@ class AddGroupMemberForm extends React.Component {
         >
           <option value="member">select</option>
           {friendsNotInGroup.map((friend) => (
-            <option key={`friend-${friend.id}`} value={friend.firstName}>
+            <option key={`friend-${friend.id}`} value={friend.id}>
               {friend.firstName} {friend.lastName}
             </option>
           ))}
