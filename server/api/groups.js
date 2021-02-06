@@ -76,7 +76,6 @@ router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
     const thisGroup = await Group.findByPk(groupId)
     if (!thisGroup) res.sendStatus(404)
 
-    // added User eager loading to try to get name in object
     const groupExpenses = await thisGroup.getExpenses({
       attributes: ['id', 'name', 'totalCost', 'groupId'],
       include: {model: User},
@@ -97,7 +96,6 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
     const userId = Number(req.body.paidBy)
 
     // create expense and associate to group
-    // trying eager loading user here but it's not adding user info to expense object
     let newExpense = await Expense.create(
       {
         name: expenseName,
@@ -114,16 +112,12 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
       }
     )
 
-    console.log('ne: ', newExpense)
-
-    // associate expense to user who paid...can't eager load User here because it says user is not associated to user_expense
+    // associate expense to user who paid
     await newExpense.addUser(userId)
 
-    // const thisUser = await newExpense.getUsers()
-    // console.log('hasU: ', await newExpense.hasUser(userId))
-    // // send user back with expense
-    // newExpense.users = thisUser
-    // console.log('expense with user? ', newExpense)
+    // find user and send info back with expense
+    const thisUser = await newExpense.getUsers()
+    newExpense.dataValues.users = thisUser
 
     res.json(newExpense)
   } catch (err) {

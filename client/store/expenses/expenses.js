@@ -41,13 +41,10 @@ export const _loadGroupExpenses = (groupId) => async (dispatch) => {
 
 export const _addGroupExpense = (groupId, expense) => async (dispatch) => {
   try {
-    // expense received by redux has name, totalCost and paidBy
-    console.log('before data')
     const {data} = await axios.post(
       `/api/groups/singleGroup/${groupId}/expenses`,
       expense
     )
-    console.log('after data, ', data)
     dispatch(addGroupExpense(data))
   } catch (error) {
     console.log(
