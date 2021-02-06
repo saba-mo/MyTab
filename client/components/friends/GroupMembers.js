@@ -6,6 +6,13 @@ import {AddGroupMemberForm} from '../index'
 export class GroupMembers extends React.Component {
   constructor() {
     super()
+    this.state = {showForm: false}
+
+    this.toggleShowForm = this.toggleShowForm.bind(this)
+  }
+
+  toggleShowForm() {
+    this.setState({showForm: !this.state.showForm})
   }
 
   componentDidMount() {
@@ -24,7 +31,20 @@ export class GroupMembers extends React.Component {
     return (
       <div>
         {/* <CreateGroupExpenseForm groupId={this.props.groupId} /> */}
-        <AddGroupMemberForm groupId={this.props.groupId} />
+        {this.state.showForm ? (
+          <AddGroupMemberForm
+            toggleForm={this.toggleShowForm}
+            groupId={this.props.groupId}
+          />
+        ) : (
+          <img
+            className="groupImg"
+            src="/images/plus.png"
+            height="64px"
+            width="64px"
+            onClick={this.toggleShowForm}
+          />
+        )}
         <div id="full-member-list">
           {this.noMembers(groupMembers)}
           <ul>

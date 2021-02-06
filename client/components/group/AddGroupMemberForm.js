@@ -5,7 +5,6 @@ import {_loadFriends, _loadGroupMembers, _addGroupMember} from '../../store'
 class AddGroupMemberForm extends React.Component {
   constructor() {
     super()
-    // does member need to be empty object if we want to send the whole friend?
     this.state = {member: ''}
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -18,6 +17,7 @@ class AddGroupMemberForm extends React.Component {
   }
 
   // filters out user's friends that are already in group so they don't appear in dropdown menu
+  // BUG: when you add a friend to the group, it removes them from the dropdown but replaces it with a friend who is already in the group...
   friendsNotInGroup(friends, groupMembers) {
     let availableFriends
     for (let i = 0; i < groupMembers.length; i++) {
@@ -28,14 +28,9 @@ class AddGroupMemberForm extends React.Component {
   }
 
   handleChange(event) {
-    console.log('value: ', event.target.value)
-    // this.setState({
-    //   member: event.target.member,
-    // })
     this.setState({
       [event.target.name]: event.target.value,
     })
-    console.log('state: ', this.state)
   }
 
   handleSubmit(event) {
@@ -45,6 +40,7 @@ class AddGroupMemberForm extends React.Component {
       return
     }
     event.preventDefault()
+    this.props.toggleForm()
     this.props.addGroupMember(this.props.groupId, {member: this.state.member})
     this.setState({member: ''})
   }
@@ -58,7 +54,6 @@ class AddGroupMemberForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="member">Add a friend to this group*</label>
-        {/* something is wrong and not allowing state to change */}
         <select
           value={this.state.member}
           onChange={this.handleChange}

@@ -39,14 +39,11 @@ export const _loadGroupMembers = (groupId) => async (dispatch) => {
 
 export const _addGroupMember = (groupId, member) => async (dispatch) => {
   try {
-    console.log('before data')
     const {data} = await axios.post(
       `/api/groups/singleGroup/${groupId}/members`,
       member
     )
-    console.log('after data: ', data)
     dispatch(addGroupMember(data))
-    console.log('did we dispatch?')
   } catch (error) {
     console.log(
       "Your friend should have been added to the group, but they weren't because: ",
