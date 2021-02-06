@@ -40,12 +40,7 @@ class SingleExpense extends React.Component {
         <h4>
           {expense.name} ${expense.totalCost}
         </h4>
-        <button type="submit">Settle</button>
-        <button type="submit" onClick={this.deleteAndGoBack}>
-          Remove
-        </button>
         <div className="editGroupPencil">
-          {/* <h3>{this.props.singleGroup.title}</h3> */}
           {this.state.showForm ? (
             <UpdateExpenseForm
               toggleForm={this.toggleShowForm}
@@ -61,6 +56,10 @@ class SingleExpense extends React.Component {
             />
           )}
         </div>
+        <button type="submit">Settle</button>
+        <button type="submit" onClick={this.deleteAndGoBack}>
+          Remove
+        </button>
       </div>
     )
   }

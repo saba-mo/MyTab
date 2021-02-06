@@ -75,8 +75,6 @@ export class UpdateExpenseForm extends React.Component {
 }
 const mapState = (state) => {
   return {
-    // singleGroup: state.singleGroup,
-    // groups: state.groups,
     groupMembers: state.groupMembers,
   }
 }
