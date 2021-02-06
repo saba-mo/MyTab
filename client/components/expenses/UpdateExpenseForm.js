@@ -1,15 +1,16 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_addGroupExpense, _loadGroupMembers} from '../../store'
+import {_loadGroupMembers, _updateExpense} from '../../store'
 
-export class CreateGroupExpenseForm extends React.Component {
-  constructor() {
-    super()
+export class UpdateExpenseForm extends React.Component {
+  constructor(props) {
+    super(props)
     this.state = {
-      name: '',
-      totalCost: '',
+      name: props.expense.name,
+      totalCost: props.expense.totalCost,
       paidBy: '',
     }
+
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -43,28 +44,27 @@ export class CreateGroupExpenseForm extends React.Component {
     }
 
     event.preventDefault()
-    this.props.addGroupExpense(this.props.groupId, this.state)
-    this.setState({
-      name: '',
-      totalCost: '',
-      paidBy: '',
-    })
+    this.props.toggleForm()
+    this.props.updateExpense(
+      this.props.groupId,
+      this.props.expense.id,
+      this.state
+    )
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label htmlFor="name">Expense Name*</label>
+        <label htmlFor="name">Edit Name:</label>
         <input
           type="text"
           name="name"
           value={this.state.name}
           onChange={this.handleChange}
         />
-        <label htmlFor="totalCost">Cost*</label>
+        <label htmlFor="totalCost">Edit Cost:</label>
         <div>$</div>
         <input
-          className="form-state"
           type="text"
           name="totalCost"
           value={this.state.totalCost}
@@ -84,23 +84,24 @@ export class CreateGroupExpenseForm extends React.Component {
           ))}
         </select>
         <h6 className="required">* Required field</h6>
-        <button type="submit">Create Expense</button>
+        <button type="submit">Save</button>
       </form>
     )
   }
 }
-
 const mapState = (state) => {
   return {
-    groupExpenses: state.groupExpenses,
     groupMembers: state.groupMembers,
+    expense: state.singleExpense,
   }
 }
+
 const mapDispatch = (dispatch) => {
   return {
-    addGroupExpense: (groupId, newExpense) =>
-      dispatch(_addGroupExpense(groupId, newExpense)),
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
+    updateExpense: (groupId, expenseId, expense) =>
+      dispatch(_updateExpense(groupId, expenseId, expense)),
   }
 }
-export default connect(mapState, mapDispatch)(CreateGroupExpenseForm)
+
+export default connect(mapState, mapDispatch)(UpdateExpenseForm)

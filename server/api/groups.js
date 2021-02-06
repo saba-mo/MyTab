@@ -78,6 +78,7 @@ router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
 
     const groupExpenses = await thisGroup.getExpenses({
       attributes: ['id', 'name', 'totalCost', 'groupId'],
+      include: {model: User},
     })
 
     res.json(groupExpenses)
@@ -92,13 +93,32 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
     let expenseCost = req.body.totalCost.replace(/^\D+/g, '')
     expenseCost = parseFloat(expenseCost)
     const expenseName = req.body.name
-    const newExpense = await Expense.create({
-      name: expenseName,
-      totalCost: expenseCost,
-    })
-    const thisGroup = await Group.findByPk(req.params.groupId)
-    await thisGroup.addExpense(newExpense.id)
-    // will want to assign expense to user(s) once we have assign to friend built in
+    const userId = Number(req.body.paidBy)
+
+    // create expense and associate to group
+    let newExpense = await Expense.create(
+      {
+        name: expenseName,
+        totalCost: expenseCost,
+        groupId: req.params.groupId,
+      },
+      {
+        include: {
+          model: User,
+          where: {
+            id: userId,
+          },
+        },
+      }
+    )
+
+    // associate expense to user who paid
+    await newExpense.addUser(userId)
+
+    // find user and send info back with expense
+    const thisUser = await newExpense.getUsers()
+    newExpense.dataValues.users = thisUser
+
     res.json(newExpense)
   } catch (err) {
     next(err)
@@ -124,6 +144,25 @@ router.get(
     }
   }
 )
+
+//UPDATE single group expense
+router.put(
+  '/singleGroup/:groupId/expenses/:expenseId',
+  async (req, res, next) => {
+    try {
+      const thisExpense = await Expense.findByPk(req.params.expenseId)
+      const updatedExpense = await thisExpense.update({
+        name: req.body.name,
+        totalCost: req.body.totalCost,
+      })
+      await updatedExpense.setUsers([req.body.paidBy])
+      res.json(updatedExpense)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+
 // DELETE single group expense
 router.delete(
   '/singleGroup/:groupId/expenses/:expenseId',

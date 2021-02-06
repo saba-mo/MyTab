@@ -21,7 +21,10 @@ export class GroupExpenses extends React.Component {
 
   render() {
     const {groupExpenses} = this.props
-
+    const groupTotal = groupExpenses.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.totalCost,
+      0
+    )
     return (
       <div>
         <CreateGroupExpenseForm groupId={this.props.groupId} />
@@ -36,11 +39,13 @@ export class GroupExpenses extends React.Component {
                   >
                     {expense.name}
                   </Link>{' '}
-                  Paid by: (name to come) ${expense.totalCost}
+                  Paid by {expense.users[0].firstName}{' '}
+                  {expense.users[0].lastName} ${expense.totalCost}
                 </div>
               )
             })}
           </ul>
+          <h3>Total: ${groupTotal.toFixed(2)}</h3>
         </div>
       </div>
     )
