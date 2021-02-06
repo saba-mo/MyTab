@@ -38,7 +38,6 @@ export class CreateGroupExpenseForm extends React.Component {
     }
 
     event.preventDefault()
-    console.log('state: ', this.state)
     this.props.addGroupExpense(this.props.groupId, this.state)
     this.setState({
       name: '',
