@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_loadFriends} from '../../store'
+import {_loadFriends, _loadGroupMembers} from '../../store'
 
 class AddGroupMemberForm extends React.Component {
   constructor() {
@@ -8,6 +8,17 @@ class AddGroupMemberForm extends React.Component {
     this.state = {memberId: ''}
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.availableFriends = this.availableFriends.bind(this)
+  }
+
+  // filters out user's friends that are already in group so they don't appear in dropdown menu
+  availableFriends(friends, groupMembers) {
+    let availableFriends
+    for (let i = 0; i < groupMembers.length; i++) {
+      let member = groupMembers[i]
+      availableFriends = friends.filter((friend) => friend.id !== member.id)
+    }
+    return availableFriends
   }
 
   handleChange(event) {
@@ -26,10 +37,14 @@ class AddGroupMemberForm extends React.Component {
 
   componentDidMount() {
     this.props.loadFriends(this.props.user.id)
+    this.props.loadGroupMembers(this.props.groupId)
   }
 
   render() {
-    console.log(this.props)
+    const availableFriends = this.availableFriends(
+      this.props.friends,
+      this.props.groupMembers
+    )
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -41,7 +56,8 @@ class AddGroupMemberForm extends React.Component {
               name="memberId"
             >
               <option value="member">select</option>
-              {this.props.friends.map((friend) => (
+              {/* how to filter list to not show who is already in this group */}
+              {availableFriends.map((friend) => (
                 <option key={`friend-${friend.id}`} value={friend.id}>
                   {friend.firstName} {friend.lastName}
                 </option>
@@ -62,12 +78,14 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
     friends: state.friends,
+    groupMembers: state.groupMembers,
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   // addFriend: (userId, email) => dispatch(_addFriend(userId, email)),
   loadFriends: (userId) => dispatch(_loadFriends(userId)),
+  loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddGroupMemberForm)

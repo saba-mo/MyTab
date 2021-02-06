@@ -24,7 +24,7 @@ export class GroupMembers extends React.Component {
     return (
       <div>
         {/* <CreateGroupExpenseForm groupId={this.props.groupId} /> */}
-        <AddGroupMemberForm />
+        <AddGroupMemberForm groupId={this.props.groupId} />
         <div id="full-member-list">
           {this.noMembers(groupMembers)}
           <ul>
