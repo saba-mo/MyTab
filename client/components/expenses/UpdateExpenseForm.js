@@ -26,7 +26,12 @@ export class UpdateExpenseForm extends React.Component {
   }
 
   handleSubmit(event) {
-    if (!this.state.name || !this.state.totalCost || !this.state.paidBy) {
+    if (
+      !this.state.name ||
+      !this.state.totalCost ||
+      !this.state.paidBy ||
+      this.state.paidBy === 'select'
+    ) {
       event.preventDefault()
       alert('A required field is missing.')
       return
@@ -58,6 +63,7 @@ export class UpdateExpenseForm extends React.Component {
           onChange={this.handleChange}
         />
         <label htmlFor="totalCost">Edit Cost:</label>
+        <div>$</div>
         <input
           type="text"
           name="totalCost"

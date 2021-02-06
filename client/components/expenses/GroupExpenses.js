@@ -45,7 +45,7 @@ export class GroupExpenses extends React.Component {
               )
             })}
           </ul>
-          <h3>Total: {groupTotal.toFixed(2)}</h3>
+          <h3>Total: ${groupTotal.toFixed(2)}</h3>
         </div>
       </div>
     )
