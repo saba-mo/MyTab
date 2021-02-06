@@ -63,6 +63,7 @@ export class UpdateExpenseForm extends React.Component {
           onChange={this.handleChange}
         />
         <label htmlFor="totalCost">Edit Cost:</label>
+        <div>$</div>
         <input
           type="text"
           name="totalCost"
