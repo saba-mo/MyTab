@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-// import {_addFriend} from '../../store'
+import {_loadFriends} from '../../store'
 
 class AddGroupMemberForm extends React.Component {
   constructor() {
@@ -24,8 +24,12 @@ class AddGroupMemberForm extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.props.loadFriends(this.props.user.id)
+  }
+
   render() {
-    const {email} = this.state
+    console.log(this.props)
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -37,11 +41,11 @@ class AddGroupMemberForm extends React.Component {
               name="memberId"
             >
               <option value="member">select</option>
-              {/* {this.props.groupMembers.map((member) => (
-                  <option key={`member-${member.id}`} value={member.id}>
-                    {member.firstName} {member.lastName}
-                  </option>
-                ))} */}
+              {this.props.friends.map((friend) => (
+                <option key={`friend-${friend.id}`} value={friend.id}>
+                  {friend.firstName} {friend.lastName}
+                </option>
+              ))}
             </select>
             <h6 className="required">* Required field</h6>
           </div>
@@ -57,11 +61,13 @@ class AddGroupMemberForm extends React.Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    friends: state.friends,
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   // addFriend: (userId, email) => dispatch(_addFriend(userId, email)),
+  loadFriends: (userId) => dispatch(_loadFriends(userId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddGroupMemberForm)
