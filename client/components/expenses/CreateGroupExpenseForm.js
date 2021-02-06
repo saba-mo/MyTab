@@ -61,7 +61,7 @@ export class CreateGroupExpenseForm extends React.Component {
       console.log('FORM: sending to thunk ExName', this.state.name)
       console.log('FORM: sending to thunk Cost', this.state.totalCost)
       console.log(
-        'FORM: after setState type of cost',
+        'FORM: after setState typeofCost',
         typeof this.state.totalCost
       )
 
