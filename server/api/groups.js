@@ -144,6 +144,23 @@ router.get(
     }
   }
 )
+
+//UPDATE single group expense
+router.put(
+  '/singleGroup/:groupId/expenses/:expenseId',
+  async (req, res, next) => {
+    try {
+      const thisExpense = await Expense.findByPk(req.params.expenseId)
+      const updatedExpense = await thisExpense.update(req.body)
+      // need to update user_expense association as well
+      // need to make sure we are only updating the fields that were sent
+      res.json(updatedExpense)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+
 // DELETE single group expense
 router.delete(
   '/singleGroup/:groupId/expenses/:expenseId',
