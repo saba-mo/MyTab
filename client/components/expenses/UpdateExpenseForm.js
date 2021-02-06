@@ -1,8 +1,10 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_addGroupExpense, _loadGroupMembers} from '../../store'
+// import {_updateExpense} from '../../store'
+import {_loadGroupMembers} from '../../store'
+// import {Link} from 'react-router-dom'
 
-export class CreateGroupExpenseForm extends React.Component {
+export class UpdateExpenseForm extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -10,6 +12,7 @@ export class CreateGroupExpenseForm extends React.Component {
       totalCost: '',
       paidBy: '',
     }
+
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -23,48 +26,34 @@ export class CreateGroupExpenseForm extends React.Component {
       [event.target.name]: event.target.value,
     })
   }
-
   handleSubmit(event) {
-    if (!this.state.name || !this.state.totalCost || !this.state.paidBy) {
-      event.preventDefault()
-      alert('A required field is missing.')
-      return
-    }
-
-    if (!Number(this.state.totalCost)) {
-      event.preventDefault()
-      alert('Cost must be a number.')
-      return
-    }
-
     event.preventDefault()
-    this.props.addGroupExpense(this.props.groupId, this.state)
+    this.props.toggleForm()
+    // this.props.updateExpense(this.props.singleGroup.id, {title: this.state.title})
     this.setState({
       name: '',
       totalCost: '',
       paidBy: '',
     })
   }
-
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label htmlFor="name">Expense Name*</label>
+        <label htmlFor="name">Edit Name:</label>
         <input
           type="text"
           name="name"
           value={this.state.name}
           onChange={this.handleChange}
         />
-        <label htmlFor="totalCost">Cost*</label>
+        <label htmlFor="totalCost">Edit Cost:</label>
         <input
-          className="form-state"
           type="text"
           name="totalCost"
           value={this.state.totalCost}
           onChange={this.handleChange}
         />
-        <label htmlFor="paidBy">Paid by*</label>
+        <label htmlFor="paidBy">Paid by</label>
         <select
           value={this.state.paidBy}
           onChange={this.handleChange}
@@ -77,24 +66,25 @@ export class CreateGroupExpenseForm extends React.Component {
             </option>
           ))}
         </select>
-        <h6 className="required">* Required field</h6>
-        <button type="submit">Create Expense</button>
+        <div>
+          <button type="submit">Edit</button>
+        </div>
       </form>
     )
   }
 }
-
 const mapState = (state) => {
   return {
-    groupExpenses: state.groupExpenses,
+    // singleGroup: state.singleGroup,
+    // groups: state.groups,
     groupMembers: state.groupMembers,
   }
 }
+
 const mapDispatch = (dispatch) => {
   return {
-    addGroupExpense: (groupId, newExpense) =>
-      dispatch(_addGroupExpense(groupId, newExpense)),
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
+    // updateExpense: (groupId, group) => dispatch(_updateExpense(groupId, group)),
   }
 }
-export default connect(mapState, mapDispatch)(CreateGroupExpenseForm)
+export default connect(mapState, mapDispatch)(UpdateExpenseForm)

@@ -2,17 +2,24 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {_loadAnExpense, _deleteGroupExpense} from '../../store/'
+import {UpdateExpenseForm} from '../index'
 
 class SingleExpense extends React.Component {
   constructor() {
     super()
+    this.state = {showForm: false}
 
     this.deleteAndGoBack = this.deleteAndGoBack.bind(this)
+    this.toggleShowForm = this.toggleShowForm.bind(this)
   }
 
   componentDidMount() {
     const {groupId, expenseId} = this.props.match.params
     this.props.loadAnExpense(groupId, expenseId)
+  }
+
+  toggleShowForm() {
+    this.setState({showForm: !this.state.showForm})
   }
 
   deleteAndGoBack() {
@@ -34,10 +41,26 @@ class SingleExpense extends React.Component {
           {expense.name} ${expense.totalCost}
         </h4>
         <button type="submit">Settle</button>
-        <button type="submit">Edit</button>
         <button type="submit" onClick={this.deleteAndGoBack}>
           Remove
         </button>
+        <div className="editGroupPencil">
+          {/* <h3>{this.props.singleGroup.title}</h3> */}
+          {this.state.showForm ? (
+            <UpdateExpenseForm
+              toggleForm={this.toggleShowForm}
+              groupId={this.props.match.params.groupId}
+            />
+          ) : (
+            <img
+              className="groupImg"
+              src="/images/pencil.png"
+              // height="400px"
+              // width="407.406px"
+              onClick={this.toggleShowForm}
+            />
+          )}
+        </div>
       </div>
     )
   }
