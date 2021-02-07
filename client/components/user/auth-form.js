@@ -16,12 +16,12 @@ const AuthForm = (props) => {
           {displayName === 'Sign Up' ? (
             <div>
               <label htmlFor="firstName">
-                <small>First Name</small>
+                <small>First Name*</small>
               </label>
               <input name="firstName" type="text" />
 
               <label htmlFor="lastName">
-                <small>Last Name</small>
+                <small>Last Name*</small>
               </label>
               <input name="lastName" type="text" />
             </div>
@@ -29,16 +29,17 @@ const AuthForm = (props) => {
             ''
           )}
           <label htmlFor="email">
-            <small>Email</small>
+            <small>Email*</small>
           </label>
           <input name="email" type="text" />
         </div>
         <div>
           <label htmlFor="password">
-            <small>Password</small>
+            <small>Password*</small>
           </label>
           <input name="password" type="password" />
         </div>
+        <h6 className="required">*Required field</h6>
         <div>
           <button type="submit">{displayName}</button>
         </div>
@@ -89,9 +90,19 @@ const mapDispatch = (dispatch) => {
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value
+      if (!email || !password) {
+        evt.preventDefault()
+        alert('A required field is missing.')
+        return
+      }
       if (formName === 'signup') {
         const firstName = evt.target.firstName.value
         const lastName = evt.target.lastName.value
+        if (!firstName || !lastName) {
+          evt.preventDefault()
+          alert('A required field is missing.')
+          return
+        }
         dispatch(authSignUp(firstName, lastName, email, password, formName))
       } else {
         dispatch(auth(email, password, formName))
