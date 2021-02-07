@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_loadGroupMembers} from '../../store'
+import {_loadGroupMembers, _deleteGroupMember} from '../../store'
 import {AddGroupMemberForm} from '../index'
 
 export class GroupMembers extends React.Component {
@@ -27,6 +27,7 @@ export class GroupMembers extends React.Component {
 
   render() {
     const {groupMembers} = this.props
+    console.log('GROUP MEMBERS: ', groupMembers)
 
     return (
       <div>
@@ -52,6 +53,17 @@ export class GroupMembers extends React.Component {
               return (
                 <div key={`member-${member.id}`}>
                   {member.firstName} {member.lastName}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      this.props.deleteGroupMember(
+                        member.user_group.group_Id,
+                        member.id
+                      )
+                    }
+                  >
+                    X
+                  </button>
                 </div>
               )
             })}
@@ -71,6 +83,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
+  deleteGroupMember: (groupId, memberId) =>
+    dispatch(_deleteGroupMember(groupId, memberId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupMembers)

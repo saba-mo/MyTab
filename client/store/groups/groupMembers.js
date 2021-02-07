@@ -3,7 +3,7 @@ import axios from 'axios'
 /* ACTION TYPES */
 const GET_GROUP_MEMBERS = 'GET_GROUP_MEMBERS'
 const ADD_GROUP_MEMBER = 'ADD_GROUP_MEMBER'
-// const DELETE_GROUP_EXPENSE = 'DELETE_GROUP_EXPENSE'
+const DELETE_GROUP_MEMBER = 'DELETE_GROUP_MEMBER'
 
 /* ACTION CREATORS */
 const getGroupMembers = (members) => ({
@@ -16,10 +16,10 @@ const addGroupMember = (member) => ({
   member,
 })
 
-// const deleteGroupExpense = (expenseId) => ({
-//   type: DELETE_GROUP_EXPENSE,
-//   expenseId,
-// })
+const deleteGroupMember = (memberId) => ({
+  type: DELETE_GROUP_MEMBER,
+  memberId,
+})
 
 /* INITIAL STATE */
 const initialState = []
@@ -52,19 +52,18 @@ export const _addGroupMember = (groupId, member) => async (dispatch) => {
   }
 }
 
-// export const _deleteGroupExpense = (groupId, expenseId) => async (dispatch) => {
-//   try {
-//     await axios.delete(
-//       `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`
-//     )
-//     dispatch(deleteGroupExpense(expenseId))
-//   } catch (error) {
-//     console.log(
-//       'Your group expense should have been deleted, but it was not because: ',
-//       error
-//     )
-//   }
-// }
+export const _deleteGroupMember = (groupId, memberId) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/groups/singleGroup/${groupId}/members/${memberId}`)
+    dispatch(deleteGroupMember(memberId))
+  } catch (error) {
+    console.log(
+      'Your group member should have been deleted, but it was not because: ',
+      error
+    )
+  }
+}
+
 /* REDUCER */
 const groupMembersReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -72,8 +71,8 @@ const groupMembersReducer = (state = initialState, action) => {
       return action.members
     case ADD_GROUP_MEMBER:
       return [...state, action.member]
-    // case DELETE_GROUP_EXPENSE:
-    //   return [...state.filter((expense) => expense.id !== action.expenseId)]
+    case DELETE_GROUP_MEMBER:
+      return [...state.filter((member) => member.id !== action.memberId)]
     default:
       return state
   }
