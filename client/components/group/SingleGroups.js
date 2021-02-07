@@ -4,7 +4,6 @@ import {_getSingleGroup, _updateGroup} from '../../store/groups/singleGroup'
 import GroupExpenses from '../expenses/GroupExpenses'
 import UpdateGroupForm from './UpdateGroupForm'
 import {GroupMembers} from '../../components'
-import {Link} from 'react-router-dom'
 
 export class SingleGroup extends React.Component {
   constructor() {
@@ -68,21 +67,27 @@ export class SingleGroup extends React.Component {
             <div>
               <div className="tab_buttons_div">
                 <a
-                  className="grp_tab_btns"
-                  onClick={this.tabChange.bind(this, 'members')}
-                >
-                  {' '}
-                  Members |{' '}
-                </a>
-                <a
-                  className="grp_tab_btns"
+                  className={`grp_tab_btns ${
+                    this.state.tabName === 'expenses' ? 'selectedTab' : ''
+                  }`}
                   onClick={this.tabChange.bind(this, 'expenses')}
                 >
                   {' '}
                   Expenses |{' '}
                 </a>
                 <a
-                  className="grp_tab_btns"
+                  className={`grp_tab_btns ${
+                    this.state.tabName === 'members' ? 'selectedTab' : ''
+                  }`}
+                  onClick={this.tabChange.bind(this, 'members')}
+                >
+                  {' '}
+                  Members |{' '}
+                </a>
+                <a
+                  className={`grp_tab_btns ${
+                    this.state.tabName === 'balances' ? 'selectedTab' : ''
+                  }`}
                   onClick={this.tabChange.bind(this, 'balances')}
                 >
                   {' '}
