@@ -43,6 +43,7 @@ export class CreateGroupExpenseForm extends React.Component {
     }
 
     event.preventDefault()
+    this.props.toggleForm()
     this.props.addGroupExpense(this.props.groupId, this.state)
     this.setState({
       name: '',
