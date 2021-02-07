@@ -4,12 +4,11 @@ import {_getSingleGroup, _updateGroup} from '../../store/groups/singleGroup'
 import GroupExpenses from '../expenses/GroupExpenses'
 import UpdateGroupForm from './UpdateGroupForm'
 import {GroupMembers} from '../../components'
-import {Link} from 'react-router-dom'
 
 export class SingleGroup extends React.Component {
   constructor() {
     super()
-    this.state = {tabName: 'expenses', showForm: false}
+    this.state = {tabName: 'members', showForm: false}
 
     this.tabChange = this.tabChange.bind(this)
     this.toggleShowForm = this.toggleShowForm.bind(this)
