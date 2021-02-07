@@ -200,4 +200,18 @@ router.get('/singleGroup/:groupId/members', async (req, res, next) => {
   }
 })
 
+// ADD a group member
+router.post('/singleGroup/:groupId/members', async (req, res, next) => {
+  try {
+    const id = Number(req.body.member)
+    let thisUser = await User.findByPk(id, {
+      attributes: ['id', 'firstName', 'lastName', 'email'],
+    })
+    await thisUser.addGroup(req.params.groupId)
+    res.json(thisUser)
+  } catch (err) {
+    next(err)
+  }
+})
+
 module.exports = router
