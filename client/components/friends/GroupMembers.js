@@ -1,11 +1,18 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_loadGroupMembers} from '../../store'
-// import {AddMemberForm} from '../index'
+import {AddGroupMemberForm} from '../index'
 
 export class GroupMembers extends React.Component {
   constructor() {
     super()
+    this.state = {showForm: false}
+
+    this.toggleShowForm = this.toggleShowForm.bind(this)
+  }
+
+  toggleShowForm() {
+    this.setState({showForm: !this.state.showForm})
   }
 
   componentDidMount() {
@@ -24,6 +31,20 @@ export class GroupMembers extends React.Component {
     return (
       <div>
         {/* <CreateGroupExpenseForm groupId={this.props.groupId} /> */}
+        {this.state.showForm ? (
+          <AddGroupMemberForm
+            toggleForm={this.toggleShowForm}
+            groupId={this.props.groupId}
+          />
+        ) : (
+          <img
+            className="groupImg"
+            src="/images/plus.png"
+            height="64px"
+            width="64px"
+            onClick={this.toggleShowForm}
+          />
+        )}
         <div id="full-member-list">
           {this.noMembers(groupMembers)}
           <ul>
