@@ -194,6 +194,10 @@ a.grp_tab_btns:hover {
   color: #0400ff;
 }
 
+.grp_tab_btns.selectedTab {
+  color: #0400ff;
+}
+
 .single-expense-navbar {
   display: flex;
   background-color: #61a3ee;
