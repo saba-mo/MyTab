@@ -82,8 +82,7 @@ router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
 // POST a new group expense
 router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
   try {
-    let expenseCost = req.body.totalCost.replace(/^\D+/g, '')
-    expenseCost = parseFloat(expenseCost)
+    const expenseCost = parseFloat(req.body.totalCost)
     const expenseName = req.body.name
     const userId = Number(req.body.paidBy)
 
@@ -103,6 +102,9 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
         },
       }
     )
+
+    // TODO: create Item rows from req.body.owedByMember
+    // if paidby don't create item
 
     // associate expense to user who paid
     await newExpense.addUser(userId)
