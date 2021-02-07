@@ -6,9 +6,10 @@ import {AddGroupMemberForm} from '../index'
 export class GroupMembers extends React.Component {
   constructor() {
     super()
-    this.state = {showForm: false}
+    this.state = {showForm: false, numberOfMembers: 0}
 
     this.toggleShowForm = this.toggleShowForm.bind(this)
+    this.attemptToRemoveMember = this.attemptToRemoveMember.bind(this)
   }
 
   toggleShowForm() {
@@ -19,6 +20,18 @@ export class GroupMembers extends React.Component {
     this.props.loadGroupMembers(this.props.groupId)
   }
 
+  attemptToRemoveMember(groupId, memberId, lengthOfMembersArray) {
+    // console.log('length arg: ', lengthOfMembersArray)
+    this.setState({numberOfMembers: lengthOfMembersArray})
+    // state does not change from 0 the first time you try to delete someone, but does when you try to delete someone else
+    // console.log('length on state: ', this.state.numberOfMembers)
+    this.props.deleteGroupMember(groupId, memberId)
+    // console.log('gm length after delete: ', this.props.groupMembers.length)
+    if (this.props.groupMembers.length === this.state.numberOfMembers) {
+      alert('You cannot remove a member with a balance in the group.')
+    }
+  }
+
   noMembers = (memberList) => {
     if (memberList.length < 1) {
       return 'Add members to this group here.'
@@ -27,10 +40,10 @@ export class GroupMembers extends React.Component {
 
   render() {
     const {groupMembers} = this.props
+    const lengthOfMembersArray = groupMembers.length
 
     return (
       <div>
-        {/* <CreateGroupExpenseForm groupId={this.props.groupId} /> */}
         {this.state.showForm ? (
           <AddGroupMemberForm
             toggleForm={this.toggleShowForm}
@@ -54,11 +67,11 @@ export class GroupMembers extends React.Component {
                   {member.firstName} {member.lastName}
                   <button
                     type="button"
-                    // change onclick to a helper function so we can both try to remove hte user and also throw an alert if we were unable to remove them
                     onClick={() =>
-                      this.props.deleteGroupMember(
+                      this.attemptToRemoveMember(
                         this.props.groupId,
-                        member.id
+                        member.id,
+                        lengthOfMembersArray
                       )
                     }
                   >

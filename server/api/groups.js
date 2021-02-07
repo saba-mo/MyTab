@@ -208,27 +208,26 @@ router.post('/singleGroup/:groupId/members', async (req, res, next) => {
 // DELETE a group member
 router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
   try {
+    // clean up this code - we might not need to find both the group and the user, but make sure before deleting
     const memberId = Number(req.body.memberId)
     const groupId = Number(req.params.groupId)
     const group = await Group.findByPk(groupId)
-    // check if user has existing balance
-    const thisUser = await User.findByPk(memberId, {include: {model: Group}})
 
+    // find user object so later we can check if they have an existing balance
+    const thisUser = await User.findByPk(memberId, {include: {model: Group}})
     // filter array of groups user is in so that we only have one array element and therefore know the index of this group
-    const thisGroup = thisUser.groups.filter(
+    const thisGroupArray = thisUser.groups.filter(
       (currentGroup) => currentGroup.user_group.group_Id === groupId
     )
-
-    // if the member has a balance in that group (number other than 0), we should not allow the user to remove the member
-    if (thisGroup[0].user_group.balance !== 0) {
+    // if the member has a balance in that group (positive or negative), we should not allow the user to remove the member
+    // instead, we send back the list of all group members so the front end can check what to display
+    if (thisGroupArray[0].user_group.balance !== 0) {
       const groupMembers = await group.getUsers({
         attributes: ['id', 'email', 'firstName', 'lastName'],
       })
-      // conditional is working on backend but front end makes it look like you are removing member, until you refresh
-      // if we shouldn't delete the user, we should send something back to thunk, otherwise, don't send anything back
       res.json(groupMembers)
     }
-    // else remove user from group
+    // else move forward with removing user from group
     else {
       await group.removeUser(memberId)
       res.sendStatus(204)
