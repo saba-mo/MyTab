@@ -3,8 +3,8 @@ const {Op} = require('sequelize')
 const db = require('../server/db')
 const {User, Group, Expense, Item} = require('../server/db/models')
 const groupData = require('./dummyDataGroups')
-const userData = require('./dummyDataUser.js')
-const expenseData = require('./dummyDataExpenses.js')
+const userData = require('./dummyDataUser')
+const expenseData = require('./dummyDataExpenses')
 
 async function seed() {
   await db.sync({force: true})
