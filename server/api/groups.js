@@ -208,13 +208,15 @@ router.post('/singleGroup/:groupId/members', async (req, res, next) => {
 // DELETE a group member
 router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
   try {
-    const memberId = req.body.memberId
-    const group = await Group.findByPk(req.params.groupId)
-    await group.removeMember(memberId)
+    const memberId = Number(req.body.memberId)
+    const groupId = Number(req.params.groupId)
+    const group = await Group.findByPk(groupId)
+    // make sure user doesn't have existing balance
+
+    // remove user from group
+    await group.removeUser(memberId)
+
     res.sendStatus(204)
-    // console.log('req.body: ', req.body)
-    // console.log('req.params.groupId: ', req.params.groupId)
-    // console.log('req.params.memberId: ', req.params.groupId)
   } catch (err) {
     next(err)
   }

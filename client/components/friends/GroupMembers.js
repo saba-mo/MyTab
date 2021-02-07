@@ -57,7 +57,7 @@ export class GroupMembers extends React.Component {
                     type="button"
                     onClick={() =>
                       this.props.deleteGroupMember(
-                        member.user_group.group_Id,
+                        this.props.groupId,
                         member.id
                       )
                     }
