@@ -1,18 +1,7 @@
 const router = require('express').Router()
 const {Group, User, Expense} = require('../db/models')
 
-//ORIGINAL GET ROUTE
-// router.get('/', async (req, res, next) => {
-//   try {
-//     const groups = await Group.findAll({
-//       include: [User]
-//     })
-//     res.send(groups)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
+//GET all groups
 router.get('/:userId', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId, {
@@ -24,6 +13,7 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
+//GET a single group
 router.get('/singleGroup/:groupId', async (req, res, next) => {
   try {
     const group = await Group.findByPk(req.params.groupId)
@@ -33,6 +23,7 @@ router.get('/singleGroup/:groupId', async (req, res, next) => {
   }
 })
 
+//ADD a new group
 router.post('/', async function (req, res, next) {
   try {
     const newGroup = await Group.create(req.body)
@@ -43,6 +34,7 @@ router.post('/', async function (req, res, next) {
   }
 })
 
+//DELETE a group
 router.delete('/:groupId', (req, res, next) => {
   try {
     Group.destroy({
@@ -206,6 +198,21 @@ router.post('/singleGroup/:groupId/members', async (req, res, next) => {
     })
     await thisUser.addGroup(req.params.groupId)
     res.json(thisUser)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// DELETE a group member
+router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
+  try {
+    const memberId = req.body.memberId
+    const group = await Group.findByPk(req.params.groupId)
+    await group.removeMember(memberId)
+    res.sendStatus(204)
+    // console.log('req.body: ', req.body)
+    // console.log('req.params.groupId: ', req.params.groupId)
+    // console.log('req.params.memberId: ', req.params.groupId)
   } catch (err) {
     next(err)
   }
