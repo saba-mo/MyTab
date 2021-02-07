@@ -5,7 +5,7 @@ import currency from 'currency.js'
 
 const defaultState = {
   name: '',
-  totalCost: undefined,
+  totalCost: '',
   paidBy: '',
 }
 
@@ -22,16 +22,7 @@ export class CreateGroupExpenseForm extends React.Component {
   }
 
   handleChange(event) {
-    let newState = {}
-    switch (event.target.name) {
-      case 'totalCost':
-        newState = {[event.target.name]: currency(event.target.value).value}
-        break
-      default:
-        newState = {[event.target.name]: event.target.value}
-        break
-    }
-    this.setState(newState)
+    this.setState({[event.target.name]: event.target.value})
   }
 
   handleSubmit(event) {
@@ -53,14 +44,10 @@ export class CreateGroupExpenseForm extends React.Component {
         return
       }
 
-      // console.log('FORM: type of cost:', typeof this.state.totalCost)
-      // console.log('FORM: sending to thunk Cost:', this.state.totalCost)
-
-      // before sending totatCost to the function addGroupExpense I think I need to convert the dollars and cents that the user entered into an integer of pennies for our database
-
       this.props.addGroupExpense(this.props.groupId, {
         name: this.state.name,
         totalCost: currency(this.state.totalCost).value,
+        paidBy: this.state.paidBy,
       })
       this.setState(defaultState)
     } catch (error) {

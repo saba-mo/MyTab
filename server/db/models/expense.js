@@ -17,6 +17,7 @@ const Expense = db.define('expense', {
       min: 0,
     },
     get() {
+      // broken down of return state to more easily read as an engineer:
       // let storedValue = this.getDataValue('totalCost')
       // let currency = currency(storedValue)
       // let floatValue = currency.value
@@ -26,7 +27,7 @@ const Expense = db.define('expense', {
       return currency(this.getDataValue('totalCost')).value
     },
     set(value) {
-      this.setDataValue(currency(value).value)
+      this.setDataValue('totalCost', currency(value).value)
     },
   },
 })

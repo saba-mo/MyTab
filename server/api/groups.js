@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const {Group, User, Expense} = require('../db/models')
+const currency = require('currency.js')
 
 //ORIGINAL GET ROUTE
 // router.get('/', async (req, res, next) => {
@@ -90,8 +91,10 @@ router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
 // POST a new group expense
 router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
   try {
-    let expenseCost = req.body.totalCost.replace(/^\D+/g, '')
-    expenseCost = parseFloat(expenseCost)
+    // for extra safely checking we can add this todo check after MVP:
+    // todo: validate totalCost format, and return a 400 status for non float data e.g if (!Number(req.body.totalCost))
+
+    const expenseCost = currency(req.body.totalCost).value
     const expenseName = req.body.name
     const userId = Number(req.body.paidBy)
 
