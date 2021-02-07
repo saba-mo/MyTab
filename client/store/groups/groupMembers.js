@@ -54,10 +54,17 @@ export const _addGroupMember = (groupId, member) => async (dispatch) => {
 
 export const _deleteGroupMember = (groupId, memberId) => async (dispatch) => {
   try {
-    await axios.delete(`/api/groups/singleGroup/${groupId}/members`, {
-      data: {memberId},
-    })
-    dispatch(deleteGroupMember(memberId))
+    const {data} = await axios.delete(
+      `/api/groups/singleGroup/${groupId}/members`,
+      {
+        data: {memberId},
+      }
+    )
+    if (data) {
+      dispatch(getGroupMembers)
+    } else {
+      dispatch(deleteGroupMember(memberId))
+    }
   } catch (error) {
     console.log(
       'Your group member should have been deleted, but it was not because: ',

@@ -27,7 +27,6 @@ export class GroupMembers extends React.Component {
 
   render() {
     const {groupMembers} = this.props
-    console.log('GROUP MEMBERS: ', groupMembers)
 
     return (
       <div>
@@ -55,6 +54,7 @@ export class GroupMembers extends React.Component {
                   {member.firstName} {member.lastName}
                   <button
                     type="button"
+                    // change onclick to a helper function so we can both try to remove hte user and also throw an alert if we were unable to remove them
                     onClick={() =>
                       this.props.deleteGroupMember(
                         this.props.groupId,
