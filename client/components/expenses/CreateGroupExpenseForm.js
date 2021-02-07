@@ -3,15 +3,17 @@ import {connect} from 'react-redux'
 import {_addGroupExpense, _loadGroupMembers} from '../../store'
 
 export class CreateGroupExpenseForm extends React.Component {
-  constructor() {
+  constructor(props) {
     super()
     this.state = {
       name: '',
       totalCost: '',
-      paidBy: '',
+      paidBy: props.user.id,
+      owedByMember: {},
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
   }
 
   componentDidMount() {
@@ -19,9 +21,30 @@ export class CreateGroupExpenseForm extends React.Component {
   }
 
   handleChange(event) {
+    let value
+    if (event.target.name === 'name') {
+      value = event.target.value
+    } else {
+      // totalCost and owedId should be numbers
+      value = Number(event.target.value)
+    }
+
+    if (event.target.name === 'paidBy') {
+      let owedByMember = this.state.owedByMember
+      let memberId = Number(event.target.value)
+      delete owedByMember[memberId]
+      this.setState({owedByMember})
+    }
+
     this.setState({
-      [event.target.name]: event.target.value,
+      [event.target.name]: value,
     })
+  }
+
+  handleAmountOwedChange(memberId, amount) {
+    let owedByMember = this.state.owedByMember
+    owedByMember[memberId] = amount
+    this.setState({owedByMember})
   }
 
   handleSubmit(event) {
@@ -45,14 +68,18 @@ export class CreateGroupExpenseForm extends React.Component {
     event.preventDefault()
     this.props.toggleForm()
     this.props.addGroupExpense(this.props.groupId, this.state)
-    this.setState({
-      name: '',
-      totalCost: '',
-      paidBy: '',
-    })
   }
 
   render() {
+    let totalOwed
+    if (Object.values(this.state.owedByMember).length === 0) {
+      totalOwed = 0
+    } else {
+      totalOwed = Object.values(this.state.owedByMember).reduce(
+        (sum, val) => sum + val
+      )
+    }
+
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="name">Expense Name*</label>
@@ -61,15 +88,19 @@ export class CreateGroupExpenseForm extends React.Component {
           name="name"
           value={this.state.name}
           onChange={this.handleChange}
+          placeholder="Ex: Quarantine Brunch"
         />
         <label htmlFor="totalCost">Cost*</label>
         <div>$</div>
         <input
           className="form-state"
-          type="text"
+          type="number"
           name="totalCost"
-          value={this.state.totalCost}
+          step="0.01"
+          min={0}
+          value={this.state.totalCost === 0 ? '' : this.state.totalCost}
           onChange={this.handleChange}
+          placeholder="Ex: 100 or 9.39"
         />
         <label htmlFor="paidBy">Paid by*</label>
         <select
@@ -85,7 +116,56 @@ export class CreateGroupExpenseForm extends React.Component {
           ))}
         </select>
         <h6 className="required">* Required field</h6>
-        <button type="submit">Create Expense</button>
+        {this.props.groupMembers.map((member) => (
+          <div className="container" key={member.id}>
+            <div>
+              {member.firstName} {member.lastName}
+            </div>
+            <div>
+              Amount Owed: $
+              <input
+                disabled={member.id === this.state.paidBy}
+                min={0}
+                type="number"
+                step="0.01"
+                value={
+                  this.state.owedByMember[member.id] === undefined
+                    ? ''
+                    : this.state.owedByMember[member.id] === 0
+                    ? ''
+                    : this.state.owedByMember[member.id]
+                }
+                placeholder={
+                  member.id === this.state.paidBy ? 'Paid by' : undefined
+                }
+                onChange={(event) =>
+                  this.handleAmountOwedChange(
+                    member.id,
+                    Number(event.target.value)
+                  )
+                }
+              />
+            </div>
+          </div>
+        ))}
+        <div>
+          <div>Total Cost: {this.state.totalCost}</div>
+          <div>Total Owed: {totalOwed}</div>
+        </div>
+        <button
+          type="submit"
+          disabled={totalOwed === 0 || totalOwed > this.state.totalCost}
+        >
+          Create Expense
+        </button>
+        {totalOwed > this.state.totalCost && (
+          <div className="error">
+            Total Cost cannot be greater than Total Owed
+          </div>
+        )}
+        {totalOwed === 0 && (
+          <div className="error">Total Owed must be greater than 0</div>
+        )}
       </form>
     )
   }
@@ -93,6 +173,7 @@ export class CreateGroupExpenseForm extends React.Component {
 
 const mapState = (state) => {
   return {
+    user: state.user,
     groupExpenses: state.groupExpenses,
     groupMembers: state.groupMembers,
   }

@@ -124,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _store_expenses_expenses__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/expenses/expenses */ "./client/store/expenses/expenses.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store */ "./client/store/index.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -153,7 +153,7 @@ var CreateGroupExpenseForm =
 function (_React$Component) {
   _inherits(CreateGroupExpenseForm, _React$Component);
 
-  function CreateGroupExpenseForm() {
+  function CreateGroupExpenseForm(props) {
     var _this;
 
     _classCallCheck(this, CreateGroupExpenseForm);
@@ -161,22 +161,57 @@ function (_React$Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(CreateGroupExpenseForm).call(this));
     _this.state = {
       name: '',
-      totalCost: ''
+      totalCost: '',
+      paidBy: props.user.id,
+      owedByMember: {}
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.handleAmountOwedChange = _this.handleAmountOwedChange.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(CreateGroupExpenseForm, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.loadGroupMembers(this.props.groupId);
+    }
+  }, {
     key: "handleChange",
     value: function handleChange(event) {
-      this.setState(_defineProperty({}, event.target.name, event.target.value));
+      var value;
+
+      if (event.target.name === 'name') {
+        value = event.target.value;
+      } else {
+        // totalCost and owedId should be numbers
+        value = Number(event.target.value);
+      }
+
+      if (event.target.name === 'paidBy') {
+        var owedByMember = this.state.owedByMember;
+        var memberId = Number(event.target.value);
+        delete owedByMember[memberId];
+        this.setState({
+          owedByMember: owedByMember
+        });
+      }
+
+      this.setState(_defineProperty({}, event.target.name, value));
+    }
+  }, {
+    key: "handleAmountOwedChange",
+    value: function handleAmountOwedChange(memberId, amount) {
+      var owedByMember = this.state.owedByMember;
+      owedByMember[memberId] = amount;
+      this.setState({
+        owedByMember: owedByMember
+      });
     }
   }, {
     key: "handleSubmit",
     value: function handleSubmit(event) {
-      if (!this.state.name || !this.state.totalCost) {
+      if (!this.state.name || !this.state.totalCost || !this.state.paidBy || this.state.paidBy === 'select') {
         event.preventDefault();
         alert('A required field is missing.');
         return;
@@ -189,15 +224,24 @@ function (_React$Component) {
       }
 
       event.preventDefault();
+      this.props.toggleForm();
       this.props.addGroupExpense(this.props.groupId, this.state);
-      this.setState({
-        name: '',
-        totalCost: ''
-      });
     }
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
+      var totalOwed;
+
+      if (Object.values(this.state.owedByMember).length === 0) {
+        totalOwed = 0;
+      } else {
+        totalOwed = Object.values(this.state.owedByMember).reduce(function (sum, val) {
+          return sum + val;
+        });
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
@@ -206,36 +250,78 @@ function (_React$Component) {
         type: "text",
         name: "name",
         value: this.state.name,
-        onChange: this.handleChange
+        onChange: this.handleChange,
+        placeholder: "Ex: Quarantine Brunch"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "totalCost"
-      }, "Cost*"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, "Cost*"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "$"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         className: "form-state",
-        type: "text",
+        type: "number",
         name: "totalCost",
-        value: this.state.totalCost,
-        onChange: this.handleChange
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
+        step: "0.01",
+        min: 0,
+        value: this.state.totalCost === 0 ? '' : this.state.totalCost,
+        onChange: this.handleChange,
+        placeholder: "Ex: 100 or 9.39"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "paidBy"
+      }, "Paid by*"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        value: this.state.paidBy,
+        onChange: this.handleChange,
+        name: "paidBy"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "member"
+      }, "select"), this.props.groupMembers.map(function (member) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: "member-".concat(member.id),
+          value: member.id
+        }, member.firstName, " ", member.lastName);
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
         className: "required"
-      }, "* Required field"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "submit"
-      }, "Create Expense"));
+      }, "* Required field"), this.props.groupMembers.map(function (member) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "container",
+          key: member.id
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, member.firstName, " ", member.lastName), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Amount Owed: $", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          disabled: member.id === _this2.state.paidBy,
+          min: 0,
+          type: "number",
+          step: "0.01",
+          value: _this2.state.owedByMember[member.id] === undefined ? '' : _this2.state.owedByMember[member.id] === 0 ? '' : _this2.state.owedByMember[member.id],
+          placeholder: member.id === _this2.state.paidBy ? 'Paid by' : undefined,
+          onChange: function onChange(event) {
+            return _this2.handleAmountOwedChange(member.id, Number(event.target.value));
+          }
+        })));
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Total Cost: ", this.state.totalCost), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Total Owed: ", totalOwed)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "submit",
+        disabled: totalOwed === 0 || totalOwed > this.state.totalCost
+      }, "Create Expense"), totalOwed > this.state.totalCost && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "error"
+      }, "Total Cost cannot be greater than Total Owed"), totalOwed === 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "error"
+      }, "Total Owed must be greater than 0"));
     }
   }]);
 
   return CreateGroupExpenseForm;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component); // is this necessary?
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 var mapState = function mapState(state) {
   return {
-    groupExpenses: state.groupExpenses
+    user: state.user,
+    groupExpenses: state.groupExpenses,
+    groupMembers: state.groupMembers
   };
 };
 
 var mapDispatch = function mapDispatch(dispatch) {
   return {
     addGroupExpense: function addGroupExpense(groupId, newExpense) {
-      return dispatch(Object(_store_expenses_expenses__WEBPACK_IMPORTED_MODULE_2__["_addGroupExpense"])(groupId, newExpense));
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_addGroupExpense"])(groupId, newExpense));
+    },
+    loadGroupMembers: function loadGroupMembers(groupId) {
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_loadGroupMembers"])(groupId));
     }
   };
 };
@@ -303,6 +389,10 @@ function (_React$Component) {
       }
     });
 
+    _this.state = {
+      showForm: false
+    };
+    _this.toggleShowForm = _this.toggleShowForm.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -312,20 +402,39 @@ function (_React$Component) {
       this.props.loadGroupExpenses(this.props.groupId);
     }
   }, {
+    key: "toggleShowForm",
+    value: function toggleShowForm() {
+      this.setState({
+        showForm: !this.state.showForm
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       var groupExpenses = this.props.groupExpenses;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_index__WEBPACK_IMPORTED_MODULE_4__["CreateGroupExpenseForm"], {
+      var groupTotal = groupExpenses.reduce(function (accumulator, currentValue) {
+        return accumulator + currentValue.totalCost;
+      }, 0);
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "editGroupPencil"
+      }, this.state.showForm ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_index__WEBPACK_IMPORTED_MODULE_4__["CreateGroupExpenseForm"], {
+        toggleForm: this.toggleShowForm,
         groupId: this.props.groupId
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        className: "groupImg",
+        src: "/images/plus.png",
+        height: "64px",
+        width: "64px",
+        onClick: this.toggleShowForm
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "full-expense-list"
       }, this.noExpenses(groupExpenses), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, groupExpenses.map(function (expense) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: "expense-".concat(expense.id)
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
           to: "/groups/singleGroup/".concat(expense.groupId, "/expenses/").concat(expense.id)
-        }, expense.name), ' ', "Paid by: (name to come) $", expense.totalCost);
-      }))));
+        }, expense.name), ' ', "Paid by ", expense.users[0].firstName, ' ', expense.users[0].lastName, " $", expense.totalCost);
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Total: $", groupTotal.toFixed(2))));
     }
   }]);
 
@@ -365,6 +474,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var _store___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store/ */ "./client/store/index.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../index */ "./client/components/index.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -388,6 +498,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var SingleExpense =
 /*#__PURE__*/
 function (_React$Component) {
@@ -399,7 +510,11 @@ function (_React$Component) {
     _classCallCheck(this, SingleExpense);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SingleExpense).call(this));
+    _this.state = {
+      showForm: false
+    };
     _this.deleteAndGoBack = _this.deleteAndGoBack.bind(_assertThisInitialized(_this));
+    _this.toggleShowForm = _this.toggleShowForm.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -410,6 +525,13 @@ function (_React$Component) {
           groupId = _this$props$match$par.groupId,
           expenseId = _this$props$match$par.expenseId;
       this.props.loadAnExpense(groupId, expenseId);
+    }
+  }, {
+    key: "toggleShowForm",
+    value: function toggleShowForm() {
+      this.setState({
+        showForm: !this.state.showForm
+      });
     }
   }, {
     key: "deleteAndGoBack",
@@ -430,11 +552,20 @@ function (_React$Component) {
         className: "pages-view-navbar"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
         to: "/groups/singleGroup/".concat(expense.groupId)
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Back to Group Expenses "))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, expense.name, " $", expense.totalCost), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Back to Group Expenses "))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, expense.name, " $", expense.totalCost), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "editGroupPencil"
+      }, this.state.showForm ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_index__WEBPACK_IMPORTED_MODULE_4__["UpdateExpenseForm"], {
+        toggleForm: this.toggleShowForm,
+        groupId: this.props.match.params.groupId
+      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        className: "groupImg",
+        src: "/images/pencil.png" // height="400px"
+        // width="407.406px"
+        ,
+        onClick: this.toggleShowForm
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit"
       }, "Settle"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "submit"
-      }, "Edit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "submit",
         onClick: this.deleteAndGoBack
       }, "Remove"));
@@ -463,6 +594,158 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(SingleExpense));
+
+/***/ }),
+
+/***/ "./client/components/expenses/UpdateExpenseForm.js":
+/*!*********************************************************!*\
+  !*** ./client/components/expenses/UpdateExpenseForm.js ***!
+  \*********************************************************/
+/*! exports provided: UpdateExpenseForm, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UpdateExpenseForm", function() { return UpdateExpenseForm; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store */ "./client/store/index.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var UpdateExpenseForm =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(UpdateExpenseForm, _React$Component);
+
+  function UpdateExpenseForm(props) {
+    var _this;
+
+    _classCallCheck(this, UpdateExpenseForm);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(UpdateExpenseForm).call(this, props));
+    _this.state = {
+      name: props.expense.name,
+      totalCost: props.expense.totalCost,
+      paidBy: ''
+    };
+    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(UpdateExpenseForm, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.loadGroupMembers(this.props.groupId);
+    }
+  }, {
+    key: "handleChange",
+    value: function handleChange(event) {
+      this.setState(_defineProperty({}, event.target.name, event.target.value));
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      if (!this.state.name || !this.state.totalCost || !this.state.paidBy || this.state.paidBy === 'select') {
+        event.preventDefault();
+        alert('A required field is missing.');
+        return;
+      }
+
+      if (!Number(this.state.totalCost)) {
+        event.preventDefault();
+        alert('Cost must be a number.');
+        return;
+      }
+
+      event.preventDefault();
+      this.props.toggleForm();
+      this.props.updateExpense(this.props.groupId, this.props.expense.id, this.state);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "name"
+      }, "Edit Name:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        name: "name",
+        value: this.state.name,
+        onChange: this.handleChange
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "totalCost"
+      }, "Edit Cost:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "$"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        name: "totalCost",
+        value: this.state.totalCost,
+        onChange: this.handleChange
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "paidBy"
+      }, "Paid by*"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        value: this.state.paidBy,
+        onChange: this.handleChange,
+        name: "paidBy"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "member"
+      }, "select"), this.props.groupMembers.map(function (member) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: "member-".concat(member.id),
+          value: member.id
+        }, member.firstName, " ", member.lastName);
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
+        className: "required"
+      }, "* Required field"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "submit"
+      }, "Save"));
+    }
+  }]);
+
+  return UpdateExpenseForm;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+var mapState = function mapState(state) {
+  return {
+    groupMembers: state.groupMembers,
+    expense: state.singleExpense
+  };
+};
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {
+    loadGroupMembers: function loadGroupMembers(groupId) {
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_loadGroupMembers"])(groupId));
+    },
+    updateExpense: function updateExpense(groupId, expenseId, expense) {
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_updateExpense"])(groupId, expenseId, expense));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapState, mapDispatch)(UpdateExpenseForm));
 
 /***/ }),
 
@@ -849,6 +1132,289 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 /***/ }),
 
+/***/ "./client/components/friends/GroupMembers.js":
+/*!***************************************************!*\
+  !*** ./client/components/friends/GroupMembers.js ***!
+  \***************************************************/
+/*! exports provided: GroupMembers, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroupMembers", function() { return GroupMembers; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store */ "./client/store/index.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../index */ "./client/components/index.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+var GroupMembers =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(GroupMembers, _React$Component);
+
+  function GroupMembers() {
+    var _this;
+
+    _classCallCheck(this, GroupMembers);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(GroupMembers).call(this));
+
+    _defineProperty(_assertThisInitialized(_this), "noMembers", function (memberList) {
+      if (memberList.length < 1) {
+        return 'Add members to this group here.';
+      }
+    });
+
+    _this.state = {
+      showForm: false
+    };
+    _this.toggleShowForm = _this.toggleShowForm.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(GroupMembers, [{
+    key: "toggleShowForm",
+    value: function toggleShowForm() {
+      this.setState({
+        showForm: !this.state.showForm
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.loadGroupMembers(this.props.groupId);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var groupMembers = this.props.groupMembers;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.showForm ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_index__WEBPACK_IMPORTED_MODULE_3__["AddGroupMemberForm"], {
+        toggleForm: this.toggleShowForm,
+        groupId: this.props.groupId
+      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        className: "groupImg",
+        src: "/images/plus.png",
+        height: "64px",
+        width: "64px",
+        onClick: this.toggleShowForm
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "full-member-list"
+      }, this.noMembers(groupMembers), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, groupMembers.map(function (member) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: "member-".concat(member.id)
+        }, member.firstName, " ", member.lastName);
+      }))));
+    }
+  }]);
+
+  return GroupMembers;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    groupMembers: state.groupMembers,
+    user: state.user
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    loadGroupMembers: function loadGroupMembers(groupId) {
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_loadGroupMembers"])(groupId));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(GroupMembers));
+
+/***/ }),
+
+/***/ "./client/components/group/AddGroupMemberForm.js":
+/*!*******************************************************!*\
+  !*** ./client/components/group/AddGroupMemberForm.js ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store */ "./client/store/index.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var AddGroupMemberForm =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(AddGroupMemberForm, _React$Component);
+
+  function AddGroupMemberForm() {
+    var _this;
+
+    _classCallCheck(this, AddGroupMemberForm);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(AddGroupMemberForm).call(this));
+    _this.state = {
+      member: ''
+    };
+    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.friendsNotInGroup = _this.friendsNotInGroup.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(AddGroupMemberForm, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.loadFriends(this.props.user.id);
+      this.props.loadGroupMembers(this.props.groupId);
+    } // filters out user's friends that are already in group so they don't appear in dropdown menu
+
+  }, {
+    key: "friendsNotInGroup",
+    value: function friendsNotInGroup(friends, groupMembers) {
+      // Problem (not breaking anything): when you add a friend to the group, it removes them from the dropdown but replaces it with a friend who is already in the group...
+      var availableFriends;
+
+      var _loop = function _loop(i) {
+        var member = groupMembers[i];
+        availableFriends = friends.filter(function (friend) {
+          return friend.id !== member.id;
+        });
+      };
+
+      for (var i = 0; i < groupMembers.length; i++) {
+        _loop(i);
+      }
+
+      return availableFriends;
+    }
+  }, {
+    key: "handleChange",
+    value: function handleChange(event) {
+      this.setState(_defineProperty({}, event.target.name, event.target.value));
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      if (!this.state.member) {
+        event.preventDefault();
+        alert('A required field is missing.');
+        return;
+      }
+
+      event.preventDefault();
+      this.props.toggleForm();
+      this.props.addGroupMember(this.props.groupId, {
+        member: this.state.member
+      });
+      this.setState({
+        member: ''
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var friendsNotInGroup = this.friendsNotInGroup(this.props.friends || [], this.props.groupMembers || []);
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "member"
+      }, "Add a friend to this group*"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        value: this.state.member,
+        onChange: this.handleChange,
+        name: "member"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: "member"
+      }, "select"), friendsNotInGroup.map(function (friend) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          key: "friend-".concat(friend.id),
+          value: friend.id
+        }, friend.firstName, " ", friend.lastName);
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
+        className: "required"
+      }, "* Required field"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "submit"
+      }, "Add"));
+    }
+  }]);
+
+  return AddGroupMemberForm;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    user: state.user,
+    friends: state.friends,
+    groupMembers: state.groupMembers
+  };
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+  return {
+    addGroupMember: function addGroupMember(groupId, memberId) {
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_addGroupMember"])(groupId, memberId));
+    },
+    loadFriends: function loadFriends(userId) {
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_loadFriends"])(userId));
+    },
+    loadGroupMembers: function loadGroupMembers(groupId) {
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_loadGroupMembers"])(groupId));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, mapDispatchToProps)(AddGroupMemberForm));
+
+/***/ }),
+
 /***/ "./client/components/group/CreateGroupForm.js":
 /*!****************************************************!*\
   !*** ./client/components/group/CreateGroupForm.js ***!
@@ -1080,6 +1646,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_groups_singleGroup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/groups/singleGroup */ "./client/store/groups/singleGroup.js");
 /* harmony import */ var _expenses_GroupExpenses__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../expenses/GroupExpenses */ "./client/components/expenses/GroupExpenses.js");
 /* harmony import */ var _UpdateGroupForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./UpdateGroupForm */ "./client/components/group/UpdateGroupForm.js");
+/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components */ "./client/components/index.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1103,6 +1670,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var SingleGroup =
 /*#__PURE__*/
 function (_React$Component) {
@@ -1115,14 +1683,23 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SingleGroup).call(this));
     _this.state = {
-      tabName: 'expenses'
+      tabName: 'expenses',
+      showForm: false
     };
     _this.tabChange = _this.tabChange.bind(_assertThisInitialized(_this));
+    _this.toggleShowForm = _this.toggleShowForm.bind(_assertThisInitialized(_this));
     _this.renderTab = _this.renderTab.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(SingleGroup, [{
+    key: "toggleShowForm",
+    value: function toggleShowForm() {
+      this.setState({
+        showForm: !this.state.showForm
+      });
+    }
+  }, {
     key: "tabChange",
     value: function tabChange(tabName) {
       this.setState({
@@ -1133,8 +1710,11 @@ function (_React$Component) {
     key: "renderTab",
     value: function renderTab() {
       switch (this.state.tabName) {
-        // case 'members':
-        //   return <GroupMembers />
+        case 'members':
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components__WEBPACK_IMPORTED_MODULE_5__["GroupMembers"], {
+            groupId: this.props.match.params.groupId
+          });
+
         case 'expenses':
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_expenses_GroupExpenses__WEBPACK_IMPORTED_MODULE_3__["default"], {
             groupId: this.props.match.params.groupId
@@ -1156,16 +1736,26 @@ function (_React$Component) {
     value: function render() {
       var singleGroup = this.props.singleGroup || {};
       if (!singleGroup) return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "LOADING");
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UpdateGroupForm__WEBPACK_IMPORTED_MODULE_4__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.singleGroup.title), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "editGroupPencil"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, this.props.singleGroup.title), this.state.showForm ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UpdateGroupForm__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        toggleForm: this.toggleShowForm
+      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        className: "groupImg",
+        src: "/images/pencil.png" // height="400px"
+        // width="407.406px"
+        ,
+        onClick: this.toggleShowForm
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "tab_buttons_div"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "grp_tab_btns",
-        onClick: this.tabChange.bind(this, 'members')
-      }, ' ', "Members |", ' '), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "grp_tab_btns",
+        className: "grp_tab_btns ".concat(this.state.tabName === 'expenses' ? 'selectedTab' : ''),
         onClick: this.tabChange.bind(this, 'expenses')
       }, ' ', "Expenses |", ' '), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        className: "grp_tab_btns",
+        className: "grp_tab_btns ".concat(this.state.tabName === 'members' ? 'selectedTab' : ''),
+        onClick: this.tabChange.bind(this, 'members')
+      }, ' ', "Members |", ' '), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "grp_tab_btns ".concat(this.state.tabName === 'balances' ? 'selectedTab' : ''),
         onClick: this.tabChange.bind(this, 'balances')
       }, ' ', "Balances", ' ')), this.renderTab()))));
     }
@@ -1263,6 +1853,7 @@ function (_React$Component) {
     key: "handleSubmit",
     value: function handleSubmit(event) {
       event.preventDefault();
+      this.props.toggleForm();
       this.props.updateGroup(this.props.singleGroup.id, {
         title: this.state.title
       });
@@ -1314,7 +1905,7 @@ var mapDispatch = function mapDispatch(dispatch) {
 /*!************************************!*\
   !*** ./client/components/index.js ***!
   \************************************/
-/*! exports provided: Navbar, UserHome, Login, Signup, Groups, AllFriends, GroupExpenses, SingleExpense, Friend, AddFriendForm, CreateGroupExpenseForm */
+/*! exports provided: Navbar, UserHome, Login, Signup, Groups, AllFriends, GroupExpenses, SingleExpense, Friend, AddFriendForm, CreateGroupExpenseForm, GroupMembers, UpdateExpenseForm, AddGroupMemberForm */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1351,11 +1942,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _expenses_CreateGroupExpenseForm__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./expenses/CreateGroupExpenseForm */ "./client/components/expenses/CreateGroupExpenseForm.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CreateGroupExpenseForm", function() { return _expenses_CreateGroupExpenseForm__WEBPACK_IMPORTED_MODULE_9__["default"]; });
 
+/* harmony import */ var _friends_GroupMembers__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./friends/GroupMembers */ "./client/components/friends/GroupMembers.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GroupMembers", function() { return _friends_GroupMembers__WEBPACK_IMPORTED_MODULE_10__["default"]; });
+
+/* harmony import */ var _expenses_UpdateExpenseForm__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./expenses/UpdateExpenseForm */ "./client/components/expenses/UpdateExpenseForm.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "UpdateExpenseForm", function() { return _expenses_UpdateExpenseForm__WEBPACK_IMPORTED_MODULE_11__["default"]; });
+
+/* harmony import */ var _group_AddGroupMemberForm__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./group/AddGroupMemberForm */ "./client/components/group/AddGroupMemberForm.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AddGroupMemberForm", function() { return _group_AddGroupMemberForm__WEBPACK_IMPORTED_MODULE_12__["default"]; });
+
 /**
  * `components/index.js` exists simply as a 'central export' for our components.
  * This way, we can import all of our components from the same place, rather than
  * having to figure out which file they belong to!
  */
+
+
+
 
 
 
@@ -1475,25 +2078,27 @@ var AuthForm = function AuthForm(props) {
     name: name
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, displayName === 'Sign Up' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "firstName"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "First Name")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "First Name*")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     name: "firstName",
     type: "text"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "lastName"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "Last Name")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "Last Name*")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     name: "lastName",
     type: "text"
   })) : '', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "email"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "Email")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "Email*")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     name: "email",
     type: "text"
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "password"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "Password")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("small", null, "Password*")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     name: "password",
     type: "password"
-  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h6", {
+    className: "required"
+  }, "*Required field"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "submit"
   }, displayName)), error && error.response && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, " ", error.response.data, " ")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "container"
@@ -1541,9 +2146,22 @@ var mapDispatch = function mapDispatch(dispatch) {
       var email = evt.target.email.value;
       var password = evt.target.password.value;
 
+      if (!email || !password) {
+        evt.preventDefault();
+        alert('A required field is missing.');
+        return;
+      }
+
       if (formName === 'signup') {
         var firstName = evt.target.firstName.value;
         var lastName = evt.target.lastName.value;
+
+        if (!firstName || !lastName) {
+          evt.preventDefault();
+          alert('A required field is missing.');
+          return;
+        }
+
         dispatch(Object(_store___WEBPACK_IMPORTED_MODULE_3__["authSignUp"])(firstName, lastName, email, password, formName));
       } else {
         dispatch(Object(_store___WEBPACK_IMPORTED_MODULE_3__["auth"])(email, password, formName));
@@ -1581,9 +2199,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _group_Groups__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../group/Groups */ "./client/components/group/Groups.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 
 
 
@@ -1591,11 +2207,10 @@ __webpack_require__.r(__webpack_exports__);
 
 var UserHome = function UserHome(props) {
   var firstName = props.firstName;
-  var email = props.email;
   var userId = props.userId;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, firstName ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Welcome, ", firstName, "!") : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Welcome, ", email, "!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Welcome, ", firstName, "!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "wrapper"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__["Link"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     to: "/groups/".concat(userId)
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
     className: "groupImg",
@@ -1604,7 +2219,7 @@ var UserHome = function UserHome(props) {
     height: "400px"
   }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "wrapper"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__["Link"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     src: "images/friendsImage.png",
     to: "/friends"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
@@ -1623,7 +2238,6 @@ var UserHome = function UserHome(props) {
 var mapState = function mapState(state) {
   return {
     firstName: state.user.firstName,
-    email: state.user.email,
     userId: state.user.id
   };
 };
@@ -1634,8 +2248,7 @@ var mapState = function mapState(state) {
  */
 
 UserHome.propTypes = {
-  firstName: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string,
-  email: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string
+  firstName: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string
 };
 
 /***/ }),
@@ -1775,7 +2388,7 @@ function (_Component) {
         component: _components__WEBPACK_IMPORTED_MODULE_4__["AllFriends"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         path: "/friend/add",
-        component: _components__WEBPACK_IMPORTED_MODULE_4__["AddFriend"]
+        component: _components__WEBPACK_IMPORTED_MODULE_4__["AddFriendForm"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         path: "/friend/:friendId",
         component: _components__WEBPACK_IMPORTED_MODULE_4__["Friend"]
@@ -2072,24 +2685,39 @@ var groupExpensesReducer = function groupExpensesReducer() {
 /*!************************************************!*\
   !*** ./client/store/expenses/singleExpense.js ***!
   \************************************************/
-/*! exports provided: _loadAnExpense, default */
+/*! exports provided: _loadAnExpense, _updateExpense, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_loadAnExpense", function() { return _loadAnExpense; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_updateExpense", function() { return _updateExpense; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
 var GET_AN_EXPENSE = 'GET_AN_EXPENSE';
+var UPDATE_EXPENSE = 'UPDATE_EXPENSE';
 
 var getAnExpense = function getAnExpense(expense) {
   return {
     type: GET_AN_EXPENSE,
+    expense: expense
+  };
+};
+
+var updateExpense = function updateExpense(expense) {
+  return {
+    type: UPDATE_EXPENSE,
     expense: expense
   };
 };
@@ -2137,6 +2765,49 @@ var _loadAnExpense = function _loadAnExpense(groupId, expenseId) {
     }()
   );
 };
+var _updateExpense = function _updateExpense(groupId, expenseId, expense) {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref3 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2(dispatch) {
+        var _ref4, data;
+
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/groups/singleGroup/".concat(groupId, "/expenses/").concat(expenseId), expense);
+
+              case 3:
+                _ref4 = _context2.sent;
+                data = _ref4.data;
+                dispatch(updateExpense(data));
+                _context2.next = 11;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](0);
+                console.log('Cannot update your expense because: ', _context2.t0);
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 8]]);
+      }));
+
+      return function (_x2) {
+        return _ref3.apply(this, arguments);
+      };
+    }()
+  );
+};
 var initialState = {};
 
 var singleExpenseReducer = function singleExpenseReducer() {
@@ -2146,6 +2817,9 @@ var singleExpenseReducer = function singleExpenseReducer() {
   switch (action.type) {
     case GET_AN_EXPENSE:
       return action.expense;
+
+    case UPDATE_EXPENSE:
+      return _objectSpread({}, state, {}, action.expense);
 
     default:
       return state;
@@ -2557,6 +3231,187 @@ var singleFriendReducer = function singleFriendReducer() {
 
 /***/ }),
 
+/***/ "./client/store/groups/groupMembers.js":
+/*!*********************************************!*\
+  !*** ./client/store/groups/groupMembers.js ***!
+  \*********************************************/
+/*! exports provided: _loadGroupMembers, _addGroupMember, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_loadGroupMembers", function() { return _loadGroupMembers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_addGroupMember", function() { return _addGroupMember; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+/* ACTION TYPES */
+
+var GET_GROUP_MEMBERS = 'GET_GROUP_MEMBERS';
+var ADD_GROUP_MEMBER = 'ADD_GROUP_MEMBER'; // const DELETE_GROUP_EXPENSE = 'DELETE_GROUP_EXPENSE'
+
+/* ACTION CREATORS */
+
+var getGroupMembers = function getGroupMembers(members) {
+  return {
+    type: GET_GROUP_MEMBERS,
+    members: members
+  };
+};
+
+var addGroupMember = function addGroupMember(member) {
+  return {
+    type: ADD_GROUP_MEMBER,
+    member: member
+  };
+}; // const deleteGroupExpense = (expenseId) => ({
+//   type: DELETE_GROUP_EXPENSE,
+//   expenseId,
+// })
+
+/* INITIAL STATE */
+
+
+var initialState = [];
+/* THUNK CREATORS */
+
+var _loadGroupMembers = function _loadGroupMembers(groupId) {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee(dispatch) {
+        var _ref2, data;
+
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/groups/singleGroup/".concat(groupId, "/members"));
+
+              case 3:
+                _ref2 = _context.sent;
+                data = _ref2.data;
+                dispatch(getGroupMembers(data));
+                _context.next = 11;
+                break;
+
+              case 8:
+                _context.prev = 8;
+                _context.t0 = _context["catch"](0);
+                console.log("All the group's members should be here, but they are not because: ", _context.t0);
+
+              case 11:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 8]]);
+      }));
+
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }()
+  );
+};
+var _addGroupMember = function _addGroupMember(groupId, member) {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref3 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2(dispatch) {
+        var _ref4, data;
+
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/api/groups/singleGroup/".concat(groupId, "/members"), member);
+
+              case 3:
+                _ref4 = _context2.sent;
+                data = _ref4.data;
+                dispatch(addGroupMember(data));
+                _context2.next = 11;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](0);
+                console.log("Your friend should have been added to the group, but they weren't because: ", _context2.t0);
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 8]]);
+      }));
+
+      return function (_x2) {
+        return _ref3.apply(this, arguments);
+      };
+    }()
+  );
+}; // export const _deleteGroupExpense = (groupId, expenseId) => async (dispatch) => {
+//   try {
+//     await axios.delete(
+//       `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`
+//     )
+//     dispatch(deleteGroupExpense(expenseId))
+//   } catch (error) {
+//     console.log(
+//       'Your group expense should have been deleted, but it was not because: ',
+//       error
+//     )
+//   }
+// }
+
+/* REDUCER */
+
+var groupMembersReducer = function groupMembersReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case GET_GROUP_MEMBERS:
+      return action.members;
+
+    case ADD_GROUP_MEMBER:
+      return [].concat(_toConsumableArray(state), [action.member]);
+    // case DELETE_GROUP_EXPENSE:
+    //   return [...state.filter((expense) => expense.id !== action.expenseId)]
+
+    default:
+      return state;
+  }
+};
+/* EXPORT */
+
+
+/* harmony default export */ __webpack_exports__["default"] = (groupMembersReducer);
+
+/***/ }),
+
 /***/ "./client/store/groups/groups.js":
 /*!***************************************!*\
   !*** ./client/store/groups/groups.js ***!
@@ -2917,7 +3772,7 @@ var singleGroupReducer = function singleGroupReducer() {
 /*!*******************************!*\
   !*** ./client/store/index.js ***!
   \*******************************/
-/*! exports provided: default, me, authSignUp, auth, logout, _loadFriends, _addFriend, _deleteFriend, friendsErrorReducer, _loadAFriend, GET_GROUPS, CREATE_GROUP, DELETE_GROUP, setGroups, createGroup, deleteGroup, _getGroups, _createGroup, _deleteGroup, _loadAnExpense, _loadGroupExpenses, _addGroupExpense, _deleteGroupExpense, GET_SINGLE_GROUP, UPDATE_GROUP, updateGroup, setSingleGroup, _getSingleGroup, _updateGroup */
+/*! exports provided: default, me, authSignUp, auth, logout, _loadFriends, _addFriend, _deleteFriend, friendsErrorReducer, _loadAFriend, GET_GROUPS, CREATE_GROUP, DELETE_GROUP, setGroups, createGroup, deleteGroup, _getGroups, _createGroup, _deleteGroup, _loadGroupExpenses, _addGroupExpense, _deleteGroupExpense, _loadAnExpense, _updateExpense, GET_SINGLE_GROUP, UPDATE_GROUP, updateGroup, setSingleGroup, _getSingleGroup, _updateGroup, _loadGroupMembers, _addGroupMember */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2935,6 +3790,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _expenses_expenses__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./expenses/expenses */ "./client/store/expenses/expenses.js");
 /* harmony import */ var _expenses_singleExpense__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./expenses/singleExpense */ "./client/store/expenses/singleExpense.js");
 /* harmony import */ var _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./groups/singleGroup */ "./client/store/groups/singleGroup.js");
+/* harmony import */ var _groups_groupMembers__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./groups/groupMembers */ "./client/store/groups/groupMembers.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "me", function() { return _user_user__WEBPACK_IMPORTED_MODULE_4__["me"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "authSignUp", function() { return _user_user__WEBPACK_IMPORTED_MODULE_4__["authSignUp"]; });
@@ -2979,6 +3835,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_loadAnExpense", function() { return _expenses_singleExpense__WEBPACK_IMPORTED_MODULE_9__["_loadAnExpense"]; });
 
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_updateExpense", function() { return _expenses_singleExpense__WEBPACK_IMPORTED_MODULE_9__["_updateExpense"]; });
+
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GET_SINGLE_GROUP", function() { return _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__["GET_SINGLE_GROUP"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "UPDATE_GROUP", function() { return _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__["UPDATE_GROUP"]; });
@@ -2990,6 +3848,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_getSingleGroup", function() { return _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__["_getSingleGroup"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_updateGroup", function() { return _groups_singleGroup__WEBPACK_IMPORTED_MODULE_10__["_updateGroup"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_loadGroupMembers", function() { return _groups_groupMembers__WEBPACK_IMPORTED_MODULE_11__["_loadGroupMembers"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_addGroupMember", function() { return _groups_groupMembers__WEBPACK_IMPORTED_MODULE_11__["_addGroupMember"]; });
+
 
 
 
@@ -3010,13 +3873,15 @@ var reducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
   singleFriend: _friends_singleFriend__WEBPACK_IMPORTED_MODULE_6__["default"],
   groupExpenses: _expenses_expenses__WEBPACK_IMPORTED_MODULE_8__["default"],
   singleExpense: _expenses_singleExpense__WEBPACK_IMPORTED_MODULE_9__["default"],
-  friendsErrorReducer: _friends_friends__WEBPACK_IMPORTED_MODULE_5__["friendsErrorReducer"]
+  friendsErrorReducer: _friends_friends__WEBPACK_IMPORTED_MODULE_5__["friendsErrorReducer"],
+  groupMembers: _groups_groupMembers__WEBPACK_IMPORTED_MODULE_11__["default"]
 });
 var middleware = Object(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_3__["composeWithDevTools"])(Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_2__["default"], Object(redux_logger__WEBPACK_IMPORTED_MODULE_1__["createLogger"])({
   collapsed: true
 })));
 var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, middleware);
 /* harmony default export */ __webpack_exports__["default"] = (store);
+
 
 
 
