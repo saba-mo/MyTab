@@ -13,9 +13,9 @@ class SingleExpense extends React.Component {
   constructor() {
     super()
     this.state = {showForm: false}
-
     this.deleteAndGoBack = this.deleteAndGoBack.bind(this)
     this.toggleShowForm = this.toggleShowForm.bind(this)
+    this.settleSingleExpense = this.settleSingleExpense.bind(this)
   }
 
   componentDidMount() {
@@ -31,6 +31,11 @@ class SingleExpense extends React.Component {
     const {groupId, id} = this.props.expense
     this.props.deleteGroupExpense(groupId, id)
     window.location.href = `/groups/singleGroup/${groupId}`
+  }
+  settleSingleExpense() {
+    const {groupId, id} = this.props.expense
+    console.log('expense: ', this.props.expense)
+    console.log('group and id: ', groupId, id)
   }
 
   render() {
@@ -61,7 +66,9 @@ class SingleExpense extends React.Component {
             />
           )}
         </div>
-        <button type="submit">Settle</button>
+        <button type="submit" onClick={this.settleSingleExpense}>
+          Settle
+        </button>
         <button type="submit" onClick={this.deleteAndGoBack}>
           Remove
         </button>
