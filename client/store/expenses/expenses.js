@@ -4,6 +4,7 @@ import axios from 'axios'
 const GET_GROUP_EXPENSES = 'GET_GROUP_EXPENSES'
 const ADD_GROUP_EXPENSE = 'ADD_GROUP_EXPENSE'
 const DELETE_GROUP_EXPENSE = 'DELETE_GROUP_EXPENSE'
+const SETTLE_SINGLE_EXPENSE = 'SETTLE_SINGLE_EXPENSE'
 
 /* ACTION CREATORS */
 const getGroupExpenses = (expenses) => ({
@@ -19,6 +20,10 @@ const addGroupExpense = (expense) => ({
 const deleteGroupExpense = (expenseId) => ({
   type: DELETE_GROUP_EXPENSE,
   expenseId,
+})
+
+const settleSingleExpense = () => ({
+  type: SETTLE_SINGLE_EXPENSE,
 })
 
 /* INITIAL STATE */
@@ -67,6 +72,11 @@ export const _deleteGroupExpense = (groupId, expenseId) => async (dispatch) => {
     )
   }
 }
+
+export const _settleSingleExpense = () => {
+  dispatch(settleSingleExpense())
+}
+
 /* REDUCER */
 const groupExpensesReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -76,6 +86,8 @@ const groupExpensesReducer = (state = initialState, action) => {
       return [...state, action.expense]
     case DELETE_GROUP_EXPENSE:
       return [...state.filter((expense) => expense.id !== action.expenseId)]
+    case SETTLE_SINGLE_EXPENSE:
+      return
     default:
       return state
   }
