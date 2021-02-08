@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_addGroupExpense, _loadGroupMembers} from '../../store'
+import currency from 'currency.js'
 
 export class CreateGroupExpenseForm extends React.Component {
   constructor(props) {
@@ -48,26 +49,34 @@ export class CreateGroupExpenseForm extends React.Component {
   }
 
   handleSubmit(event) {
-    if (
-      !this.state.name ||
-      !this.state.totalCost ||
-      !this.state.paidBy ||
-      this.state.paidBy === 'select'
-    ) {
-      event.preventDefault()
-      alert('A required field is missing.')
-      return
-    }
+    try {
+      if (
+        !this.state.name ||
+        !this.state.totalCost ||
+        !this.state.paidBy ||
+        this.state.paidBy === 'select'
+      ) {
+        event.preventDefault()
+        alert('A required field is missing.')
+        return
+      }
+      if (!Number(this.state.totalCost)) {
+        event.preventDefault()
+        alert('Cost must be a number.')
+        return
+      }
 
-    if (!Number(this.state.totalCost)) {
       event.preventDefault()
-      alert('Cost must be a number.')
-      return
+      this.props.toggleForm()
+      this.props.addGroupExpense(this.props.groupId, {
+        name: this.state.name,
+        totalCost: currency(this.state.totalCost).value,
+        paidBy: this.state.paidBy,
+        owedByMember: this.state.owedByMember,
+      })
+    } catch (error) {
+      console.log('Failed to handle expense submission due to: ', error)
     }
-
-    event.preventDefault()
-    this.props.toggleForm()
-    this.props.addGroupExpense(this.props.groupId, this.state)
   }
 
   render() {
@@ -180,8 +189,8 @@ const mapState = (state) => {
 }
 const mapDispatch = (dispatch) => {
   return {
-    addGroupExpense: (groupId, newExpense) =>
-      dispatch(_addGroupExpense(groupId, newExpense)),
+    addGroupExpense: (groupId, newExpenseName) =>
+      dispatch(_addGroupExpense(groupId, newExpenseName)),
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
   }
 }

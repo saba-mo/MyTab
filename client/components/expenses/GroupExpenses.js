@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {_loadGroupExpenses} from '../../store/expenses/expenses'
 import {CreateGroupExpenseForm} from '../index'
+import currency from 'currency.js'
 
 export class GroupExpenses extends React.Component {
   constructor() {
@@ -63,12 +64,13 @@ export class GroupExpenses extends React.Component {
                     {expense.name}
                   </Link>{' '}
                   Paid by {expense.users[0].firstName}{' '}
-                  {expense.users[0].lastName} ${expense.totalCost}
+                  {expense.users[0].lastName}{' '}
+                  {currency(expense.totalCost).format()}
                 </div>
               )
             })}
           </ul>
-          <h3>Total: ${groupTotal.toFixed(2)}</h3>
+          <h3>Total: {currency(groupTotal).format()}</h3>
         </div>
       </div>
     )

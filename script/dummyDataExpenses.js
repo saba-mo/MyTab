@@ -22,7 +22,7 @@ const expenseData = [
     },
     {
       name: 'Fisher',
-      totalCost: 89.8,
+      totalCost: 8.98,
       groupId: 1,
     },
     {

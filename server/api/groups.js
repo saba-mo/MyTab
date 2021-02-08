@@ -1,5 +1,6 @@
 const router = require('express').Router()
-const {Group, User, Expense} = require('../db/models')
+const currency = require('currency.js')
+const {Group, User, Expense, Item} = require('../db/models')
 const {isInGroup, isIdentity} = require('../express-gate-auth')
 
 //GET all groups
@@ -74,7 +75,7 @@ router.get(
 
       const groupExpenses = await thisGroup.getExpenses({
         attributes: ['id', 'name', 'totalCost', 'groupId'],
-        include: {model: User},
+        include: [{model: User}, {model: Item, include: {model: User}}],
       })
 
       res.json(groupExpenses)
@@ -87,7 +88,10 @@ router.get(
 // POST a new group expense
 router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
   try {
-    const expenseCost = parseFloat(req.body.totalCost)
+    // for extra safely checking we can add this todo check after MVP:
+    // todo: validate totalCost format, and return a 400 status for non float data e.g if (!Number(req.body.totalCost))
+
+    const expenseCost = currency(req.body.totalCost).value
     const expenseName = req.body.name
     const userId = Number(req.body.paidBy)
 
@@ -108,8 +112,13 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
       }
     )
 
-    // TODO: create Item rows from req.body.owedByMember
-    // if paidby don't create item
+    let items = []
+    for (const [itemUserId, amount] of Object.entries(req.body.owedByMember)) {
+      if (amount === 0) {
+        continue
+      }
+      await Item.create({amount, userId: itemUserId, expenseId: newExpense.id})
+    }
 
     // associate expense to user who paid
     await newExpense.addUser(userId)
@@ -117,6 +126,8 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
     // find user and send info back with expense
     const thisUser = await newExpense.getUsers()
     newExpense.dataValues.users = thisUser
+
+    newExpense.dataValues.items = items
 
     res.json(newExpense)
   } catch (err) {
