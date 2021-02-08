@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_createGroup} from '../../store/groups/groups'
-import {Link} from 'react-router-dom'
 
 export class CreateGroupForm extends React.Component {
   constructor() {
