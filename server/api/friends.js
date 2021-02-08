@@ -43,6 +43,8 @@ router.post('/:userId', async (req, res, next) => {
     })
     if (!thisFriend) return res.sendStatus(404)
 
+    // checking to confirm the friend is not the user
+    if (thisFriend.dataValues.id === id) return res.sendStatus(404)
     // adding friendship to this user
     thisUser.addFriend(thisFriend.id)
     // adding friendship to the new friend
