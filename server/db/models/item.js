@@ -6,8 +6,7 @@ const Item = db.define('item', {
   name: {
     type: Sequelize.STRING,
   },
-
-  cost: {
+  amount: {
     type: Sequelize.FLOAT,
     validate: {
       min: 0,
@@ -20,18 +19,15 @@ const Item = db.define('item', {
       // return floatValue
 
       // Use Currency.js to force an appropriate currency friendly float representation of the value
-      return currency(this.getDataValue('cost')).value
+      return currency(this.getDataValue('amount')).value
     },
     set(value) {
-      this.setDataValue('cost', currency(value).value)
+      this.setDataValue('amount', currency(value).value)
     },
   },
-
-  quantity: {
-    type: Sequelize.INTEGER,
-    validate: {
-      min: 0,
-    },
+  settled: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
   },
 })
 

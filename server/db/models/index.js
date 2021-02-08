@@ -19,6 +19,9 @@ Expense.belongsTo(Group)
 Item.belongsTo(Expense)
 Expense.hasMany(Item)
 
+Item.belongsTo(User)
+User.hasMany(Item)
+
 module.exports = {
   User,
   Group,
