@@ -24,7 +24,7 @@ export class Groups extends React.Component {
   handleDeleteGroup(groupId) {
     if (
       window.confirm(
-        "Are you sure? Deleting a group also deletes the group's expenses."
+        'Are you sure? You will be deleting the group and expenses for all members.'
       )
     ) {
       this.props.deleteGroup(groupId)
