@@ -77,8 +77,11 @@ router.delete('/:userId/:friendId', async (req, res, next) => {
     const thisUser = await User.findByPk(id)
     if (!thisUser) return res.sendStatus(404)
 
-    thisUser.removeFriend(friendId)
-    // friendId.removeFriend(thisUser)
+    const friend = await User.findByPk(friendId)
+    if (!friendId) return res.sendStatus(404)
+
+    await friend.removeFriend(thisUser)
+    await thisUser.removeFriend(friendId)
 
     res.sendStatus(204)
   } catch (err) {

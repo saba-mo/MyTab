@@ -65,16 +65,24 @@ async function associations() {
   // loops through all users and associates each of them to one friend, except for last user
   for (let i = 0; i < usersToAssoc.length - 1; i++) {
     await usersToAssoc[i].addFriend(usersToAssoc[i + 1].id)
+    await usersToAssoc[i + 1].addFriend(usersToAssoc[i].id)
   }
 
   // adds more friend and group associations to create variety of group sizes
   let user1 = await User.findByPk(1)
   await user1.addFriends([9, 8, 7, 4])
+  await usersToAssoc[8].addFriends([1])
+  await usersToAssoc[7].addFriends([1])
+  await usersToAssoc[6].addFriends([1])
+  await usersToAssoc[3].addFriends([1])
   let group9 = await Group.create({title: 'Titanic'})
   await group9.addUsers([1, 7, 8, 9])
 
   let user2 = await User.findByPk(2)
   await user2.addFriends([6, 5])
+  await usersToAssoc[4].addFriends([2])
+  await usersToAssoc[5].addFriends([2])
+
   let group10 = await Group.create({title: 'Princess Bride'})
   await group10.addUsers([2, 5, 6])
 }
