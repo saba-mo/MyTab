@@ -1220,9 +1220,11 @@ var GroupMembers = /*#__PURE__*/function (_React$Component) {
     });
 
     _this.state = {
-      showForm: false
+      showForm: false,
+      numberOfMembers: 0
     };
     _this.toggleShowForm = _this.toggleShowForm.bind(_assertThisInitialized(_this));
+    _this.attemptToRemoveMember = _this.attemptToRemoveMember.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -1239,9 +1241,27 @@ var GroupMembers = /*#__PURE__*/function (_React$Component) {
       this.props.loadGroupMembers(this.props.groupId);
     }
   }, {
+    key: "attemptToRemoveMember",
+    value: function attemptToRemoveMember(groupId, memberId, lengthOfMembersArray) {
+      // console.log('length arg: ', lengthOfMembersArray)
+      this.setState({
+        numberOfMembers: lengthOfMembersArray
+      }); // state does not change from 0 the first time you try to delete someone, but does when you try to delete someone else
+      // console.log('length on state: ', this.state.numberOfMembers)
+
+      this.props.deleteGroupMember(groupId, memberId); // console.log('gm length after delete: ', this.props.groupMembers.length)
+
+      if (this.props.groupMembers.length === this.state.numberOfMembers) {
+        alert('You cannot remove a member with a balance in the group.');
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var groupMembers = this.props.groupMembers;
+      var lengthOfMembersArray = groupMembers.length;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.showForm ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_index__WEBPACK_IMPORTED_MODULE_3__["AddGroupMemberForm"], {
         toggleForm: this.toggleShowForm,
         groupId: this.props.groupId
@@ -1256,7 +1276,12 @@ var GroupMembers = /*#__PURE__*/function (_React$Component) {
       }, this.noMembers(groupMembers), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, groupMembers.map(function (member) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: "member-".concat(member.id)
-        }, member.firstName, " ", member.lastName);
+        }, member.firstName, " ", member.lastName, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          type: "button",
+          onClick: function onClick() {
+            return _this2.attemptToRemoveMember(_this2.props.groupId, member.id, lengthOfMembersArray);
+          }
+        }, "X"));
       }))));
     }
   }]);
@@ -1275,6 +1300,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   return {
     loadGroupMembers: function loadGroupMembers(groupId) {
       return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_loadGroupMembers"])(groupId));
+    },
+    deleteGroupMember: function deleteGroupMember(groupId, memberId) {
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["_deleteGroupMember"])(groupId, memberId));
     }
   };
 };
@@ -3251,13 +3279,14 @@ var singleFriendReducer = function singleFriendReducer() {
 /*!*********************************************!*\
   !*** ./client/store/groups/groupMembers.js ***!
   \*********************************************/
-/*! exports provided: _loadGroupMembers, _addGroupMember, default */
+/*! exports provided: _loadGroupMembers, _addGroupMember, _deleteGroupMember, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_loadGroupMembers", function() { return _loadGroupMembers; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_addGroupMember", function() { return _addGroupMember; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_deleteGroupMember", function() { return _deleteGroupMember; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -3280,8 +3309,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* ACTION TYPES */
 
 var GET_GROUP_MEMBERS = 'GET_GROUP_MEMBERS';
-var ADD_GROUP_MEMBER = 'ADD_GROUP_MEMBER'; // const DELETE_GROUP_EXPENSE = 'DELETE_GROUP_EXPENSE'
-
+var ADD_GROUP_MEMBER = 'ADD_GROUP_MEMBER';
+var DELETE_GROUP_MEMBER = 'DELETE_GROUP_MEMBER';
 /* ACTION CREATORS */
 
 var getGroupMembers = function getGroupMembers(members) {
@@ -3296,11 +3325,14 @@ var addGroupMember = function addGroupMember(member) {
     type: ADD_GROUP_MEMBER,
     member: member
   };
-}; // const deleteGroupExpense = (expenseId) => ({
-//   type: DELETE_GROUP_EXPENSE,
-//   expenseId,
-// })
+};
 
+var deleteGroupMember = function deleteGroupMember(memberId) {
+  return {
+    type: DELETE_GROUP_MEMBER,
+    memberId: memberId
+  };
+};
 /* INITIAL STATE */
 
 
@@ -3382,20 +3414,55 @@ var _addGroupMember = function _addGroupMember(groupId, member) {
       return _ref2.apply(this, arguments);
     };
   }();
-}; // export const _deleteGroupExpense = (groupId, expenseId) => async (dispatch) => {
-//   try {
-//     await axios.delete(
-//       `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`
-//     )
-//     dispatch(deleteGroupExpense(expenseId))
-//   } catch (error) {
-//     console.log(
-//       'Your group expense should have been deleted, but it was not because: ',
-//       error
-//     )
-//   }
-// }
+};
+var _deleteGroupMember = function _deleteGroupMember(groupId, memberId) {
+  return /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(dispatch) {
+      var _yield$axios$delete, data;
 
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              _context3.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/api/groups/singleGroup/".concat(groupId, "/members"), {
+                data: {
+                  memberId: memberId
+                }
+              });
+
+            case 3:
+              _yield$axios$delete = _context3.sent;
+              data = _yield$axios$delete.data;
+
+              if (data) {
+                dispatch(getGroupMembers);
+              } else {
+                dispatch(deleteGroupMember(memberId));
+              }
+
+              _context3.next = 11;
+              break;
+
+            case 8:
+              _context3.prev = 8;
+              _context3.t0 = _context3["catch"](0);
+              console.log('Your group member should have been deleted, but it was not because: ', _context3.t0);
+
+            case 11:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 8]]);
+    }));
+
+    return function (_x3) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+};
 /* REDUCER */
 
 var groupMembersReducer = function groupMembersReducer() {
@@ -3408,8 +3475,11 @@ var groupMembersReducer = function groupMembersReducer() {
 
     case ADD_GROUP_MEMBER:
       return [].concat(_toConsumableArray(state), [action.member]);
-    // case DELETE_GROUP_EXPENSE:
-    //   return [...state.filter((expense) => expense.id !== action.expenseId)]
+
+    case DELETE_GROUP_MEMBER:
+      return _toConsumableArray(state.filter(function (member) {
+        return member.id !== action.memberId;
+      }));
 
     default:
       return state;
@@ -3761,7 +3831,7 @@ var singleGroupReducer = function singleGroupReducer() {
 /*!*******************************!*\
   !*** ./client/store/index.js ***!
   \*******************************/
-/*! exports provided: default, me, authSignUp, auth, logout, _loadFriends, _addFriend, _deleteFriend, friendsErrorReducer, _loadAFriend, GET_GROUPS, CREATE_GROUP, DELETE_GROUP, setGroups, createGroup, deleteGroup, _getGroups, _createGroup, _deleteGroup, _loadGroupExpenses, _addGroupExpense, _deleteGroupExpense, _loadAnExpense, _updateExpense, GET_SINGLE_GROUP, UPDATE_GROUP, updateGroup, setSingleGroup, _getSingleGroup, _updateGroup, _loadGroupMembers, _addGroupMember */
+/*! exports provided: default, me, authSignUp, auth, logout, _loadFriends, _addFriend, _deleteFriend, friendsErrorReducer, _loadAFriend, GET_GROUPS, CREATE_GROUP, DELETE_GROUP, setGroups, createGroup, deleteGroup, _getGroups, _createGroup, _deleteGroup, _loadGroupExpenses, _addGroupExpense, _deleteGroupExpense, _loadAnExpense, _updateExpense, GET_SINGLE_GROUP, UPDATE_GROUP, updateGroup, setSingleGroup, _getSingleGroup, _updateGroup, _loadGroupMembers, _addGroupMember, _deleteGroupMember */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3841,6 +3911,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_loadGroupMembers", function() { return _groups_groupMembers__WEBPACK_IMPORTED_MODULE_11__["_loadGroupMembers"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_addGroupMember", function() { return _groups_groupMembers__WEBPACK_IMPORTED_MODULE_11__["_addGroupMember"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_deleteGroupMember", function() { return _groups_groupMembers__WEBPACK_IMPORTED_MODULE_11__["_deleteGroupMember"]; });
 
 
 
