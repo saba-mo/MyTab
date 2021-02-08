@@ -3,17 +3,15 @@ import {connect} from 'react-redux'
 import {_addGroupExpense, _loadGroupMembers} from '../../store'
 import currency from 'currency.js'
 
-const defaultState = {
-  name: '',
-  totalCost: '',
-  paidBy: props.user.id,
-  owedByMember: {},
-}
-
 export class CreateGroupExpenseForm extends React.Component {
   constructor(props) {
     super()
-    this.state = defaultState
+    this.state = {
+      name: '',
+      totalCost: '',
+      paidBy: props.user.id,
+      owedByMember: {},
+    }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
@@ -51,7 +49,6 @@ export class CreateGroupExpenseForm extends React.Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault()
     try {
       if (
         !this.state.name ||
@@ -69,19 +66,17 @@ export class CreateGroupExpenseForm extends React.Component {
         return
       }
 
+      event.preventDefault()
+      this.props.toggleForm()
       this.props.addGroupExpense(this.props.groupId, {
         name: this.state.name,
         totalCost: currency(this.state.totalCost).value,
         paidBy: this.state.paidBy,
+        owedByMember: this.state.owedByMember,
       })
-      this.setState(defaultState)
     } catch (error) {
       console.log('Failed to handle expense submission due to: ', error)
     }
-
-    event.preventDefault()
-    this.props.toggleForm()
-    this.props.addGroupExpense(this.props.groupId, this.state)
   }
 
   render() {
