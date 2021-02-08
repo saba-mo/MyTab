@@ -1,4 +1,3 @@
-const {green, red} = require('chalk')
 const {Op} = require('sequelize')
 const db = require('../server/db')
 const {User, Group, Expense, Item} = require('../server/db/models')
@@ -25,7 +24,7 @@ async function seed() {
       return Expense.bulkCreate(expense)
     })
   )
-  console.log(green('seeded successfully'))
+  console.log('seeded successfully')
 }
 
 // this function is first finding things already in the database, then associating them
@@ -84,12 +83,12 @@ async function associations() {
 // This way we can isolate the error handling and exit trapping.
 // The `seed` function is concerned only with modifying the database.
 async function runSeed() {
-  console.log(green('seeding...'))
+  console.log('seeding...')
   try {
     await seed()
     await associations()
   } catch (err) {
-    console.log('error seeding:', red(err))
+    console.log('error seeding:', err)
     process.exitCode = 1
   } finally {
     console.log('closing db connection')
