@@ -20,7 +20,7 @@ Item.belongsTo(Expense)
 Expense.hasMany(Item)
 
 Item.belongsTo(User)
-User.hasOne(Item)
+User.hasMany(Item)
 
 Expense.belongsTo(User)
 User.hasMany(Expense)

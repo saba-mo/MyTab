@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Group, User, Expense} = require('../db/models')
+const {Group, User, Expense, Item} = require('../db/models')
 
 //ORIGINAL GET ROUTE
 // router.get('/', async (req, res, next) => {
@@ -78,7 +78,7 @@ router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
 
     const groupExpenses = await thisGroup.getExpenses({
       attributes: ['id', 'name', 'totalCost', 'groupId'],
-      include: {model: User},
+      include: [{model: User}, {model: Item, include: {model: User}}],
     })
 
     res.json(groupExpenses)
@@ -111,8 +111,13 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
       }
     )
 
-    // TODO: create Item rows from req.body.owedByMember
-    // if paidby don't create item
+    let items = []
+    for (const [itemUserId, amount] of Object.entries(req.body.owedByMember)) {
+      if (amount === 0) {
+        continue
+      }
+      await Item.create({amount, userId: itemUserId, expenseId: newExpense.id})
+    }
 
     // associate expense to user who paid
     await newExpense.addUser(userId)
@@ -120,6 +125,8 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
     // find user and send info back with expense
     const thisUser = await newExpense.getUsers()
     newExpense.dataValues.users = thisUser
+
+    newExpense.dataValues.items = items
 
     res.json(newExpense)
   } catch (err) {
