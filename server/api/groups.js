@@ -2,18 +2,7 @@ const router = require('express').Router()
 const {Group, User, Expense} = require('../db/models')
 const currency = require('currency.js')
 
-//ORIGINAL GET ROUTE
-// router.get('/', async (req, res, next) => {
-//   try {
-//     const groups = await Group.findAll({
-//       include: [User]
-//     })
-//     res.send(groups)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
+//GET all groups
 router.get('/:userId', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId, {
@@ -25,6 +14,7 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
+//GET a single group
 router.get('/singleGroup/:groupId', async (req, res, next) => {
   try {
     const group = await Group.findByPk(req.params.groupId)
@@ -34,6 +24,7 @@ router.get('/singleGroup/:groupId', async (req, res, next) => {
   }
 })
 
+//ADD a new group
 router.post('/', async function (req, res, next) {
   try {
     const newGroup = await Group.create(req.body)
@@ -44,6 +35,7 @@ router.post('/', async function (req, res, next) {
   }
 })
 
+//DELETE a group
 router.delete('/:groupId', (req, res, next) => {
   try {
     Group.destroy({
@@ -114,6 +106,9 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
         },
       }
     )
+
+    // TODO: create Item rows from req.body.owedByMember
+    // if paidby don't create item
 
     // associate expense to user who paid
     await newExpense.addUser(userId)
@@ -209,6 +204,38 @@ router.post('/singleGroup/:groupId/members', async (req, res, next) => {
     })
     await thisUser.addGroup(req.params.groupId)
     res.json(thisUser)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// DELETE a group member
+router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
+  try {
+    // clean up this code - we might not need to find both the group and the user, but make sure before deleting
+    const memberId = Number(req.body.memberId)
+    const groupId = Number(req.params.groupId)
+    const group = await Group.findByPk(groupId)
+
+    // find user object so later we can check if they have an existing balance
+    const thisUser = await User.findByPk(memberId, {include: {model: Group}})
+    // filter array of groups user is in so that we only have one array element and therefore know the index of this group
+    const thisGroupArray = thisUser.groups.filter(
+      (currentGroup) => currentGroup.user_group.group_Id === groupId
+    )
+    // if the member has a balance in that group (positive or negative), we should not allow the user to remove the member
+    // instead, we send back the list of all group members so the front end can check what to display
+    if (thisGroupArray[0].user_group.balance !== 0) {
+      const groupMembers = await group.getUsers({
+        attributes: ['id', 'email', 'firstName', 'lastName'],
+      })
+      res.json(groupMembers)
+    }
+    // else move forward with removing user from group
+    else {
+      await group.removeUser(memberId)
+      res.sendStatus(204)
+    }
   } catch (err) {
     next(err)
   }
