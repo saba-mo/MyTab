@@ -189,8 +189,8 @@ const mapState = (state) => {
 }
 const mapDispatch = (dispatch) => {
   return {
-    addGroupExpense: (groupId, newExpenseName) =>
-      dispatch(_addGroupExpense(groupId, newExpenseName)),
+    addGroupExpense: (groupId, newExpenseObject) =>
+      dispatch(_addGroupExpense(groupId, newExpenseObject)),
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
   }
 }
