@@ -34,7 +34,7 @@ export class GroupBalances extends React.Component {
         } else if (owedToUser.id === user.id) {
           totalOwedToUser += amount
         }
-        expenses.push([owedToUser, owingUser, amount, expense.name])
+        expenses.push([owedToUser, owingUser, amount, expense.name, expense.id])
       })
     })
 
@@ -56,7 +56,7 @@ export class GroupBalances extends React.Component {
             {expenses
               .filter((expense) => expense[0].id === user.id)
               .map((expense) => (
-                <tr>
+                <tr key={expense[4]}>
                   <td>{expense[3]}</td>
                   <td>
                     {expense[0].firstName} {expense[0].lastName}
@@ -86,7 +86,7 @@ export class GroupBalances extends React.Component {
             {expenses
               .filter((expense) => expense[1].id === user.id)
               .map((expense) => (
-                <tr>
+                <tr key={expense[4]}>
                   <td>{expense[3]}</td>
                   <td>
                     {expense[0].firstName} {expense[0].lastName}
@@ -116,7 +116,7 @@ export class GroupBalances extends React.Component {
                 (expense) => ![expense[0].id, expense[1].id].includes(user.id)
               )
               .map((expense) => (
-                <tr>
+                <tr key={expense[4]}>
                   <td>{expense[3]}</td>
                   <td>
                     {expense[0].firstName} {expense[0].lastName}
