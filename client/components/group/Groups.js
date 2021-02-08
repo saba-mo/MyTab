@@ -5,15 +5,49 @@ import {Link} from 'react-router-dom'
 import CreateGroupForm from './CreateGroupForm'
 
 export class Groups extends React.Component {
+  constructor() {
+    super()
+    this.state = {showForm: false}
+
+    this.toggleShowForm = this.toggleShowForm.bind(this)
+    this.handleDeleteGroup = this.handleDeleteGroup.bind(this)
+  }
+
   componentDidMount() {
     this.props.getGroups(this.props.user.id)
+  }
+
+  toggleShowForm() {
+    this.setState({showForm: !this.state.showForm})
+  }
+
+  handleDeleteGroup(groupId) {
+    if (
+      window.confirm(
+        'Are you sure? You will be deleting the group and expenses for all members.'
+      )
+    ) {
+      this.props.deleteGroup(groupId)
+    }
   }
 
   render() {
     if (this.props.groups.length > 0) {
       return (
         <div>
-          <CreateGroupForm />
+          <div className="editGroupPencil">
+            {this.state.showForm ? (
+              <CreateGroupForm toggleForm={this.toggleShowForm} />
+            ) : (
+              <img
+                className="groupImg"
+                src="/images/plus.png"
+                height="64px"
+                width="64px"
+                onClick={this.toggleShowForm}
+              />
+            )}
+          </div>
           {this.props.groups.map((group) => {
             return (
               <div key={group.id}>
@@ -22,7 +56,7 @@ export class Groups extends React.Component {
                 </Link>
                 <button
                   type="button"
-                  onClick={() => this.props.deleteGroup(group.id)}
+                  onClick={() => this.handleDeleteGroup(group.id)}
                 >
                   X
                 </button>

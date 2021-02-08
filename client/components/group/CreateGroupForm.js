@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_createGroup} from '../../store/groups/groups'
-import {Link} from 'react-router-dom'
 
 export class CreateGroupForm extends React.Component {
   constructor() {
@@ -19,6 +18,7 @@ export class CreateGroupForm extends React.Component {
   }
   handleSubmit(event) {
     event.preventDefault()
+    this.props.toggleForm()
     this.props.createGroup(this.state)
     this.setState({
       title: '',
