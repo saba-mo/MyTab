@@ -90,9 +90,7 @@ const createApp = () => {
   app.use((err, req, res, next) => {
     console.error(err)
     console.error(err.stack)
-    res
-      .status(err.status || 500)
-      .send(err.message && 'Sorry! Incorrect email and/or password.')
+    res.status(err.status || 500).send(err.message)
   })
 }
 
