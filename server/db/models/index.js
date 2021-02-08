@@ -22,9 +22,6 @@ Expense.hasMany(Item)
 Item.belongsTo(User)
 User.hasMany(Item)
 
-Expense.belongsTo(User)
-User.hasMany(Expense)
-
 module.exports = {
   User,
   Group,
