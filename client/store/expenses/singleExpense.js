@@ -18,6 +18,11 @@ export const _loadAnExpense = (groupId, expenseId) => async (dispatch) => {
     const {data} = await axios.get(
       `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`
     )
+    // *
+    // *
+    // *
+    // *
+    console.log('thunk load an expense: ', data)
     dispatch(getAnExpense(data))
   } catch (error) {
     console.log('Cannot find your expense because: ', error)
@@ -32,6 +37,8 @@ export const _updateExpense = (groupId, expenseId, expense) => async (
       `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`,
       expense
     )
+    console.log('thunk update an expense: ', data)
+
     dispatch(updateExpense(data))
   } catch (error) {
     console.log('Cannot update your expense because: ', error)

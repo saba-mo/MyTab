@@ -150,7 +150,7 @@ router.get(
       if (isNaN(expenseId)) return res.sendStatus(404)
 
       const thisExpense = await Expense.findByPk(expenseId, {
-        attributes: ['id', 'name', 'totalCost', 'groupId'],
+        attributes: ['id', 'name', 'totalCost', 'groupId', 'settled'],
       })
       if (!thisExpense) res.sendStatus(404)
 

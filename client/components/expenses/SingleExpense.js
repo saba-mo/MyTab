@@ -15,7 +15,7 @@ class SingleExpense extends React.Component {
     this.state = {showForm: false}
     this.deleteAndGoBack = this.deleteAndGoBack.bind(this)
     this.toggleShowForm = this.toggleShowForm.bind(this)
-    this.settleSingleExpense = this.settleSingleExpense.bind(this)
+    this.settleAnExpense = this.settleAnExpense.bind(this)
   }
 
   componentDidMount() {
@@ -32,10 +32,15 @@ class SingleExpense extends React.Component {
     this.props.deleteGroupExpense(groupId, id)
     window.location.href = `/groups/singleGroup/${groupId}`
   }
-  settleSingleExpense() {
+
+  settleAnExpense() {
     const {groupId, id} = this.props.expense
-    console.log('expense: ', this.props.expense)
-    console.log('group and id: ', groupId, id)
+    this.props.expense.settled = true
+    const expense = this.props.expense
+    console.log('expense object sending to reducer: ', expense)
+
+    this.props.settleSingleExpense(groupId, id, expense)
+    console.log('group id to send with expense: ', groupId)
   }
 
   render() {
@@ -66,7 +71,7 @@ class SingleExpense extends React.Component {
             />
           )}
         </div>
-        <button type="submit" onClick={this.settleSingleExpense}>
+        <button type="submit" onClick={this.settleAnExpense}>
           Settle
         </button>
         <button type="submit" onClick={this.deleteAndGoBack}>
@@ -89,8 +94,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(_deleteGroupExpense(groupId, expenseId)),
   loadAnExpense: (groupId, expenseId) =>
     dispatch(_loadAnExpense(groupId, expenseId)),
-  settleSingleExpense: (groupId, expenseId) =>
-    dispatch(_settleSingleExpense(groupId, expenseId)),
+  settleSingleExpense: (groupId, expenseId, expense) =>
+    dispatch(_settleSingleExpense(groupId, expenseId, expense)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleExpense)

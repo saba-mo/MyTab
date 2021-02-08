@@ -74,13 +74,13 @@ export const _deleteGroupExpense = (groupId, expenseId) => async (dispatch) => {
   }
 }
 
-export const _settleSingleExpense = (groupId, expenseId) => async (
+export const _settleSingleExpense = (groupId, expenseId, expense) => async (
   dispatch
 ) => {
   try {
     const {data} = await axios
       .put(`/api/groups/singleGroup/${groupId}/expenses/${expenseId}`, {
-        expenseId,
+        expense,
       })
       .then((response) => {
         console.log('response to put: ', response)
