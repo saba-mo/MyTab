@@ -19,6 +19,7 @@ export class CreateGroupForm extends React.Component {
   }
   handleSubmit(event) {
     event.preventDefault()
+    this.props.toggleForm()
     this.props.createGroup(this.state)
     this.setState({
       title: '',

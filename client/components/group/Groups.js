@@ -7,12 +7,18 @@ import CreateGroupForm from './CreateGroupForm'
 export class Groups extends React.Component {
   constructor() {
     super()
+    this.state = {showForm: false}
 
+    this.toggleShowForm = this.toggleShowForm.bind(this)
     this.handleDeleteGroup = this.handleDeleteGroup.bind(this)
   }
 
   componentDidMount() {
     this.props.getGroups(this.props.user.id)
+  }
+
+  toggleShowForm() {
+    this.setState({showForm: !this.state.showForm})
   }
 
   handleDeleteGroup(groupId) {
@@ -29,7 +35,19 @@ export class Groups extends React.Component {
     if (this.props.groups.length > 0) {
       return (
         <div>
-          <CreateGroupForm />
+          <div className="editGroupPencil">
+            {this.state.showForm ? (
+              <CreateGroupForm toggleForm={this.toggleShowForm} />
+            ) : (
+              <img
+                className="groupImg"
+                src="/images/plus.png"
+                height="64px"
+                width="64px"
+                onClick={this.toggleShowForm}
+              />
+            )}
+          </div>
           {this.props.groups.map((group) => {
             return (
               <div key={group.id}>
@@ -39,7 +57,6 @@ export class Groups extends React.Component {
                 <button
                   type="button"
                   onClick={() => this.handleDeleteGroup(group.id)}
-                  // onClick={() => this.props.deleteGroup(group.id)}
                 >
                   X
                 </button>
