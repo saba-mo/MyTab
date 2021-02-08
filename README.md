@@ -6,8 +6,8 @@ https://jsonformatter.curiousconcept.com/#
 eager loading - includes
 
 //to create or find a new orderItem
-curl -d "groupId=2&title="Kat"" -X POST http://localhost:8080/api/groups
-
+curl -d "groupId=2&title="Kat"" -X POST http://localhost:8080/api/groups/
+curl -d "itemId=1&amount="10"&expenseId="2"&userId="3"" -X POST http://localhost:8080/api/groups/singleGroup/1/expenses
 //update number of orderItems
 curl -d "title="manny"" -X PUT http://localhost:8080/api/groups/53
 //update active or inactive after checking out order
