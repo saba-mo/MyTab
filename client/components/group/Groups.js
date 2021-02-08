@@ -16,12 +16,13 @@ export class Groups extends React.Component {
   }
 
   handleDeleteGroup(groupId) {
-    let confirm = confirm(
-      "Are you sure? Deleting a group also deletes the group's expenses."
-    )
-    if (confirm == true) {
+    if (
+      window.confirm(
+        "Are you sure? Deleting a group also deletes the group's expenses."
+      )
+    ) {
       this.props.deleteGroup(groupId)
-    } else return
+    }
   }
 
   render() {
