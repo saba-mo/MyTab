@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import {_getSingleGroup, _updateGroup} from '../../store/groups/singleGroup'
 import GroupExpenses from '../expenses/GroupExpenses'
 import GroupBalances from '../expenses/GroupBalances'
@@ -48,8 +49,12 @@ export class SingleGroup extends React.Component {
 
     return (
       <div>
-        {/* <Navigation pageName = "Single Robots" /> */}
         <main>
+          <div className="pages-view-navbar">
+            <Link to={`/groups/${this.props.user.id}`}>
+              <h3>Back to All Groups </h3>
+            </Link>
+          </div>
           <div>
             <div className="editGroupPencil">
               <h3>{this.props.singleGroup.title}</h3>
@@ -125,6 +130,7 @@ const mapState = (state) => {
   return {
     singleGroup: state.singleGroup,
     groups: state.groups,
+    user: state.user,
   }
 }
 

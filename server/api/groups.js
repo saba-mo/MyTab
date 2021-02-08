@@ -36,8 +36,19 @@ router.post('/', async function (req, res, next) {
 })
 
 //DELETE a group
-router.delete('/:groupId', (req, res, next) => {
+router.delete('/:groupId', async (req, res, next) => {
   try {
+    // get all expenses for the group
+    const groupExpenses = await Expense.findAll({
+      where: {groupId: req.params.groupId},
+    })
+    // destroy all of them in the db
+    for (let i = 0; i < groupExpenses.length; i++) {
+      let expense = groupExpenses[i]
+      await expense.destroy()
+    }
+
+    // destroy the group in the db
     Group.destroy({
       where: {
         id: req.params.groupId,
