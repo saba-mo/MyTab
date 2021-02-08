@@ -1,8 +1,9 @@
 const router = require('express').Router()
 const {User} = require('../db/models')
+const {isIdentity, isFriend} = require('../express-gate-auth')
 
 // GET all of user's friends
-router.get('/:userId', async (req, res, next) => {
+router.get('/:userId', isIdentity, async (req, res, next) => {
   try {
     const id = parseInt(req.params.userId)
     if (isNaN(id)) return res.sendStatus(404)
@@ -49,21 +50,26 @@ router.post('/:userId', async (req, res, next) => {
 })
 
 // GET individual friend
-router.get('/:userId/:friendId', async (req, res, next) => {
-  try {
-    const friendId = parseInt(req.params.friendId)
-    if (isNaN(friendId)) return res.sendStatus(404)
+router.get(
+  '/:userId/:friendId',
+  isIdentity,
+  isFriend,
+  async (req, res, next) => {
+    try {
+      const friendId = parseInt(req.params.friendId)
+      if (isNaN(friendId)) return res.sendStatus(404)
 
-    const thisFriend = await User.findByPk(friendId, {
-      attributes: ['firstName', 'lastName', 'email', 'id'],
-    })
-    if (!thisFriend) return res.sendStatus(404)
+      const thisFriend = await User.findByPk(friendId, {
+        attributes: ['firstName', 'lastName', 'email', 'id'],
+      })
+      if (!thisFriend) return res.sendStatus(404)
 
-    res.json(thisFriend)
-  } catch (err) {
-    next(err)
+      res.json(thisFriend)
+    } catch (err) {
+      next(err)
+    }
   }
-})
+)
 
 // DELETE a friend
 router.delete('/:userId/:friendId', async (req, res, next) => {

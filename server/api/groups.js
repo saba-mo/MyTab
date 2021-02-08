@@ -61,24 +61,28 @@ router.put('/singleGroup/:groupId', async (req, res, next) => {
 })
 
 // GET all of group's expenses
-router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
-  try {
-    const groupId = parseInt(req.params.groupId)
-    if (isNaN(groupId)) return res.sendStatus(404)
+router.get(
+  '/singleGroup/:groupId/expenses',
+  isInGroup,
+  async (req, res, next) => {
+    try {
+      const groupId = parseInt(req.params.groupId)
+      if (isNaN(groupId)) return res.sendStatus(404)
 
-    const thisGroup = await Group.findByPk(groupId)
-    if (!thisGroup) res.sendStatus(404)
+      const thisGroup = await Group.findByPk(groupId)
+      if (!thisGroup) res.sendStatus(404)
 
-    const groupExpenses = await thisGroup.getExpenses({
-      attributes: ['id', 'name', 'totalCost', 'groupId'],
-      include: {model: User},
-    })
+      const groupExpenses = await thisGroup.getExpenses({
+        attributes: ['id', 'name', 'totalCost', 'groupId'],
+        include: {model: User},
+      })
 
-    res.json(groupExpenses)
-  } catch (err) {
-    next(err)
+      res.json(groupExpenses)
+    } catch (err) {
+      next(err)
+    }
   }
-})
+)
 
 // POST a new group expense
 router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
@@ -123,6 +127,7 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
 // GET single group expense
 router.get(
   '/singleGroup/:groupId/expenses/:expenseId',
+  isInGroup,
   async (req, res, next) => {
     try {
       const expenseId = parseInt(req.params.expenseId)
@@ -175,22 +180,26 @@ router.delete(
 )
 
 // GET all of group's members
-router.get('/singleGroup/:groupId/members', async (req, res, next) => {
-  try {
-    const groupId = parseInt(req.params.groupId)
-    if (isNaN(groupId)) return res.sendStatus(404)
+router.get(
+  '/singleGroup/:groupId/members',
+  isInGroup,
+  async (req, res, next) => {
+    try {
+      const groupId = parseInt(req.params.groupId)
+      if (isNaN(groupId)) return res.sendStatus(404)
 
-    const thisGroup = await Group.findByPk(groupId)
-    if (!thisGroup) res.sendStatus(404)
+      const thisGroup = await Group.findByPk(groupId)
+      if (!thisGroup) res.sendStatus(404)
 
-    const groupMembers = await thisGroup.getUsers({
-      attributes: ['id', 'email', 'firstName', 'lastName'],
-    })
-    res.json(groupMembers)
-  } catch (err) {
-    next(err)
+      const groupMembers = await thisGroup.getUsers({
+        attributes: ['id', 'email', 'firstName', 'lastName'],
+      })
+      res.json(groupMembers)
+    } catch (err) {
+      next(err)
+    }
   }
-})
+)
 
 // ADD a group member
 router.post('/singleGroup/:groupId/members', async (req, res, next) => {

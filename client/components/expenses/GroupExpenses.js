@@ -32,6 +32,7 @@ export class GroupExpenses extends React.Component {
       (accumulator, currentValue) => accumulator + currentValue.totalCost,
       0
     )
+
     return (
       <div>
         <div className="editGroupPencil">

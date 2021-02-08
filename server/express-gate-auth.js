@@ -1,5 +1,15 @@
-const User = require('./db/models/user')
-const Group = require('./db/models/group')
+const {User, Group} = require('./db/models')
+
+//checking if the user identity is the identity associated with user in params
+const isIdentity = async (req, res, next) => {
+  const user = await User.findOne({
+    where: {
+      id: req.user.id,
+    },
+  })
+
+  user.id == req.params.userId ? next() : res.send("You don't have permission")
+}
 
 //checking if the user identity is the identity associated with this group
 const isInGroup = async (req, res, next) => {
@@ -18,15 +28,20 @@ const isInGroup = async (req, res, next) => {
   thisGroup.length ? next() : res.send("You don't have permission")
 }
 
-//checking if the user identity is the identity associated with user in params
-const isIdentity = async (req, res, next) => {
+//checking if the user identity is the identity associated with this friend
+const isFriend = async (req, res, next) => {
   const user = await User.findOne({
     where: {
       id: req.user.id,
     },
   })
+  const myFriends = await user.getFriends()
+  const thisFriend = myFriends.filter(
+    (friend) => friend.id == req.params.friendId
+  )
+  console.log(thisFriend)
 
-  user.id == req.params.userId ? next() : res.send("You don't have permission")
+  thisFriend.length ? next() : res.send("You don't have permission")
 }
 
-module.exports = {isInGroup, isIdentity}
+module.exports = {isInGroup, isFriend, isIdentity}
