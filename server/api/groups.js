@@ -1,8 +1,9 @@
 const router = require('express').Router()
 const {Group, User, Expense} = require('../db/models')
+const {isInGroup, isIdentity} = require('../express-gate-auth')
 
 //GET all groups
-router.get('/:userId', async (req, res, next) => {
+router.get('/:userId', isIdentity, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId, {
       include: [{model: Group}],
@@ -14,7 +15,7 @@ router.get('/:userId', async (req, res, next) => {
 })
 
 //GET a single group
-router.get('/singleGroup/:groupId', async (req, res, next) => {
+router.get('/singleGroup/:groupId', isInGroup, async (req, res, next) => {
   try {
     const group = await Group.findByPk(req.params.groupId)
     res.json(group)
