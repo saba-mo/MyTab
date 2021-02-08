@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {_loadAnExpense, _deleteGroupExpense} from '../../store/'
 import {UpdateExpenseForm} from '../index'
+import currency from 'currency.js'
 
 class SingleExpense extends React.Component {
   constructor() {
@@ -38,7 +39,7 @@ class SingleExpense extends React.Component {
           </Link>
         </div>
         <h4>
-          {expense.name} ${expense.totalCost}
+          {expense.name} {currency(expense.totalCost).format()}
         </h4>
         <div className="editGroupPencil">
           {this.state.showForm ? (
