@@ -5,8 +5,23 @@ import {Link} from 'react-router-dom'
 import CreateGroupForm from './CreateGroupForm'
 
 export class Groups extends React.Component {
+  constructor() {
+    super()
+
+    this.handleDeleteGroup = this.handleDeleteGroup.bind(this)
+  }
+
   componentDidMount() {
     this.props.getGroups(this.props.user.id)
+  }
+
+  handleDeleteGroup(groupId) {
+    let confirm = confirm(
+      "Are you sure? Deleting a group also deletes the group's expenses."
+    )
+    if (confirm == true) {
+      this.props.deleteGroup(groupId)
+    } else return
   }
 
   render() {
@@ -22,7 +37,8 @@ export class Groups extends React.Component {
                 </Link>
                 <button
                   type="button"
-                  onClick={() => this.props.deleteGroup(group.id)}
+                  onClick={() => this.handleDeleteGroup(group.id)}
+                  // onClick={() => this.props.deleteGroup(group.id)}
                 >
                   X
                 </button>
