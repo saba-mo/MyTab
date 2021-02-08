@@ -26,10 +26,14 @@ const isInGroup = async (req, res, next) => {
   const thisGroup = user.groups.filter(
     (group) => group.id == req.params.groupId
   )
+
+  console.log('g: ', thisGroup, 'l: ', thisGroup.length)
+
+  // !thisGroup.length ? res.redirect('/') : next()
   thisGroup.length ? next() : res.redirect(`/groups/${req.user.id}`)
   // thisGroup.length ? next() : (window.location.href = `/groups/${req.user.id}`)
 
-  thisGroup.length ? next() : res.send([])
+  // thisGroup.length ? next() : res.send([])
 }
 
 //checking if the user identity is the identity associated with this friend

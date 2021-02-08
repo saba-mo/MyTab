@@ -17,7 +17,12 @@ export const _getSingleGroup = (groupId) => {
   return async (dispatch) => {
     try {
       const {data} = await axios.get(`/api/groups/singleGroup/${groupId}`)
-      dispatch(setSingleGroup(data))
+      if (data.title) {
+        dispatch(setSingleGroup(data))
+      } else {
+        // if we go with this, need to change 1 to user Id
+        window.location = `/groups/1`
+      }
     } catch (err) {
       console.log(err.message)
     }
