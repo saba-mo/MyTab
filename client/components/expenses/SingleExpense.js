@@ -1,7 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {_loadAnExpense, _deleteGroupExpense} from '../../store/'
+import {
+  _loadAnExpense,
+  _deleteGroupExpense,
+  _settleSingleExpense,
+} from '../../store/'
 import {UpdateExpenseForm} from '../index'
 import currency from 'currency.js'
 
@@ -78,6 +82,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(_deleteGroupExpense(groupId, expenseId)),
   loadAnExpense: (groupId, expenseId) =>
     dispatch(_loadAnExpense(groupId, expenseId)),
+  settleSingleExpense: (groupId, expenseId) =>
+    dispatch(_settleSingleExpense(groupId, expenseId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleExpense)

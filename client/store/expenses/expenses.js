@@ -22,8 +22,9 @@ const deleteGroupExpense = (expenseId) => ({
   expenseId,
 })
 
-const settleSingleExpense = () => ({
+const settleSingleExpense = (expense) => ({
   type: SETTLE_SINGLE_EXPENSE,
+  expense,
 })
 
 /* INITIAL STATE */
@@ -73,8 +74,22 @@ export const _deleteGroupExpense = (groupId, expenseId) => async (dispatch) => {
   }
 }
 
-export const _settleSingleExpense = () => {
-  dispatch(settleSingleExpense())
+export const _settleSingleExpense = (groupId, expenseId) => async (
+  dispatch
+) => {
+  try {
+    const {data} = await axios
+      .put(`/api/groups/singleGroup/${groupId}/expenses/${expenseId}`, {
+        expenseId,
+      })
+      .then((response) => {
+        console.log('response to put: ', response)
+      })
+
+    dispatch(settleSingleExpense(data))
+  } catch (error) {
+    console.log(`The expense was not settled due to an error: `, error)
+  }
 }
 
 /* REDUCER */
@@ -87,7 +102,7 @@ const groupExpensesReducer = (state = initialState, action) => {
     case DELETE_GROUP_EXPENSE:
       return [...state.filter((expense) => expense.id !== action.expenseId)]
     case SETTLE_SINGLE_EXPENSE:
-      return
+      return [...state, action.expense]
     default:
       return state
   }

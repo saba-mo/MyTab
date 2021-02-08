@@ -30,6 +30,10 @@ const Expense = db.define('expense', {
       this.setDataValue('totalCost', currency(value).value)
     },
   },
+  settled: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
 })
 
 module.exports = Expense
