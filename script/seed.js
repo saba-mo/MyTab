@@ -66,6 +66,7 @@ async function associations() {
   // loops through all users and associates each of them to one friend, except for last user
   for (let i = 0; i < usersToAssoc.length - 1; i++) {
     await usersToAssoc[i].addFriend(usersToAssoc[i + 1].id)
+    await usersToAssoc[i + 1].addFriend(usersToAssoc[i].id)
   }
 
   // adds more friend and group associations to create variety of group sizes
