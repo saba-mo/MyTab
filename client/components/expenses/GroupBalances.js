@@ -41,7 +41,8 @@ export class GroupBalances extends React.Component {
     return (
       <div>
         <h3>
-          Total Owed to {user.firstName} {user.lastName}: ${totalOwedToUser}
+          Total Owed to {user.firstName} {user.lastName}: $
+          {totalOwedToUser.toFixed(2)}
         </h3>
         <table>
           <thead>
@@ -71,7 +72,8 @@ export class GroupBalances extends React.Component {
         </table>
 
         <h3>
-          Total {user.firstName} {user.lastName} Owes: ${totalUserOwes}
+          Total {user.firstName} {user.lastName} Owes: $
+          {totalUserOwes.toFixed(2)}
         </h3>
         <table>
           <thead>
