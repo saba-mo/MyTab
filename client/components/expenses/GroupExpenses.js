@@ -7,10 +7,17 @@ import {CreateGroupExpenseForm} from '../index'
 export class GroupExpenses extends React.Component {
   constructor() {
     super()
+    this.state = {showForm: false}
+
+    this.toggleShowForm = this.toggleShowForm.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupExpenses(this.props.groupId)
+  }
+
+  toggleShowForm() {
+    this.setState({showForm: !this.state.showForm})
   }
 
   noExpenses = (expenseList) => {
@@ -27,7 +34,22 @@ export class GroupExpenses extends React.Component {
     )
     return (
       <div>
-        <CreateGroupExpenseForm groupId={this.props.groupId} />
+        <div className="editGroupPencil">
+          {this.state.showForm ? (
+            <CreateGroupExpenseForm
+              toggleForm={this.toggleShowForm}
+              groupId={this.props.groupId}
+            />
+          ) : (
+            <img
+              className="groupImg"
+              src="/images/plus.png"
+              height="64px"
+              width="64px"
+              onClick={this.toggleShowForm}
+            />
+          )}
+        </div>
         <div id="full-expense-list">
           {this.noExpenses(groupExpenses)}
           <ul>

@@ -1,3 +1,5 @@
+/* ignore this comment */
+
 /* body {
   font-family: sans-serif;
 }
@@ -190,6 +192,14 @@ input:focus {
   text-align: center;
 }
 
+a.grp_tab_btns:hover {
+  color: #0400ff;
+}
+
+.grp_tab_btns.selectedTab {
+  color: #0400ff;
+}
+
 .single-expense-navbar {
   display: flex;
   background-color: #61a3ee;
@@ -233,4 +243,8 @@ footer {
 .container {
   display: flex;
   justify-content: center;
+}
+
+.error {
+  color: red;
 }

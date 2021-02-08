@@ -15,9 +15,19 @@ const User = db.define('user', {
   },
   firstName: {
     type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notNull: true,
+      notEmpty: true,
+    },
   },
   lastName: {
     type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notNull: true,
+      notEmpty: true,
+    },
   },
 
   password: {
