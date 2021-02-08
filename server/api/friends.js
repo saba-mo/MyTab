@@ -26,12 +26,16 @@ router.post('/:userId', async (req, res, next) => {
     // This request comes along with:
     // 1. User Id
     // 2. friend email
+
+    //checking to ensure user id is valid
     const id = parseInt(req.params.userId)
     if (isNaN(id)) return res.sendStatus(404)
 
+    //finding user in database, returning 404 if not found in db
     const thisUser = await User.findByPk(id)
     if (!thisUser) return res.sendStatus(404)
 
+    //finding the email of the user to add as a friend, returning 404 if not found in db
     const thisFriend = await User.findOne({
       where: {
         email: req.body.email,
@@ -39,7 +43,9 @@ router.post('/:userId', async (req, res, next) => {
     })
     if (!thisFriend) return res.sendStatus(404)
 
+    // adding friendship to this user
     thisUser.addFriend(thisFriend.id)
+    // adding friendship to the new friend
     thisFriend.addFriend(thisUser.id)
 
     res.json(thisFriend)
