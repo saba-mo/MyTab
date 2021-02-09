@@ -6,6 +6,7 @@ const TotalBalance = () => (
   <div className="totalBalance">
     <div>Total Balance</div>
     {/* might need to use currency.js here */}
+    {/* say You are all settled up if balance is 0, see Groups component */}
     {/* <div>
         {positiveBalance ? (
           <div>You are owed ${balance}</div>
