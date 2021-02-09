@@ -33,8 +33,6 @@ export const _loadAnExpense = (groupId, expenseId) => async (dispatch) => {
   }
 }
 
-// _settleAPortion(paidBy, itemToSettle, groupId)
-
 export const _settleOnePortion = (paidBy, itemToSettle, groupId) => async (
   dispatch
 ) => {
