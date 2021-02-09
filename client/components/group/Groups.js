@@ -75,7 +75,7 @@ export class Groups extends React.Component {
         <div>
           <h4>See the groups you belong to, and create a new one.</h4>
           <p>No groups to show, want to add one?</p>
-          <CreateGroupForm />
+          <CreateGroupForm toggleForm={this.toggleShowForm} />
         </div>
       )
     }
