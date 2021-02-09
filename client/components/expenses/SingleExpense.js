@@ -41,7 +41,7 @@ class SingleExpense extends React.Component {
 
   settleAnExpense() {
     const {groupId, id} = this.props.expense
-    this.props.expense.settled = true
+    // this.props.expense.settled = true
     const expense = this.props.expense
     console.log('expense object sending to reducer: ', expense)
 
@@ -51,6 +51,10 @@ class SingleExpense extends React.Component {
 
   render() {
     const {expense} = this.props
+    console.log('props in render: ', this.props)
+
+    console.log('expense in render: ', expense)
+
     return (
       <div className="expense-individual">
         <div className="pages-view-navbar">
