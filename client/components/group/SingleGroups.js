@@ -40,10 +40,19 @@ export class SingleGroup extends React.Component {
 
   componentDidMount() {
     this.props.getSingleGroup(this.props.match.params.groupId)
+    // load group members so we can filter and see if logged in user is in this group
+    // log members array to make sure it's populated here
+
+    // then, change values to reflect if logged in user is in this group
+    // if (this.props.user.id !== Number(this.props.match.params.userId)) {
+    //   window.location = '/home'
+    // }
   }
 
   render() {
     const singleGroup = this.props.singleGroup || {}
+    console.log('tis group: ', singleGroup)
+    console.log('this user: ', this.props.user)
 
     if (!singleGroup) return <div>LOADING</div>
 
