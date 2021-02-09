@@ -64,6 +64,7 @@ export class SingleGroup extends React.Component {
                 <img
                   className="groupImg"
                   src="/images/pencil.png"
+                  title="Update group name"
                   // height="400px"
                   // width="407.406px"
                   onClick={this.toggleShowForm}

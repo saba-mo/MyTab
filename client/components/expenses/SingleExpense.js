@@ -24,9 +24,15 @@ class SingleExpense extends React.Component {
   }
 
   deleteAndGoBack() {
-    const {groupId, id} = this.props.expense
-    this.props.deleteGroupExpense(groupId, id)
-    window.location.href = `/groups/singleGroup/${groupId}`
+    if (
+      window.confirm(
+        'Are you sure you want to delete this expense? This will remove this expense for all members involved.'
+      )
+    ) {
+      const {groupId, id} = this.props.expense
+      this.props.deleteGroupExpense(groupId, id)
+      window.location.href = `/groups/singleGroup/${groupId}`
+    }
   }
 
   render() {
