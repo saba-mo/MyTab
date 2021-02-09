@@ -167,17 +167,13 @@ router.put(
   async (req, res, next) => {
     try {
       const thisExpense = await Expense.findByPk(Number(req.params.expenseId))
-
       const updatedExpense = await thisExpense.update({
         name: req.body.name,
         totalCost: req.body.totalCost,
       })
-      // we have successfully updated the expense and the user_expense models
       await updatedExpense.setUsers([req.body.paidBy])
 
-      // we need to update the items model
       const items = await updatedExpense.getItems()
-      // console.log('rb: ', req.body)
 
       // iterate through existing list of items from db before the update
       for (let i = 0; i < items.length; i++) {
@@ -189,19 +185,21 @@ router.put(
             amount: req.body.owedByMember[item.userId],
             userId: item.userId,
           })
-
           // else, the item is in the database but not in the request body, so destroy it
         } else item.destroy()
       }
 
       // check request for a user id that does not exist in the items array and then create an item
-      const newItemOwers = Object.keys(req.body.owedByMember)
-      const existingItemOwners = items.map((item) => item.userId)
+      const newItemOwersStr = Object.keys(req.body.owedByMember)
+      const newItemOwers = newItemOwersStr.map((ower) => Number(ower))
+      const existingItemOwers = items.map((item) => item.userId)
 
-      // this is creating duplicate entries for the same item...
+      // iterate through users who are on the request as owers
       for (let i = 0; i < newItemOwers.length; i++) {
         let owerOnRequest = newItemOwers[i]
-        if (!existingItemOwners.includes(owerOnRequest)) {
+        // if the database does not include a row for this user and this item, create one
+        if (!existingItemOwers.includes(owerOnRequest)) {
+          console.log('in if statement: ', owerOnRequest)
           Item.create({
             amount: req.body.owedByMember[owerOnRequest],
             userId: Number(owerOnRequest),
@@ -209,10 +207,7 @@ router.put(
           })
         }
       }
-
-      // what do we need to send back
-      // res.json(updatedExpense)
-      res.end()
+      res.json(updatedExpense)
     } catch (err) {
       next(err)
     }
