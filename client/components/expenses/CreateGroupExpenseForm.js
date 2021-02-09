@@ -88,6 +88,7 @@ export class CreateGroupExpenseForm extends React.Component {
         (sum, val) => sum + val
       )
     }
+    let remainder = this.state.totalCost
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -158,8 +159,14 @@ export class CreateGroupExpenseForm extends React.Component {
           </div>
         ))}
         <div>
-          <div>Total Cost: ${this.state.totalCost}</div>
-          <div>Total Owed: ${totalOwed}</div>
+          <div>Total Cost: {this.state.totalCost}</div>
+          <div>Total Owed: {totalOwed}</div>
+          {remainder - totalOwed &&
+          remainder - totalOwed != this.state.totalCost ? (
+            <div className="error">Remaining: ${remainder - totalOwed}</div>
+          ) : (
+            ''
+          )}
         </div>
         <button
           type="submit"

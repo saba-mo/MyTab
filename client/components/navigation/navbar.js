@@ -21,11 +21,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
       ) : (
         <div>
           <div className="signup">
-            <h1>
-              {' '}
-              Upload your receipt and we’ll do the math. Split your bill now
-              with MyTab!
-            </h1>
+            <h1> Track shared expenses worry free with MyTab.</h1>
             <Link to="/login">Login</Link>
             <Link to="/signup">Sign Up</Link>
           </div>
