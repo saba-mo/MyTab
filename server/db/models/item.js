@@ -27,13 +27,6 @@ const Item = db.define('item', {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
   },
-  expenseId: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: Expense,
-      key: 'id',
-    },
-  },
 })
 
 module.exports = Item
