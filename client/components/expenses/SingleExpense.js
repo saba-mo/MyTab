@@ -37,6 +37,7 @@ class SingleExpense extends React.Component {
 
   render() {
     const {expense} = this.props
+
     return (
       <div className="expense-individual">
         <div className="pages-view-navbar">
@@ -45,7 +46,8 @@ class SingleExpense extends React.Component {
           </Link>
         </div>
         <h4>
-          {expense.name} {currency(expense.totalCost).format()}
+          {expense.name}
+          {currency(expense.totalCost).format()}
         </h4>
         <div className="editGroupPencil">
           {this.state.showForm ? (

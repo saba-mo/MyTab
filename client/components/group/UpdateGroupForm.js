@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_updateGroup} from '../../store/groups/singleGroup'
-import {Link} from 'react-router-dom'
 
 export class UpdateGroupForm extends React.Component {
   constructor() {

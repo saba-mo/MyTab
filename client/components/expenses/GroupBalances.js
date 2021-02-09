@@ -1,16 +1,24 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {_loadGroupExpenses} from '../../store/expenses/expenses'
+import {_loadGroupExpenses, _settleOnePortion} from '../../store/'
 import {CreateGroupExpenseForm} from '../index'
+import currency from 'currency.js'
 
 export class GroupBalances extends React.Component {
   constructor() {
     super()
+    this.settleThisPortion = this.settleThisPortion.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupExpenses(this.props.groupId)
+  }
+
+  settleThisPortion(paidBy, itemToSettle) {
+    itemToSettle.settled = true
+    const {groupId} = this.props
+    this.props.settleAPortion(paidBy, itemToSettle, groupId)
   }
 
   render() {
@@ -34,7 +42,14 @@ export class GroupBalances extends React.Component {
         } else if (owedToUser.id === user.id) {
           totalOwedToUser += amount
         }
-        expenses.push([owedToUser, owingUser, amount, expense.name, expense.id])
+        expenses.push([
+          owedToUser,
+          owingUser,
+          amount,
+          expense.name,
+          expense.id,
+          item,
+        ])
       })
     })
 
@@ -51,6 +66,7 @@ export class GroupBalances extends React.Component {
               <th>Paid By</th>
               <th>Ower</th>
               <th>Amount</th>
+              <th />
             </tr>
           </thead>
           <tbody>
@@ -66,6 +82,16 @@ export class GroupBalances extends React.Component {
                     {expense[1].firstName} {expense[1].lastName}
                   </td>
                   <td>${expense[2]}</td>
+                  <td>
+                    <button
+                      type="submit"
+                      onClick={() =>
+                        this.settleThisPortion(expense[0], expense[5])
+                      }
+                    >
+                      Settle
+                    </button>
+                  </td>
                 </tr>
               ))}
           </tbody>
@@ -145,6 +171,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   loadGroupExpenses: (groupId) => dispatch(_loadGroupExpenses(groupId)),
+  settleAPortion: (paidBy, itemToSettle, groupId) =>
+    dispatch(_settleOnePortion(paidBy, itemToSettle, groupId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupBalances)
