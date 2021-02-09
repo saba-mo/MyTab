@@ -21,12 +21,8 @@ export class GroupMembers extends React.Component {
   }
 
   attemptToRemoveMember(groupId, memberId, lengthOfMembersArray) {
-    // console.log('length arg: ', lengthOfMembersArray)
     this.setState({numberOfMembers: lengthOfMembersArray})
-    // state does not change from 0 the first time you try to delete someone, but does when you try to delete someone else
-    // console.log('length on state: ', this.state.numberOfMembers)
     this.props.deleteGroupMember(groupId, memberId)
-    // console.log('gm length after delete: ', this.props.groupMembers.length)
     if (this.props.groupMembers.length === this.state.numberOfMembers) {
       alert('You cannot remove a member with a balance in the group.')
     }
@@ -55,6 +51,7 @@ export class GroupMembers extends React.Component {
             src="/images/plus.png"
             height="64px"
             width="64px"
+            title="Add a member"
             onClick={this.toggleShowForm}
           />
         )}

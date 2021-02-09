@@ -47,6 +47,7 @@ export class GroupExpenses extends React.Component {
               src="/images/plus.png"
               height="64px"
               width="64px"
+              title="Create an expense"
               onClick={this.toggleShowForm}
             />
           )}

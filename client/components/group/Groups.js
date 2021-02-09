@@ -45,6 +45,7 @@ export class Groups extends React.Component {
                 src="/images/plus.png"
                 height="64px"
                 width="64px"
+                title="Add a group"
                 onClick={this.toggleShowForm}
               />
             )}

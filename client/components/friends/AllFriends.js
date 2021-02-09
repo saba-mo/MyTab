@@ -48,6 +48,7 @@ export class AllFriends extends React.Component {
               src="/images/plus.png"
               height="64px"
               width="64px"
+              title="Add a friend"
               onClick={this.toggleShowForm}
             />
           )}
