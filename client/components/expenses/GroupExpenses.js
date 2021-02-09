@@ -58,9 +58,6 @@ export class GroupExpenses extends React.Component {
               height="64px"
               width="64px"
               title="Create an expense"
-              // turn it into a helper function that checks if members array has length > 1
-              // if it does, toggleShowForm, else alert to add members first
-              // onClick={this.toggleShowForm}
               onClick={this.checkMembersList}
             />
           )}
@@ -75,7 +72,7 @@ export class GroupExpenses extends React.Component {
                     to={`/groups/singleGroup/${expense.groupId}/expenses/${expense.id}`}
                   >
                     {expense.name}
-                  </Link>{' '}
+                  </Link>
                   Paid by {expense.users[0].firstName}{' '}
                   {expense.users[0].lastName}{' '}
                   {currency(expense.totalCost).format()}
