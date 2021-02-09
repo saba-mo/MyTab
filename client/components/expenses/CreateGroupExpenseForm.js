@@ -88,7 +88,6 @@ export class CreateGroupExpenseForm extends React.Component {
         (sum, val) => sum + val
       )
     }
-
     let remainder = this.state.totalCost
 
     return (
