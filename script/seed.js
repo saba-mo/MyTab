@@ -4,6 +4,7 @@ const {User, Group, Expense, Item} = require('../server/db/models')
 const groupData = require('./dummyDataGroups')
 const userData = require('./dummyDataUser')
 const expenseData = require('./dummyDataExpenses')
+const itemizedData = require('./dummyDataItimized')
 
 async function seed() {
   await db.sync({force: true})
@@ -24,6 +25,12 @@ async function seed() {
       return Expense.bulkCreate(expense)
     })
   )
+  await Promise.all(
+    itemizedData.map((itemizedExpense) => {
+      return Item.bulkCreate(itemizedExpense)
+    })
+  )
+
   console.log('seeded successfully')
 }
 
