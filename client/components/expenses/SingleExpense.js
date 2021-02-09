@@ -41,13 +41,13 @@ class SingleExpense extends React.Component {
 
   settleAnExpense() {
     const {groupId, id} = this.props.expense
-    // this.props.expense.settled = true
     const expense = this.props.expense
     console.log('expense object sending to reducer: ', expense)
 
     this.props.settleSingleExpense(groupId, id, expense)
     console.log('group id to send with expense: ', groupId)
   }
+  // this.props.expense.settled = true
 
   render() {
     const {expense} = this.props
@@ -104,7 +104,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(_deleteGroupExpense(groupId, expenseId)),
   loadAnExpense: (groupId, expenseId) =>
     dispatch(_loadAnExpense(groupId, expenseId)),
-  settleSingleExpense: (groupId, expenseId, expense) =>
+  SingleExpense: (groupId, expenseId, expense) =>
     dispatch(_settleSingleExpense(groupId, expenseId, expense)),
 })
 

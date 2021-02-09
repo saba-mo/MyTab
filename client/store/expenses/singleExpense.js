@@ -24,6 +24,8 @@ const updateExpense = (expense) => ({
 /* THUNK CREATORS */
 export const _loadAnExpense = (groupId, expenseId) => async (dispatch) => {
   try {
+    console.log('before await in thunk: ', groupId, expenseId)
+
     const {data} = await axios.get(
       `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`
     )
