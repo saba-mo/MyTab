@@ -179,7 +179,6 @@ router.put(
       const items = await updatedExpense.getItems()
       // console.log('rb: ', req.body)
 
-      // this works to update an existing item line and destroy the line item if no longer included in request
       // iterate through existing list of items from db before the update
       for (let i = 0; i < items.length; i++) {
         let item = items[i]
@@ -195,26 +194,22 @@ router.put(
         } else item.destroy()
       }
 
-      // Item.create({
-      //   // these aren't the right values
-      //   amount: req.body.owedByMember[item.userId],
-      //   userId: item.userId,
-      //   expenseId: thisExpense.id,
-      // // })
+      // check request for a user id that does not exist in the items array and then create an item
+      const newItemOwers = Object.keys(req.body.owedByMember)
+      const existingItemOwners = items.map((item) => item.userId)
 
-      // is this right?
-      // for (const [itemUserId, amount] of Object.entries(
-      //   req.body.owedByMember
-      // )) {
-      //   if (amount === 0) {
-      //     continue
-      //   }
-      //   await Item.update({
-      //     amount,
-      //     userId: itemUserId,
-      //     expenseId: thisExpense.id,
-      //   })
-      // }
+      // this is creating duplicate entries for the same item...
+      for (let i = 0; i < newItemOwers.length; i++) {
+        let owerOnRequest = newItemOwers[i]
+        if (!existingItemOwners.includes(owerOnRequest)) {
+          Item.create({
+            amount: req.body.owedByMember[owerOnRequest],
+            userId: Number(owerOnRequest),
+            expenseId: thisExpense.id,
+          })
+        }
+      }
+
       // what do we need to send back
       // res.json(updatedExpense)
       res.end()
