@@ -37,11 +37,7 @@ class SingleExpense extends React.Component {
 
   render() {
     const {expense} = this.props
-    let userName = ''
-    if (expense.paidBy) {
-      userName += expense.paidBy[0].firstName + ' '
-      userName += expense.paidBy[0].lastName
-    }
+
     return (
       <div className="expense-individual">
         <div className="pages-view-navbar">
@@ -50,7 +46,7 @@ class SingleExpense extends React.Component {
           </Link>
         </div>
         <h4>
-          {expense.name} Paid by {expense.paidBy ? userName : ''}
+          {expense.name}
           {currency(expense.totalCost).format()}
         </h4>
         <div className="editGroupPencil">

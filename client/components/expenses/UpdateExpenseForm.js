@@ -77,8 +77,6 @@ export class UpdateExpenseForm extends React.Component {
   }
 
   render() {
-    console.log('form props: ', this.props)
-    console.log('state paidby: ', this.state.paidBy)
     let totalOwed
     if (Object.values(this.state.owedByMember).length === 0) {
       totalOwed = 0
