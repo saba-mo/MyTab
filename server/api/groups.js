@@ -166,6 +166,13 @@ router.put(
   '/singleGroup/:groupId/expenses/:expenseId',
   async (req, res, next) => {
     try {
+      // request comes in with
+      // 1. expense name
+      // 2. expense totalCost
+      // 3. id of user who paid
+      // 4. object of who owes payer money {userId: amount}
+
+      // update expense
       const thisExpense = await Expense.findByPk(Number(req.params.expenseId))
       const updatedExpense = await thisExpense.update({
         name: req.body.name,
@@ -173,20 +180,20 @@ router.put(
       })
       await updatedExpense.setUsers([req.body.paidBy])
 
+      // update items
       const items = await updatedExpense.getItems()
-
       // iterate through existing list of items from db before the update
       for (let i = 0; i < items.length; i++) {
         let item = items[i]
         // if the item in the database is also in the request body
         if (req.body.owedByMember[item.userId]) {
           // update that item
-          item.update({
+          await item.update({
             amount: req.body.owedByMember[item.userId],
             userId: item.userId,
           })
           // else, the item is in the database but not in the request body, so destroy it
-        } else item.destroy()
+        } else await item.destroy()
       }
 
       // check request for a user id that does not exist in the items array and then create an item
@@ -199,14 +206,15 @@ router.put(
         let owerOnRequest = newItemOwers[i]
         // if the database does not include a row for this user and this item, create one
         if (!existingItemOwers.includes(owerOnRequest)) {
-          console.log('in if statement: ', owerOnRequest)
-          Item.create({
+          await Item.create({
             amount: req.body.owedByMember[owerOnRequest],
             userId: Number(owerOnRequest),
             expenseId: thisExpense.id,
           })
         }
       }
+      const updatedItems = await updatedExpense.getItems()
+      updatedExpense.dataValues.items = updatedItems
       res.json(updatedExpense)
     } catch (err) {
       next(err)

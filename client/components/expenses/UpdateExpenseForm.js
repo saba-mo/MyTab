@@ -68,7 +68,7 @@ export class UpdateExpenseForm extends React.Component {
 
     event.preventDefault()
     this.props.toggleForm()
-    this.props.updateExpense(this.props.groupId, {
+    this.props.updateExpense(this.props.groupId, this.props.expense.id, {
       name: this.state.name,
       totalCost: currency(this.state.totalCost).value,
       paidBy: this.state.paidBy,
@@ -87,9 +87,9 @@ export class UpdateExpenseForm extends React.Component {
     }
     let remainder = this.state.totalCost
     // groupMembers array includes user ids
-    console.log(this.props.groupMembers)
+    // console.log(this.props.groupMembers)
     // this.props.user and this.state.paidBy logging as undefined...
-    console.log(this.props.user)
+    // console.log(this.props.user)
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="name">Edit Name*:</label>
