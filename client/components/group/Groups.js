@@ -35,6 +35,7 @@ export class Groups extends React.Component {
     if (this.props.groups.length > 0) {
       return (
         <div>
+          <h4>See the groups you belong to, and create a new one.</h4>
           <div className="editGroupPencil">
             {this.state.showForm ? (
               <CreateGroupForm toggleForm={this.toggleShowForm} />
@@ -71,7 +72,8 @@ export class Groups extends React.Component {
     } else {
       return (
         <div>
-          <p>No groups, want to add one?</p>
+          <h4>See the groups you belong to, and create a new one.</h4>
+          <p>No groups to show, want to add one?</p>
           <CreateGroupForm />
         </div>
       )
