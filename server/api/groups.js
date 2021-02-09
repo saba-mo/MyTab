@@ -177,18 +177,30 @@ router.put(
 
       // we need to update the items model
       const items = await updatedExpense.getItems()
+      // console.log('rb: ', req.body)
 
-      // this works to update an existing item line but does not destroy or create accordingly
+      // this works to update an existing item line and destroy the line item if no longer included in request
+      // iterate through existing list of items from db before the update
       for (let i = 0; i < items.length; i++) {
         let item = items[i]
+        // if the item in the database is also in the request body
         if (req.body.owedByMember[item.userId]) {
-          // item.userId = req.body.owedByMember[item.userId]
+          // update that item
           item.update({
             amount: req.body.owedByMember[item.userId],
             userId: item.userId,
           })
-        }
+
+          // else, the item is in the database but not in the request body, so destroy it
+        } else item.destroy()
       }
+
+      // Item.create({
+      //   // these aren't the right values
+      //   amount: req.body.owedByMember[item.userId],
+      //   userId: item.userId,
+      //   expenseId: thisExpense.id,
+      // // })
 
       // is this right?
       // for (const [itemUserId, amount] of Object.entries(
