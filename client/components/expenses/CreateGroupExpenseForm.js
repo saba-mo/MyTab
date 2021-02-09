@@ -89,6 +89,8 @@ export class CreateGroupExpenseForm extends React.Component {
       )
     }
 
+    let remainder = this.state.totalCost
+
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="name">Expense Name*</label>
@@ -158,6 +160,12 @@ export class CreateGroupExpenseForm extends React.Component {
           </div>
         ))}
         <div>
+          {remainder - totalOwed &&
+          remainder - totalOwed != this.state.totalCost ? (
+            <div className="error">Remaining: ${remainder - totalOwed}</div>
+          ) : (
+            ''
+          )}
           <div>Total Cost: {this.state.totalCost}</div>
           <div>Total Owed: {totalOwed}</div>
         </div>
