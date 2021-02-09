@@ -91,6 +91,26 @@ router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
   }
 })
 
+// GET single group expense
+router.get(
+  '/singleGroup/:groupId/expenses/:expenseId',
+  async (req, res, next) => {
+    try {
+      const expenseId = parseInt(req.params.expenseId)
+      if (isNaN(expenseId)) return res.sendStatus(404)
+
+      const thisExpense = await Expense.findByPk(expenseId, {
+        attributes: ['id', 'name', 'totalCost', 'groupId'],
+      })
+      if (!thisExpense) res.sendStatus(404)
+
+      res.json(thisExpense)
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+
 // POST a new group expense
 router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
   try {
@@ -141,38 +161,26 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
   }
 })
 
-// GET single group expense
-router.get(
-  '/singleGroup/:groupId/expenses/:expenseId',
-  async (req, res, next) => {
-    try {
-      const expenseId = parseInt(req.params.expenseId)
-      if (isNaN(expenseId)) return res.sendStatus(404)
-
-      const thisExpense = await Expense.findByPk(expenseId, {
-        attributes: ['id', 'name', 'totalCost', 'groupId'],
-      })
-      if (!thisExpense) res.sendStatus(404)
-
-      res.json(thisExpense)
-    } catch (err) {
-      next(err)
-    }
-  }
-)
-
 //UPDATE single group expense
 router.put(
   '/singleGroup/:groupId/expenses/:expenseId',
   async (req, res, next) => {
     try {
-      const thisExpense = await Expense.findByPk(req.params.expenseId)
+      console.log(Object.keys(Item.prototype))
+      const thisExpense = await Expense.findByPk(Number(req.params.expenseId))
+
       const updatedExpense = await thisExpense.update({
         name: req.body.name,
         totalCost: req.body.totalCost,
       })
+      // we have successfully updated the expense and the user_expense models
       await updatedExpense.setUsers([req.body.paidBy])
-      res.json(updatedExpense)
+
+      // we need to update the items model
+
+      // what do we need to send back
+      // res.json(updatedExpense)
+      res.end()
     } catch (err) {
       next(err)
     }
