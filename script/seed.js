@@ -4,19 +4,20 @@ const {User, Group, Expense, Item} = require('../server/db/models')
 const groupData = require('./dummyDataGroups')
 const userData = require('./dummyDataUser')
 const expenseData = require('./dummyDataExpenses')
+const portionData = require('./dummyDataPortions')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
   await Promise.all(
-    groupData.map((group) => {
-      return Group.bulkCreate(group)
+    userData.map((user) => {
+      return User.bulkCreate(user)
     })
   )
   await Promise.all(
-    userData.map((user) => {
-      return User.bulkCreate(user)
+    groupData.map((group) => {
+      return Group.bulkCreate(group)
     })
   )
   await Promise.all(
@@ -24,20 +25,19 @@ async function seed() {
       return Expense.bulkCreate(expense)
     })
   )
+  await Promise.all(
+    portionData.map((portionOfExpense) => {
+      return Item.bulkCreate(portionOfExpense)
+    })
+  )
+
   console.log('seeded successfully')
 }
 
 // this function is first finding things already in the database, then associating them
 async function associations() {
-  // gives an array of objects that are newly created users that meet the where condition
-  // this where condition includes @ so currently it finds all the Users. We can change this at will
-  let usersToAssoc = await User.findAll({
-    where: {
-      email: {
-        [Op.like]: '%@%',
-      },
-    },
-  })
+  // gives an array of objects that are newly created users
+  let usersToAssoc = await User.findAll()
 
   // gives an array of objects that are newly created groups
   let groupsToAssoc = await Group.findAll()
@@ -78,13 +78,34 @@ async function associations() {
   let group9 = await Group.create({title: 'Titanic'})
   await group9.addUsers([1, 7, 8, 9])
 
+  // add another friend and group association group
   let user2 = await User.findByPk(2)
   await user2.addFriends([6, 5])
   await usersToAssoc[4].addFriends([2])
   await usersToAssoc[5].addFriends([2])
-
   let group10 = await Group.create({title: 'Princess Bride'})
   await group10.addUsers([2, 5, 6])
+}
+
+// function to create portions assocations
+async function portionsOfExpenses() {
+  // gives an array of objects that are newly created users
+  let usersToAssoc = await User.findAll()
+
+  // gives an array of objects that are newly created portions of the expenses, ready to assign to Users
+  let portionsOfExpensesToAssoc = await Item.findAll()
+
+  // add portions of expenses to specific Users. Ensured that the Users are in the same group and that group has the Expense that the item/portion is part of
+  await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[0].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[1].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[2].id)
+  await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[3].id)
+  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[4].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[5].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[6].id)
+  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[7].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[8].id)
+  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[9].id)
 }
 
 // We've separated the `seed` function from the `runSeed` function.
@@ -95,6 +116,7 @@ async function runSeed() {
   try {
     await seed()
     await associations()
+    await portionsOfExpenses()
   } catch (err) {
     console.log('error seeding:', err)
     process.exitCode = 1

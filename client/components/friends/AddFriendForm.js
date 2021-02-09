@@ -14,10 +14,11 @@ class AddFriendForm extends React.Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
-  async handleSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault()
+    this.props.toggleForm()
     try {
-      await this.props.addFriend(this.props.user.id, this.state.email)
+      this.props.addFriend(this.props.user.id, this.state.email)
       this.setState({email: ''})
     } catch (error) {
       console.log('Hmm, having a hard time with this.', error)
@@ -31,14 +32,14 @@ class AddFriendForm extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <div>
             <label htmlFor="email">
-              <small>
-                Add your friends here by entering their email address
-              </small>
+              <div>Add your friends here by entering their email address.</div>
+              <small>Friends must first create an account with MyTab.</small>
             </label>
             <input
               name="email"
               type="email"
               value={email}
+              placeholder="Ex: hello@world.com"
               onChange={this.handleChange}
             />
           </div>

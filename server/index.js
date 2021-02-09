@@ -51,6 +51,8 @@ const createApp = () => {
   // compression middleware
   app.use(compression())
 
+  app.enable('trust proxy')
+
   // session middleware with passport
   app.use(
     session({

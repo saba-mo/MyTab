@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {_loadGroupExpenses} from '../../store/expenses/expenses'
+import {_loadGroupExpenses, _loadGroupMembers} from '../../store'
 import {CreateGroupExpenseForm} from '../index'
 import currency from 'currency.js'
 
@@ -11,10 +11,20 @@ export class GroupExpenses extends React.Component {
     this.state = {showForm: false}
 
     this.toggleShowForm = this.toggleShowForm.bind(this)
+    this.checkMembersList = this.checkMembersList.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupExpenses(this.props.groupId)
+    this.props.loadGroupMembers(this.props.groupId)
+  }
+
+  checkMembersList() {
+    if (this.props.groupMembers.length > 1) {
+      this.toggleShowForm()
+    } else {
+      alert('Add a group member before creating a group expense.')
+    }
   }
 
   toggleShowForm() {
@@ -48,7 +58,8 @@ export class GroupExpenses extends React.Component {
               src="/images/plus.png"
               height="64px"
               width="64px"
-              onClick={this.toggleShowForm}
+              title="Create an expense"
+              onClick={this.checkMembersList}
             />
           )}
         </div>
@@ -62,7 +73,7 @@ export class GroupExpenses extends React.Component {
                     to={`/groups/singleGroup/${expense.groupId}/expenses/${expense.id}`}
                   >
                     {expense.name}
-                  </Link>{' '}
+                  </Link>
                   Paid by {expense.users[0].firstName}{' '}
                   {expense.users[0].lastName}{' '}
                   {currency(expense.totalCost).format()}
@@ -80,12 +91,14 @@ export class GroupExpenses extends React.Component {
 const mapStateToProps = (state) => {
   return {
     groupExpenses: state.groupExpenses,
+    groupMembers: state.groupMembers,
     user: state.user,
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   loadGroupExpenses: (groupId) => dispatch(_loadGroupExpenses(groupId)),
+  loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupExpenses)

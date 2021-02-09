@@ -88,6 +88,7 @@ export class CreateGroupExpenseForm extends React.Component {
         (sum, val) => sum + val
       )
     }
+    let remainder = this.state.totalCost
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -111,7 +112,7 @@ export class CreateGroupExpenseForm extends React.Component {
           onChange={this.handleChange}
           placeholder="Ex: 100 or 9.39"
         />
-        <label htmlFor="paidBy">Paid by*</label>
+        <label htmlFor="paidBy">Paid By*</label>
         <select
           value={this.state.paidBy}
           onChange={this.handleChange}
@@ -158,8 +159,14 @@ export class CreateGroupExpenseForm extends React.Component {
           </div>
         ))}
         <div>
-          <div>Total Cost: {this.state.totalCost}</div>
-          <div>Total Owed: {totalOwed}</div>
+          <div>Total Cost: ${this.state.totalCost}</div>
+          <div>Total Owed: ${totalOwed}</div>
+          {remainder - totalOwed &&
+          remainder - totalOwed != this.state.totalCost ? (
+            <div className="error">Remaining: ${remainder - totalOwed}</div>
+          ) : (
+            ''
+          )}
         </div>
         <button
           type="submit"
@@ -189,8 +196,8 @@ const mapState = (state) => {
 }
 const mapDispatch = (dispatch) => {
   return {
-    addGroupExpense: (groupId, newExpenseName) =>
-      dispatch(_addGroupExpense(groupId, newExpenseName)),
+    addGroupExpense: (groupId, newExpenseObject) =>
+      dispatch(_addGroupExpense(groupId, newExpenseObject)),
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
   }
 }

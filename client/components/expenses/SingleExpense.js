@@ -24,13 +24,20 @@ class SingleExpense extends React.Component {
   }
 
   deleteAndGoBack() {
-    const {groupId, id} = this.props.expense
-    this.props.deleteGroupExpense(groupId, id)
-    window.location.href = `/groups/singleGroup/${groupId}`
+    if (
+      window.confirm(
+        'Are you sure you want to delete this expense? This will remove this expense for all members involved.'
+      )
+    ) {
+      const {groupId, id} = this.props.expense
+      this.props.deleteGroupExpense(groupId, id)
+      window.location.href = `/groups/singleGroup/${groupId}`
+    }
   }
 
   render() {
     const {expense} = this.props
+
     return (
       <div className="expense-individual">
         <div className="pages-view-navbar">
@@ -39,7 +46,8 @@ class SingleExpense extends React.Component {
           </Link>
         </div>
         <h4>
-          {expense.name} {currency(expense.totalCost).format()}
+          {expense.name}
+          {currency(expense.totalCost).format()}
         </h4>
         <div className="editGroupPencil">
           {this.state.showForm ? (
