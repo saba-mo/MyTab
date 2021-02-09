@@ -46,13 +46,20 @@ export const _settleSingleExpense = (groupId, expenseId, expense) => async (
   dispatch
 ) => {
   try {
-    const {data} = await axios
-      .put(`/api/groups/singleGroup/${groupId}/expenses/${expenseId}`, {
+    console.log('thunk incoming expense: ', expense)
+    //settled is true, as changed in component/singleexpense.js before sending here
+
+    const {data} = await axios.put(
+      `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`,
+      {
         expense,
-      })
-      .then((response) => {
-        console.log('response to put: ', response)
-      })
+      }
+    )
+    console.log('thunk update an expense: ', data)
+    //settled is false after the put request
+    // .then((response) => {
+    //   console.log('response to put: ', response)
+    // })
 
     dispatch(settleSingleExpense(data))
   } catch (error) {
@@ -68,8 +75,6 @@ export const _updateExpense = (groupId, expenseId, expense) => async (
       `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`,
       expense
     )
-    console.log('thunk update an expense: ', data)
-
     dispatch(updateExpense(data))
   } catch (error) {
     console.log('Cannot update your expense because: ', error)
