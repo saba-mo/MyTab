@@ -15,6 +15,7 @@ export class GroupBalances extends React.Component {
 
   render() {
     const {groupExpenses, user} = this.props
+
     const groupTotal = groupExpenses.reduce(
       (accumulator, currentValue) => accumulator + currentValue.totalCost,
       0
