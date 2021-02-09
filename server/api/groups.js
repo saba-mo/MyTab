@@ -104,6 +104,9 @@ router.get(
       })
       if (!thisExpense) res.sendStatus(404)
 
+      // find user who paid for this expense and send it back on the expense object
+      const paidBy = await thisExpense.getUsers()
+      thisExpense.dataValues.paidBy = paidBy
       res.json(thisExpense)
     } catch (err) {
       next(err)

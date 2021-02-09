@@ -9,7 +9,7 @@ export class UpdateExpenseForm extends React.Component {
     this.state = {
       name: props.expense.name,
       totalCost: props.expense.totalCost,
-      paidBy: props.user,
+      paidBy: props.expense.paidBy[0].id,
       owedByMember: {},
     }
     this.handleChange = this.handleChange.bind(this)
@@ -77,6 +77,8 @@ export class UpdateExpenseForm extends React.Component {
   }
 
   render() {
+    console.log('form props: ', this.props)
+    console.log('state paidby: ', this.state.paidBy)
     let totalOwed
     if (Object.values(this.state.owedByMember).length === 0) {
       totalOwed = 0
@@ -86,10 +88,7 @@ export class UpdateExpenseForm extends React.Component {
       )
     }
     let remainder = this.state.totalCost
-    // groupMembers array includes user ids
-    // console.log(this.props.groupMembers)
-    // this.props.user and this.state.paidBy logging as undefined...
-    // console.log(this.props.user)
+
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="name">Edit Name*:</label>
