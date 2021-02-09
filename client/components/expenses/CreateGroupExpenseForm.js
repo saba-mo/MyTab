@@ -159,8 +159,8 @@ export class CreateGroupExpenseForm extends React.Component {
           </div>
         ))}
         <div>
-          <div>Total Cost: {this.state.totalCost}</div>
-          <div>Total Owed: {totalOwed}</div>
+          <div>Total Cost: ${this.state.totalCost}</div>
+          <div>Total Owed: ${totalOwed}</div>
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">Remaining: ${remainder - totalOwed}</div>
