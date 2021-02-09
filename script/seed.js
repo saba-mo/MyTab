@@ -85,13 +85,21 @@ async function associations() {
   let group9 = await Group.create({title: 'Titanic'})
   await group9.addUsers([1, 7, 8, 9])
 
+  // add another friend and group association group
   let user2 = await User.findByPk(2)
   await user2.addFriends([6, 5])
   await usersToAssoc[4].addFriends([2])
   await usersToAssoc[5].addFriends([2])
-
   let group10 = await Group.create({title: 'Princess Bride'})
   await group10.addUsers([2, 5, 6])
+}
+
+async function itemizationOfExpenses() {
+  // gives an array of objects that are newly created itemizations
+  let itemizedExpensesToAssoc = await Item.findAll()
+
+  // add itemization to expenses within groups
+  await itemizedExpensesToAssoc[0].addUser([1])
 }
 
 // We've separated the `seed` function from the `runSeed` function.
@@ -102,6 +110,7 @@ async function runSeed() {
   try {
     await seed()
     await associations()
+    await itemizationOfExpenses()
   } catch (err) {
     console.log('error seeding:', err)
     process.exitCode = 1
