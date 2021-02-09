@@ -1,11 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {
-  _loadAnExpense,
-  _deleteGroupExpense,
-  _settleSingleExpense,
-} from '../../store/'
+import {_loadAnExpense, _deleteGroupExpense} from '../../store/'
 import {UpdateExpenseForm} from '../index'
 import currency from 'currency.js'
 
@@ -15,7 +11,6 @@ class SingleExpense extends React.Component {
     this.state = {showForm: false}
     this.deleteAndGoBack = this.deleteAndGoBack.bind(this)
     this.toggleShowForm = this.toggleShowForm.bind(this)
-    this.settleAnExpense = this.settleAnExpense.bind(this)
   }
 
   componentDidMount() {
@@ -39,22 +34,8 @@ class SingleExpense extends React.Component {
     }
   }
 
-  settleAnExpense() {
-    const {groupId, id} = this.props.expense
-    const expense = this.props.expense
-    console.log('expense object sending to reducer: ', expense)
-
-    this.props.settleSingleExpense(groupId, id, expense)
-    console.log('group id to send with expense: ', groupId)
-  }
-  // this.props.expense.settled = true
-
   render() {
     const {expense} = this.props
-    console.log('props in render: ', this.props)
-
-    console.log('expense in render: ', expense)
-
     return (
       <div className="expense-individual">
         <div className="pages-view-navbar">
@@ -81,9 +62,7 @@ class SingleExpense extends React.Component {
             />
           )}
         </div>
-        <button type="submit" onClick={this.settleAnExpense}>
-          Settle
-        </button>
+        <button type="submit">Settle</button>
         <button type="submit" onClick={this.deleteAndGoBack}>
           Remove
         </button>
@@ -104,8 +83,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(_deleteGroupExpense(groupId, expenseId)),
   loadAnExpense: (groupId, expenseId) =>
     dispatch(_loadAnExpense(groupId, expenseId)),
-  SingleExpense: (groupId, expenseId, expense) =>
-    dispatch(_settleSingleExpense(groupId, expenseId, expense)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleExpense)

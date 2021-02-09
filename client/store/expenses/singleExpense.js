@@ -3,7 +3,7 @@ import axios from 'axios'
 /* ACTION TYPES */
 const GET_AN_EXPENSE = 'GET_AN_EXPENSE'
 const UPDATE_EXPENSE = 'UPDATE_EXPENSE'
-const SETTLE_SINGLE_EXPENSE = 'SETTLE_SINGLE_EXPENSE'
+const SETTLE_ONE_PORTION = 'SETTLE_ONE_PORTION'
 
 /* ACTION CREATORS */
 const getAnExpense = (expense) => ({
@@ -11,8 +11,8 @@ const getAnExpense = (expense) => ({
   expense,
 })
 
-const settleSingleExpense = (expense) => ({
-  type: SETTLE_SINGLE_EXPENSE,
+const settleOnePortion = (expense) => ({
+  type: SETTLE_ONE_PORTION,
   expense,
 })
 
@@ -44,7 +44,7 @@ export const _loadAnExpense = (groupId, expenseId) => async (dispatch) => {
   }
 }
 
-export const _settleSingleExpense = (groupId, expenseId, expense) => async (
+export const _settleOnePortion = (groupId, expenseId, expense) => async (
   dispatch
 ) => {
   try {
@@ -63,7 +63,7 @@ export const _settleSingleExpense = (groupId, expenseId, expense) => async (
     //   console.log('response to put: ', response)
     // })
 
-    dispatch(settleSingleExpense(data))
+    dispatch(settleOnePortion(data))
   } catch (error) {
     console.log(`The expense was not settled due to an error: `, error)
   }
@@ -91,7 +91,7 @@ const singleExpenseReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_AN_EXPENSE:
       return action.expense
-    case SETTLE_SINGLE_EXPENSE:
+    case SETTLE_ONE_PORTION:
       return {...state, ...action.expense}
     case UPDATE_EXPENSE:
       return {...state, ...action.expense}
