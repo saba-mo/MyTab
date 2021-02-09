@@ -37,6 +37,8 @@ class SingleExpense extends React.Component {
 
   render() {
     const {expense} = this.props
+    // expense has id, groupid, name and totalCost, not who paid
+    // bring who paid into this component so we can pass it to update form
     return (
       <div className="expense-individual">
         <div className="pages-view-navbar">
@@ -45,7 +47,7 @@ class SingleExpense extends React.Component {
           </Link>
         </div>
         <h4>
-          {expense.name} {currency(expense.totalCost).format()}
+          {expense.name} Paid by {currency(expense.totalCost).format()}
         </h4>
         <div className="editGroupPencil">
           {this.state.showForm ? (

@@ -86,7 +86,10 @@ export class UpdateExpenseForm extends React.Component {
       )
     }
     let remainder = this.state.totalCost
-
+    // groupMembers array includes user ids
+    console.log(this.props.groupMembers)
+    // this.props.user and this.state.paidBy logging as undefined...
+    console.log(this.props.user)
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="name">Edit Name*:</label>
