@@ -7,11 +7,18 @@ import {AddFriendForm} from '../../components'
 export class AllFriends extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {showForm: false}
+
     this.handleDelete = this.handleDelete.bind(this)
+    this.toggleShowForm = this.toggleShowForm.bind(this)
   }
 
   componentDidMount() {
     this.props.loadFriends(this.props.user.id)
+  }
+
+  toggleShowForm() {
+    this.setState({showForm: !this.state.showForm})
   }
 
   handleDelete = (userId, friendToDelete) => {
@@ -20,7 +27,7 @@ export class AllFriends extends React.Component {
 
   noFriends = (friendList) => {
     if (friendList.length < 1) {
-      return 'Add your friends to MyTab'
+      return 'Add your friends to MyTab.'
     }
   }
 
@@ -32,6 +39,20 @@ export class AllFriends extends React.Component {
         <main>
           <h2>My Friends on MyTab</h2>
         </main>
+        <div className="editGroupPencil">
+          {this.state.showForm ? (
+            <AddFriendForm toggleForm={this.toggleShowForm} />
+          ) : (
+            <img
+              className="groupImg"
+              src="/images/plus.png"
+              height="64px"
+              width="64px"
+              title="Add a friend"
+              onClick={this.toggleShowForm}
+            />
+          )}
+        </div>
         {this.noFriends(friendList)}
         <div id="full-friend-list">
           <ul>
@@ -52,9 +73,9 @@ export class AllFriends extends React.Component {
             })}
           </ul>
         </div>
-        <div id="add-friend">
+        {/* <div id="add-friend">
           <AddFriendForm />
-        </div>
+        </div> */}
       </div>
     )
   }

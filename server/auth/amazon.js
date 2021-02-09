@@ -35,7 +35,10 @@ if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET) {
       const email = profile.emails[0].value
       const name = profile.displayName
       const firstName = name.split(' ')[0]
-      const lastName = name.split(' ')[1]
+      let lastName = name.split(' ')[1]
+      if (!lastName) {
+        lastName = '-'
+      }
 
       User.findOrCreate({
         where: {amazonId},
