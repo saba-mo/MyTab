@@ -67,7 +67,6 @@ export const _deleteGroupExpense = (groupId, expenseId) => async (dispatch) => {
     )
   }
 }
-
 /* REDUCER */
 const groupExpensesReducer = (state = initialState, action) => {
   switch (action.type) {

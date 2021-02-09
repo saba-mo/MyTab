@@ -9,6 +9,7 @@ class SingleExpense extends React.Component {
   constructor() {
     super()
     this.state = {showForm: false}
+
     this.deleteAndGoBack = this.deleteAndGoBack.bind(this)
     this.toggleShowForm = this.toggleShowForm.bind(this)
   }
