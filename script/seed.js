@@ -4,7 +4,7 @@ const {User, Group, Expense, Item} = require('../server/db/models')
 const groupData = require('./dummyDataGroups')
 const userData = require('./dummyDataUser')
 const expenseData = require('./dummyDataExpenses')
-const itemizedData = require('./dummyDataItimized')
+const portionData = require('./dummyDataPortions')
 
 async function seed() {
   await db.sync({force: true})
@@ -26,8 +26,8 @@ async function seed() {
     })
   )
   await Promise.all(
-    itemizedData.map((itemizedExpense) => {
-      return Item.bulkCreate(itemizedExpense)
+    portionData.map((portionOfExpense) => {
+      return Item.bulkCreate(portionOfExpense)
     })
   )
 
@@ -94,12 +94,26 @@ async function associations() {
   await group10.addUsers([2, 5, 6])
 }
 
-async function itemizationOfExpenses() {
-  // gives an array of objects that are newly created itemizations
-  let itemizedExpensesToAssoc = await Item.findAll()
+async function portionsOfExpenses() {
+  let usersToAssoc = await User.findAll()
 
-  // add itemization to expenses within groups
-  await itemizedExpensesToAssoc[0].addUser([1])
+  // gives an array of objects that are newly created portions of the expenses, ready to assign to Users
+  let portionsOfExpensesToAssoc = await Item.findAll()
+
+  // add portions of expenses to specific Users
+  await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[0].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[1].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[2].id)
+  await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[3].id)
+  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[4].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[5].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[6].id)
+  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[7].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[8].id)
+  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[9].id)
+
+  console.log('portion ', portionsOfExpensesToAssoc[0].id)
+  // console.log('user ', usersToAssoc[0])
 }
 
 // We've separated the `seed` function from the `runSeed` function.
@@ -110,7 +124,7 @@ async function runSeed() {
   try {
     await seed()
     await associations()
-    await itemizationOfExpenses()
+    await portionsOfExpenses()
   } catch (err) {
     console.log('error seeding:', err)
     process.exitCode = 1
