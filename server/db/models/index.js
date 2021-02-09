@@ -16,8 +16,8 @@ User.belongsToMany(Expense, {through: User_Expense, foreignKey: 'user_Id'})
 Group.hasMany(Expense)
 Expense.belongsTo(Group)
 
-Item.belongsTo(Expense)
 Expense.hasMany(Item)
+Item.belongsTo(Expense)
 
 Item.belongsTo(User)
 User.hasMany(Item)
