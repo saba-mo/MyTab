@@ -3,22 +3,22 @@ const expenseData = [
     {
       name: 'Phascogale',
       totalCost: 89.73,
-      groupId: 8,
+      groupId: 1,
     },
     {
       name: 'Flycatcher',
       totalCost: 18.42,
-      groupId: 5,
+      groupId: 1,
     },
     {
       name: 'Rhea',
       totalCost: 18.68,
-      groupId: 7,
+      groupId: 2,
     },
     {
       name: 'Bush dog',
       totalCost: 52.14,
-      groupId: 1,
+      groupId: 3,
     },
     {
       name: 'Fisher',
@@ -33,27 +33,32 @@ const expenseData = [
     {
       name: 'Bateleur eagle',
       totalCost: 90.62,
-      groupId: 7,
+      groupId: 4,
     },
     {
       name: 'Great Egret',
       totalCost: 87.75,
-      groupId: 1,
+      groupId: 2,
     },
     {
       name: 'Bleeding heart monkey',
       totalCost: 75.16,
-      groupId: 8,
+      groupId: 3,
     },
     {
       name: `Gambel's quail`,
       totalCost: 88.84,
-      groupId: 1,
+      groupId: 3,
     },
     {
       name: `House Cat`,
       totalCost: 5.21,
-      groupId: 1,
+      groupId: 2,
+    },
+    {
+      name: `House Dog`,
+      totalCost: 100,
+      groupId: 2,
     },
   ],
 ]

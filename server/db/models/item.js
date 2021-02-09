@@ -1,11 +1,9 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 const currency = require('currency.js')
+const Expense = require('./expense')
 
 const Item = db.define('item', {
-  name: {
-    type: Sequelize.STRING,
-  },
   amount: {
     type: Sequelize.FLOAT,
     validate: {
