@@ -166,7 +166,6 @@ router.put(
   '/singleGroup/:groupId/expenses/:expenseId',
   async (req, res, next) => {
     try {
-      console.log(Object.keys(Item.prototype))
       const thisExpense = await Expense.findByPk(Number(req.params.expenseId))
 
       const updatedExpense = await thisExpense.update({
@@ -177,7 +176,33 @@ router.put(
       await updatedExpense.setUsers([req.body.paidBy])
 
       // we need to update the items model
+      const items = await updatedExpense.getItems()
 
+      // this works to update an existing item line but does not destroy or create accordingly
+      for (let i = 0; i < items.length; i++) {
+        let item = items[i]
+        if (req.body.owedByMember[item.userId]) {
+          // item.userId = req.body.owedByMember[item.userId]
+          item.update({
+            amount: req.body.owedByMember[item.userId],
+            userId: item.userId,
+          })
+        }
+      }
+
+      // is this right?
+      // for (const [itemUserId, amount] of Object.entries(
+      //   req.body.owedByMember
+      // )) {
+      //   if (amount === 0) {
+      //     continue
+      //   }
+      //   await Item.update({
+      //     amount,
+      //     userId: itemUserId,
+      //     expenseId: thisExpense.id,
+      //   })
+      // }
       // what do we need to send back
       // res.json(updatedExpense)
       res.end()
