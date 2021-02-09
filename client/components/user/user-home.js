@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import TotalBalance from '../totalBalance/TotalBalance'
 
 const UserHome = (props) => {
   const {firstName} = props
@@ -10,6 +11,7 @@ const UserHome = (props) => {
   return (
     <div>
       <h3>Welcome, {firstName}!</h3>
+      <TotalBalance />
       <div className="wrapper">
         <Link to={`/groups/${userId}`}>
           <img
