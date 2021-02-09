@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 const currency = require('currency.js')
+const Expense = require('./expense')
 
 const Item = db.define('item', {
   amount: {
@@ -25,6 +26,13 @@ const Item = db.define('item', {
   settled: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
+  },
+  expenseId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: Expense,
+      key: 'id',
+    },
   },
 })
 

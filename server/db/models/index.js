@@ -16,17 +16,11 @@ User.belongsToMany(Expense, {through: User_Expense, foreignKey: 'user_Id'})
 Group.hasMany(Expense)
 Expense.belongsTo(Group)
 
-// Item.belongsToMany(Expense, {through: 'Portioned_Expenses'})
-// Expense.belongsToMany(Item, {through: 'Portioned_Expenses'})
-
-Item.belongsTo(Expense)
 Expense.hasMany(Item)
+Item.belongsTo(Expense)
 
-Item.belongsToMany(User, {through: 'Portioned_Expenses'})
-User.belongsToMany(Item, {through: 'Portioned_Expenses'})
-
-// Item.belongsTo(User)
-// User.hasMany(Item)
+Item.belongsTo(User)
+User.hasMany(Item)
 
 module.exports = {
   User,
