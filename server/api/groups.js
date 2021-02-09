@@ -258,18 +258,24 @@ router.put(
   }
 )
 
-// UPDATE single group expense
+// UPDATE one portion of an expense within a group
 router.put(
-  '/singleGroup/:groupId/expenses/:expenseId',
+  '/singleGroup/:groupId/expenses/:expenseId/:itemId',
   async (req, res, next) => {
     try {
-      const thisExpense = await Expense.findByPk(req.params.expenseId)
-      const updatedExpense = await thisExpense.update({
-        name: req.body.name,
-        totalCost: req.body.totalCost,
+      console.log('req: ', req.body)
+      console.log('params ', req.params)
+      const thisPortion = await Item.findByPk(req.params.itemId)
+      const updatedPortion = await thisPortion.update({
+        settled: req.body.itemToSettle.settled,
       })
-      await updatedExpense.setUsers([req.body.paidBy])
-      res.json(updatedExpense)
+      // const thisExpense = await Expense.findByPk(req.params.expenseId)
+      // const updatedExpense = await thisExpense.update({
+      //   name: req.body.name,
+      //   totalCost: req.body.totalCost,
+      // })
+      // await updatedExpense.setUsers([req.body.paidBy])
+      res.json(updatedPortion)
     } catch (err) {
       next(err)
     }

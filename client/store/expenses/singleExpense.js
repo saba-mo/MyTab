@@ -44,26 +44,34 @@ export const _loadAnExpense = (groupId, expenseId) => async (dispatch) => {
   }
 }
 
-export const _settleOnePortion = (groupId, expenseId, expense) => async (
+// _settleAPortion(paidBy, itemToSettle, groupId)
+
+export const _settleOnePortion = (paidBy, itemToSettle, groupId) => async (
   dispatch
 ) => {
   try {
-    console.log('thunk incoming expense: ', expense)
+    console.log('THUNK: whole item object: ', itemToSettle)
+    console.log('THUNK: expense id of item: ', itemToSettle.expenseId)
+    console.log('THUNK: amount to settle: ', itemToSettle.amount)
+    console.log('THUNK: user to settle: ', itemToSettle.user)
+    console.log('THUNK: boolean status of settle: ', itemToSettle.settled)
+
+    console.log('paid by coming in: ', paidBy)
     //settled is true, as changed in component/singleexpense.js before sending here
 
     const {data} = await axios.put(
-      `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`,
+      `/api/groups/singleGroup/${groupId}/expenses/${itemToSettle.expenseId}/${itemToSettle.id}`,
       {
-        expense,
+        itemToSettle,
       }
     )
-    console.log('thunk update an expense: ', data)
+    console.log('data after axios: ', data)
     //settled is false after the put request
     // .then((response) => {
     //   console.log('response to put: ', response)
     // })
 
-    dispatch(settleOnePortion(data))
+    // dispatch(settleOnePortion(data))
   } catch (error) {
     console.log(`The expense was not settled due to an error: `, error)
   }

@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {_loadGroupExpenses, _settleAPortion} from '../../store/'
+import {_loadGroupExpenses, _settleOnePortion} from '../../store/'
 import {CreateGroupExpenseForm} from '../index'
 import currency from 'currency.js'
 
@@ -15,22 +15,10 @@ export class GroupBalances extends React.Component {
     this.props.loadGroupExpenses(this.props.groupId)
   }
 
-  settleThisPortion(paidBy, userSettlingUp, itemToSettle, amountToSettle) {
-    console.log('item coming in: ', itemToSettle)
-    console.log('boolean: ', itemToSettle.settled)
-    console.log('amount coming in: ', amountToSettle)
-    console.log('user to settle coming in: ', userSettlingUp)
-    console.log('paid by coming in: ', paidBy)
-
+  settleThisPortion(paidBy, itemToSettle) {
     itemToSettle.settled = true
-    console.log('boolean: ', itemToSettle.settled)
-
-    this.props.settleAPortion(
-      paidBy,
-      userSettlingUp,
-      itemToSettle,
-      amountToSettle
-    )
+    const {groupId} = this.props
+    this.props.settleAPortion(paidBy, itemToSettle, groupId)
   }
 
   render() {
@@ -98,12 +86,7 @@ export class GroupBalances extends React.Component {
                     <button
                       type="submit"
                       onClick={() =>
-                        this.settleThisPortion(
-                          expense[0],
-                          expense[1],
-                          expense[5],
-                          expense[2]
-                        )
+                        this.settleThisPortion(expense[0], expense[5])
                       }
                     >
                       Settle
@@ -188,10 +171,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   loadGroupExpenses: (groupId) => dispatch(_loadGroupExpenses(groupId)),
-  settleAPortion: (paidBy, userSettlingUp, itemToSettle, amountToSettle) =>
-    dispatch(
-      _settleAPortion(paidBy, userSettlingUp, itemToSettle, amountToSettle)
-    ),
+  settleAPortion: (paidBy, itemToSettle, groupId) =>
+    dispatch(_settleOnePortion(paidBy, itemToSettle, groupId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupBalances)
