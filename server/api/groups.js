@@ -230,7 +230,6 @@ router.post('/singleGroup/:groupId/members', async (req, res, next) => {
 // DELETE a group member
 router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
   try {
-    // clean up this code - we might not need to find both the group and the user, but make sure before deleting
     const memberId = Number(req.body.memberId)
     const groupId = Number(req.params.groupId)
     const group = await Group.findByPk(groupId)
