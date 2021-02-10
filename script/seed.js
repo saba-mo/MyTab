@@ -96,16 +96,13 @@ async function portionsOfExpenses() {
   let portionsOfExpensesToAssoc = await Item.findAll()
 
   // add portions of expenses to specific Users. Ensured that the Users are in the same group and that group has the Expense that the item/portion is part of
-  await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[0].id)
-  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[1].id)
-  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[2].id)
-  await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[3].id)
+
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[0].id)
+  await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[1].id)
+  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[2].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[3].id)
   await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[4].id)
-  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[5].id)
-  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[6].id)
-  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[7].id)
-  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[8].id)
-  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[9].id)
+  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[5].id)
 }
 
 // We've separated the `seed` function from the `runSeed` function.
