@@ -3,34 +3,52 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../../store'
+import {Layout, PageHeader, Content, Tabs} from 'antd'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
-  <div>
-    <div className="header">MyTab</div>
-    {/* <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link> */}
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-        </div>
-      ) : (
-        <div>
-          <div className="signup">
-            <h1> Track shared expenses worry free with MyTab.</h1>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Sign Up</Link>
-          </div>
-        </div>
-      )}
-    </nav>
-    <h1 />
-  </div>
-)
+const {TabPane} = Tabs
+import {withRouter} from 'react-router'
+
+class Navbar extends React.Component {
+  constructor() {
+    super()
+
+    this.clickTab = this.clickTab.bind(this)
+  }
+
+  clickTab(href) {
+    console.log(href)
+    if (href === '#') {
+      this.props.handleClick()
+    } else {
+      this.props.history.push(href)
+    }
+  }
+
+  render() {
+    return (
+      <PageHeader
+        className="site-page-header-responsive"
+        title="MyTab"
+        subTitle="Track shared expenses worry free with MyTab"
+        footer={
+          <Tabs defaultActiveKey="1" onChange={this.clickTab}>
+            {this.props.isLoggedIn ? (
+              <>
+                <TabPane tab="Home" key="/home" />
+                <TabPane tab="Logout" key="#" />
+              </>
+            ) : (
+              <>
+                <TabPane tab="Log In" key="/login" />
+                <TabPane tab="Sign Up" key="/signup" />
+              </>
+            )}
+          </Tabs>
+        }
+      />
+    )
+  }
+}
 
 /**
  * CONTAINER
@@ -49,7 +67,7 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-export default connect(mapState, mapDispatch)(Navbar)
+export default withRouter(connect(mapState, mapDispatch)(Navbar))
 
 /**
  * PROP TYPES
