@@ -285,25 +285,36 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
     const groupMembers = await group.getUsers({
       attributes: ['id', 'email', 'firstName', 'lastName'],
     })
-
+    // FIRST, check to see if user paid for any expenses in this group that still have outstanding items; if so, do not remove this user
     const thisUser = await User.findByPk(memberId)
-    // find all expenses paid by (associated to) this user
     const userExpenses = await thisUser.getExpenses()
-    // if any belong in this group, they should not be removed until they are settled
-    const expensesInThisGroup = userExpenses.filter(
+    const userExpensesInThisGroup = userExpenses.filter(
       (expense) => expense.groupId === groupId
     )
     // load in all the items associated to the group expense
-    // OOPS need to do this for all gropu expenses, not just user's group expenses
-    for (let i = 0; i < expensesInThisGroup.length; i++) {
-      let expense = expensesInThisGroup[i]
-      expense.dataValue.items = await expense.getItems()
+    // ALSO need to do this for all gropu expenses, not just user's group expenses
+    const userExpensesUnsettledItems = []
+    for (let i = 0; i < userExpensesInThisGroup.length; i++) {
+      let expense = userExpensesInThisGroup[i]
+      // add items key to each expense to hold array of items
+      expense.dataValues.items = await expense.getItems()
+      for (let j = 0; j < expense.dataValues.items.length; j++) {
+        // if the item is not settled, add it to the array of items associated to the user's expenses
+        if (expense.dataValues.items[i].settled === false) {
+          userExpensesUnsettledItems.push(expense.dataValues.items[i])
+        }
+      }
     }
+    // SECOND if user's id is associated to an UNSETTLED item that belongs to an expense in this group, don't delete
+    const groupExpenses = await group.getExpenses()
 
-    console.log('x in g: ', expensesInThisGroup)
-    if (expensesInThisGroup.length) {
+    // based on FIRST check
+    if (userExpensesUnsettledItems.length) {
       res.json(groupMembers)
     }
+
+    // based on SECOND check
+
     // else if - find all the items for those expenses, and if the user's id is associated to any of the expenses, don't delete
     // else if (expensesInThisGroup)
 
