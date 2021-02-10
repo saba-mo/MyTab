@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {_loadGroupExpenses, _settleOnePortion} from '../../store/'
 import {CreateGroupExpenseForm} from '../index'
@@ -15,7 +14,7 @@ export class GroupBalances extends React.Component {
     this.props.loadGroupExpenses(this.props.groupId)
   }
 
-  // takes item object, toggles settle boolean to true, then sends to the thunk along with groupId
+  // takes item object, toggles boolean value of "settled" to true, then sends to the thunk along with groupId
   settleThisPortion(itemToSettle) {
     itemToSettle.settled = true
     const {groupId} = this.props
