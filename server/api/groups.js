@@ -326,17 +326,18 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
       othersExpensesUnsettledItems.push(
         findUnsettledItems(expense.dataValues.items)
       )
-      // for (let j = 0; j < expense.dataValues.items.length; j++) {
-      //   if (expense.dataValues.items[i].settled === false) {
-      //     othersExpensesUnsettledItems.push(expense.dataValues.items[i])
-      //   }
-      // }
     }
-    console.log('unsettled items i am owed: ', userExpensesUnsettledItems)
-    console.log('unsettled items i owe: ', othersExpensesUnsettledItems)
+    const unsettledItemsUserOwes = []
+    for (let i = 0; i < othersExpensesUnsettledItems.length; i++) {
+      let itemsArr = othersExpensesUnsettledItems[i]
+      unsettledItemsUserOwes.push(
+        itemsArr.filter((item) => item.userId === memberId)
+      )
+    }
+
     if (
-      userExpensesUnsettledItems.length ||
-      othersExpensesUnsettledItems.length
+      userExpensesUnsettledItems.flat().length ||
+      unsettledItemsUserOwes.flat().length
     ) {
       res.json(groupMembers)
     } else {
