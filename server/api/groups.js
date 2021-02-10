@@ -306,15 +306,15 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
     for (let i = 0; i < userExpensesInThisGroup.length; i++) {
       let expense = userExpensesInThisGroup[i]
       expense.dataValues.items = await expense.getItems()
-      userExpensesUnsettledItems = findUnsettledItems(expense.dataValues.items)
+      userExpensesUnsettledItems.push(
+        findUnsettledItems(expense.dataValues.items)
+      )
     }
     // SECOND, check if user's id is associated to any UNSETTLED items that belong to someone else's expense in this group; if so, do not remove this user
     const groupExpenses = await Expense.findAll({
       where: {groupId},
       include: {model: User},
     })
-
-    console.log(groupExpenses)
     // filter out expenses associated to user, as those have already been checked
     const othersGroupExpenses = groupExpenses.filter(
       (expense) => expense.users[0].id !== memberId
@@ -323,8 +323,8 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
     for (let i = 0; i < othersGroupExpenses.length; i++) {
       let expense = othersGroupExpenses[i]
       expense.dataValues.items = await expense.getItems()
-      othersExpensesUnsettledItems = findUnsettledItems(
-        expense.dataValues.items
+      othersExpensesUnsettledItems.push(
+        findUnsettledItems(expense.dataValues.items)
       )
       // for (let j = 0; j < expense.dataValues.items.length; j++) {
       //   if (expense.dataValues.items[i].settled === false) {
@@ -332,7 +332,8 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
       //   }
       // }
     }
-
+    console.log('unsettled items i am owed: ', userExpensesUnsettledItems)
+    console.log('unsettled items i owe: ', othersExpensesUnsettledItems)
     if (
       userExpensesUnsettledItems.length ||
       othersExpensesUnsettledItems.length
