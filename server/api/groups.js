@@ -285,56 +285,60 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
     const groupMembers = await group.getUsers({
       attributes: ['id', 'email', 'firstName', 'lastName'],
     })
-    // FIRST, check to see if user paid for any expenses in this group that still have outstanding items; if so, do not remove this user
+
+    const findUnsettledItems = (arr) => {
+      const unsettledItemsArr = []
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].settled === false) {
+          unsettledItemsArr.push(arr[i])
+        }
+      }
+      return unsettledItemsArr
+    }
+
+    // FIRST, check if user paid for (is associcated to) any expenses in this group that still have outstanding items; if so, do not remove this user
     const thisUser = await User.findByPk(memberId)
     const userExpenses = await thisUser.getExpenses()
     const userExpensesInThisGroup = userExpenses.filter(
       (expense) => expense.groupId === groupId
     )
-    // load in all the items associated to the group expense
-    // ALSO need to do this for all gropu expenses, not just user's group expenses
-    const userExpensesUnsettledItems = []
+    let userExpensesUnsettledItems = []
     for (let i = 0; i < userExpensesInThisGroup.length; i++) {
       let expense = userExpensesInThisGroup[i]
-      // add items key to each expense to hold array of items
       expense.dataValues.items = await expense.getItems()
-      for (let j = 0; j < expense.dataValues.items.length; j++) {
-        // if the item is not settled, add it to the array of items associated to the user's expenses
-        if (expense.dataValues.items[i].settled === false) {
-          userExpensesUnsettledItems.push(expense.dataValues.items[i])
-        }
-      }
+      userExpensesUnsettledItems = findUnsettledItems(expense.dataValues.items)
     }
-    // SECOND if user's id is associated to an UNSETTLED item that belongs to an expense in this group, don't delete
-    const groupExpenses = await group.getExpenses()
+    // SECOND, check if user's id is associated to any UNSETTLED items that belong to someone else's expense in this group; if so, do not remove this user
+    const groupExpenses = await Expense.findAll({
+      where: {groupId},
+      include: {model: User},
+    })
 
-    // based on FIRST check
-    if (userExpensesUnsettledItems.length) {
+    console.log(groupExpenses)
+    // filter out expenses associated to user, as those have already been checked
+    const othersGroupExpenses = groupExpenses.filter(
+      (expense) => expense.users[0].id !== memberId
+    )
+    let othersExpensesUnsettledItems = []
+    for (let i = 0; i < othersGroupExpenses.length; i++) {
+      let expense = othersGroupExpenses[i]
+      expense.dataValues.items = await expense.getItems()
+      othersExpensesUnsettledItems = findUnsettledItems(
+        expense.dataValues.items
+      )
+      // for (let j = 0; j < expense.dataValues.items.length; j++) {
+      //   if (expense.dataValues.items[i].settled === false) {
+      //     othersExpensesUnsettledItems.push(expense.dataValues.items[i])
+      //   }
+      // }
+    }
+
+    if (
+      userExpensesUnsettledItems.length ||
+      othersExpensesUnsettledItems.length
+    ) {
       res.json(groupMembers)
-    }
-
-    // based on SECOND check
-
-    // else if - find all the items for those expenses, and if the user's id is associated to any of the expenses, don't delete
-    // else if (expensesInThisGroup)
-
-    // find user object so later we can check if they have an existing balance
-    // const thisUser = await User.findByPk(memberId, {include: {model: Group}})
-    // filter array of groups user is in so that we only have one array element and therefore know the index of this group
-    // const thisGroupArray = thisUser.groups.filter(
-    //   (currentGroup) => currentGroup.user_group.group_Id === groupId
-    // )
-    // PROBLEM IS THAT IT RELIES ON THE BALANCES COLUMN WHICH IS NOT BEING USED
-    // if the member has a balance in that group (positive or negative), we should not allow the user to remove the member
-    // instead, we send back the list of all group members so the front end can check what to display
-    // if (thisGroupArray[0].user_group.balance !== 0) {
-    //   const groupMembers = await group.getUsers({
-    //     attributes: ['id', 'email', 'firstName', 'lastName'],
-    //   })
-    //   res.json(groupMembers)
-    // }
-    // else move forward with removing user from group
-    else {
+    } else {
       await group.removeUser(memberId)
       res.sendStatus(204)
     }
