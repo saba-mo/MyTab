@@ -21,14 +21,14 @@ export class TotalBalance extends React.Component {
       return (
         <div>
           <div>Total Balance</div>
-          <div>You are owed ${balance}</div>
+          <div className="positiveBalance">You are owed ${balance}</div>
         </div>
       )
     } else {
       return (
         <div>
           <div>Total Balance</div>
-          <div>You owe ${balance * -1}</div>
+          <div className="negativeBalance">You owe ${balance * -1}</div>
         </div>
       )
     }

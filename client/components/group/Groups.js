@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_getGroups, _deleteGroup} from '../../store'
+import {_getGroups, _deleteGroup, _loadBalance} from '../../store'
 import {Link} from 'react-router-dom'
 import {TotalBalance, CreateGroupForm} from '../index'
 
@@ -28,6 +28,7 @@ export class Groups extends React.Component {
       )
     ) {
       this.props.deleteGroup(groupId)
+      this.props.loadBalance(this.props.user.id)
     }
   }
 
@@ -95,6 +96,7 @@ const mapDispatch = (dispatch) => {
   return {
     getGroups: (userId) => dispatch(_getGroups(userId)),
     deleteGroup: (groupId) => dispatch(_deleteGroup(groupId)),
+    loadBalance: (userId) => dispatch(_loadBalance(userId)),
   }
 }
 
