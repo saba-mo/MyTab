@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_loadBalance} from '../../store'
+import currency from 'currency.js'
 
 export class TotalBalance extends React.Component {
   componentDidMount() {
@@ -21,14 +22,18 @@ export class TotalBalance extends React.Component {
       return (
         <div>
           <div>Total Balance</div>
-          <div className="positiveBalance">You are owed ${balance}</div>
+          <div className="positiveBalance">
+            You are owed {currency(balance).format()}
+          </div>
         </div>
       )
     } else {
       return (
         <div>
           <div>Total Balance</div>
-          <div className="negativeBalance">You owe ${balance * -1}</div>
+          <div className="negativeBalance">
+            You owe {currency(balance * -1).format()}
+          </div>
         </div>
       )
     }
