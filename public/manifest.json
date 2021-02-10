@@ -5,7 +5,7 @@
   "short_name": "MyTab",
   "scope": "/",
   "display": "standalone",
-  "start_url": "http://mytab-ghp.herokuapp.com/",
+  "start_url": "https://mytab-ghp.herokuapp.com/",
   "background_color": "#000000",
   "theme_color": "#329ba8",
   "description": "",
@@ -25,5 +25,5 @@
       "purpose": "maskable"
     }
   ],
-  "url": "http://mytab-ghp.herokuapp.com/"
+  "url": "https://mytab-ghp.herokuapp.com/"
 }
