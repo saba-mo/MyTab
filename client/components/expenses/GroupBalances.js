@@ -56,8 +56,8 @@ export class GroupBalances extends React.Component {
     return (
       <div>
         <h3>
-          Total Owed to {user.firstName} {user.lastName}: $
-          {totalOwedToUser.toFixed(2)}
+          Total Owed to {user.firstName} {user.lastName}:{' '}
+          {currency(totalOwedToUser).format()}
         </h3>
         <table>
           <thead>
@@ -81,7 +81,7 @@ export class GroupBalances extends React.Component {
                   <td>
                     {expense[1].firstName} {expense[1].lastName}
                   </td>
-                  <td>${expense[2]}</td>
+                  <td>{currency(expense[2]).format()}</td>
                   <td>
                     <button
                       type="submit"
@@ -98,8 +98,8 @@ export class GroupBalances extends React.Component {
         </table>
 
         <h3>
-          Total {user.firstName} {user.lastName} Owes: $
-          {totalUserOwes.toFixed(2)}
+          Total {user.firstName} {user.lastName} Owes:{' '}
+          {currency(totalUserOwes).format()}
         </h3>
         <table>
           <thead>
@@ -122,7 +122,7 @@ export class GroupBalances extends React.Component {
                   <td>
                     {expense[1].firstName} {expense[1].lastName}
                   </td>
-                  <td>${expense[2]}</td>
+                  <td>{currency(expense[2]).format()}</td>
                 </tr>
               ))}
           </tbody>
@@ -152,7 +152,7 @@ export class GroupBalances extends React.Component {
                   <td>
                     {expense[1].firstName} {expense[1].lastName}
                   </td>
-                  <td>${expense[2]}</td>
+                  <td>{currency(expense[2]).format()}</td>
                 </tr>
               ))}
           </tbody>
