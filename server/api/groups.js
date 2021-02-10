@@ -327,6 +327,7 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
         findUnsettledItems(expense.dataValues.items)
       )
     }
+    // filter out the items that are not associated to this user
     const unsettledItemsUserOwes = []
     for (let i = 0; i < othersExpensesUnsettledItems.length; i++) {
       let itemsArr = othersExpensesUnsettledItems[i]
