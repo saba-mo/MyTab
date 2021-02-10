@@ -37,10 +37,7 @@ export class GroupMembers extends React.Component {
 
   render() {
     const {groupMembers} = this.props
-    let lengthOfMembersArray
-    if (groupMembers && groupMembers.length) {
-      lengthOfMembersArray = groupMembers.length
-    }
+    const lengthOfMembersArray = groupMembers.length
 
     return (
       <div>
