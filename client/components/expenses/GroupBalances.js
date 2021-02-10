@@ -15,10 +15,11 @@ export class GroupBalances extends React.Component {
     this.props.loadGroupExpenses(this.props.groupId)
   }
 
-  settleThisPortion(paidBy, itemToSettle) {
+  // takes item object, toggles settle boolean to true, then sends to the thunk along with groupId
+  settleThisPortion(itemToSettle) {
     itemToSettle.settled = true
     const {groupId} = this.props
-    this.props.settleAPortion(paidBy, itemToSettle, groupId)
+    this.props.settleAPortion(itemToSettle, groupId)
   }
 
   render() {
@@ -85,9 +86,7 @@ export class GroupBalances extends React.Component {
                   <td>
                     <button
                       type="submit"
-                      onClick={() =>
-                        this.settleThisPortion(expense[0], expense[5])
-                      }
+                      onClick={() => this.settleThisPortion(expense[5])}
                     >
                       Settle
                     </button>
@@ -171,8 +170,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   loadGroupExpenses: (groupId) => dispatch(_loadGroupExpenses(groupId)),
-  settleAPortion: (paidBy, itemToSettle, groupId) =>
-    dispatch(_settleOnePortion(paidBy, itemToSettle, groupId)),
+  settleAPortion: (itemToSettle, groupId) =>
+    dispatch(_settleOnePortion(itemToSettle, groupId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupBalances)
