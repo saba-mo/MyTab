@@ -20,6 +20,8 @@ export class GroupMembers extends React.Component {
     this.props.loadGroupMembers(this.props.groupId)
   }
 
+  // if group member has outstanding balance in the group, alert they cannot be removed, else remove them
+  // PROBLEM IS IN THE API, RELYING ON GROUP BALANCES COLUMN WHICH IS EMPTY
   attemptToRemoveMember(groupId, memberId, lengthOfMembersArray) {
     this.setState({numberOfMembers: lengthOfMembersArray})
     this.props.deleteGroupMember(groupId, memberId)
@@ -36,7 +38,10 @@ export class GroupMembers extends React.Component {
 
   render() {
     const {groupMembers} = this.props
-    const lengthOfMembersArray = groupMembers.length
+    let lengthOfMembersArray
+    if (groupMembers && groupMembers.length) {
+      lengthOfMembersArray = groupMembers.length
+    }
 
     return (
       <div>

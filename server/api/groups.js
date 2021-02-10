@@ -282,21 +282,46 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
     const memberId = Number(req.body.memberId)
     const groupId = Number(req.params.groupId)
     const group = await Group.findByPk(groupId)
+    const groupMembers = await group.getUsers({
+      attributes: ['id', 'email', 'firstName', 'lastName'],
+    })
 
-    // find user object so later we can check if they have an existing balance
-    const thisUser = await User.findByPk(memberId, {include: {model: Group}})
-    // filter array of groups user is in so that we only have one array element and therefore know the index of this group
-    const thisGroupArray = thisUser.groups.filter(
-      (currentGroup) => currentGroup.user_group.group_Id === groupId
+    const thisUser = await User.findByPk(memberId)
+    // find all expenses paid by (associated to) this user
+    const userExpenses = await thisUser.getExpenses()
+    // if any belong in this group, they should not be removed until they are settled
+    const expensesInThisGroup = userExpenses.filter(
+      (expense) => expense.groupId === groupId
     )
-    // if the member has a balance in that group (positive or negative), we should not allow the user to remove the member
-    // instead, we send back the list of all group members so the front end can check what to display
-    if (thisGroupArray[0].user_group.balance !== 0) {
-      const groupMembers = await group.getUsers({
-        attributes: ['id', 'email', 'firstName', 'lastName'],
-      })
+    // load in all the items associated to the group expense
+    // OOPS need to do this for all gropu expenses, not just user's group expenses
+    for (let i = 0; i < expensesInThisGroup.length; i++) {
+      let expense = expensesInThisGroup[i]
+      expense.dataValue.items = await expense.getItems()
+    }
+
+    console.log('x in g: ', expensesInThisGroup)
+    if (expensesInThisGroup.length) {
       res.json(groupMembers)
     }
+    // else if - find all the items for those expenses, and if the user's id is associated to any of the expenses, don't delete
+    // else if (expensesInThisGroup)
+
+    // find user object so later we can check if they have an existing balance
+    // const thisUser = await User.findByPk(memberId, {include: {model: Group}})
+    // filter array of groups user is in so that we only have one array element and therefore know the index of this group
+    // const thisGroupArray = thisUser.groups.filter(
+    //   (currentGroup) => currentGroup.user_group.group_Id === groupId
+    // )
+    // PROBLEM IS THAT IT RELIES ON THE BALANCES COLUMN WHICH IS NOT BEING USED
+    // if the member has a balance in that group (positive or negative), we should not allow the user to remove the member
+    // instead, we send back the list of all group members so the front end can check what to display
+    // if (thisGroupArray[0].user_group.balance !== 0) {
+    //   const groupMembers = await group.getUsers({
+    //     attributes: ['id', 'email', 'firstName', 'lastName'],
+    //   })
+    //   res.json(groupMembers)
+    // }
     // else move forward with removing user from group
     else {
       await group.removeUser(memberId)
