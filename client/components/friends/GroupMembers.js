@@ -21,9 +21,9 @@ export class GroupMembers extends React.Component {
   }
 
   // if group member has outstanding balance in the group, alert they cannot be removed, else remove them
-  attemptToRemoveMember(groupId, memberId, lengthOfMembersArray) {
+  async attemptToRemoveMember(groupId, memberId, lengthOfMembersArray) {
     this.setState({numberOfMembers: lengthOfMembersArray})
-    this.props.deleteGroupMember(groupId, memberId)
+    await this.props.deleteGroupMember(groupId, memberId)
     if (this.props.groupMembers.length === this.state.numberOfMembers) {
       alert('You cannot remove a member with a balance in the group.')
     }
