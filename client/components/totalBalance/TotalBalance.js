@@ -9,24 +9,29 @@ export class TotalBalance extends React.Component {
 
   render() {
     const {balance} = this.props
-    // if (this.props.balance && this.props.balance.length) {
-    //   balance = this.props.balance[0]
-    // }
-    return (
-      <div className="totalBalance">
-        <div>Total Balance {balance}</div>
 
-        {/* check if 0, say all settled up; if positve say you are owed; if negative say you owe  */}
-        {/* see Groups component for 3 part conditional render */}
-        {/* <div>
-        {positiveBalance ? (
+    if (balance === 0) {
+      return (
+        <div>
+          <div>Total Balance</div>
+          <div>You are all settled up</div>
+        </div>
+      )
+    } else if (balance > 0) {
+      return (
+        <div>
+          <div>Total Balance</div>
           <div>You are owed ${balance}</div>
-        ) : (
-          <div>You owe ${balance}</div>
-        )}
-      </div> */}
-      </div>
-    )
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <div>Total Balance</div>
+          <div>You owe ${balance * -1}</div>
+        </div>
+      )
+    }
   }
 }
 

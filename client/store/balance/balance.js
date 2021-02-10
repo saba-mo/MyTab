@@ -29,7 +29,7 @@ export const _loadBalance = (userId) => async (dispatch) => {
 const balanceReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_BALANCE:
-      return state + action.balance
+      return action.balance
     default:
       return state
   }
