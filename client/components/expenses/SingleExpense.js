@@ -65,7 +65,6 @@ class SingleExpense extends React.Component {
             />
           )}
         </div>
-        <button type="submit">Settle</button>
         <button type="submit" onClick={this.deleteAndGoBack}>
           Remove
         </button>
