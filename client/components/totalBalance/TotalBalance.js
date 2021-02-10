@@ -8,7 +8,8 @@ export class TotalBalance extends React.Component {
   }
 
   render() {
-    const {balance} = this.props
+    let {balance} = this.props
+    balance = balance.toFixed(2)
 
     if (balance === 0) {
       return (
