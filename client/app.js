@@ -2,13 +2,15 @@ import React from 'react'
 
 import {Navbar} from './components'
 import Routes from './routes'
+import {Layout} from 'antd'
 
 const App = () => {
   return (
-    <div>
+    <Layout>
       <Navbar />
       <Routes />
-    </div>
+      <Layout.Footer>by Team Butterfingers</Layout.Footer>
+    </Layout>
   )
 }
 

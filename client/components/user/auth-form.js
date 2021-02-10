@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth, authSignUp} from '../../store/'
 
+import {Layout, Form, Input, Button, Row, Col, Alert} from 'antd'
+
 /**
  * COMPONENT
  */
@@ -10,53 +12,102 @@ const AuthForm = (props) => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          {displayName === 'Sign Up' ? (
-            <div>
-              <label htmlFor="firstName">
-                <small>First Name*</small>
-              </label>
-              <input name="firstName" type="text" />
+    <Layout.Content>
+      <Row>
+        <Col span={1} />
+        <Col span={7}>
+          <Form
+            onFinish={handleSubmit}
+            initialValues={{
+              formName: name,
+            }}
+          >
+            <Form.Item hidden name="formName" />
+            {displayName === 'Sign Up' && (
+              <>
+                <Form.Item
+                  label="First Name"
+                  name="firstName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "'first name' is required",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Last Name"
+                  name="lastName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "'last name' is required",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </>
+            )}
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: 'email',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-              <label htmlFor="lastName">
-                <small>Last Name*</small>
-              </label>
-              <input name="lastName" type="text" />
-            </div>
-          ) : (
-            ''
-          )}
-          <label htmlFor="email">
-            <small>Email*</small>
-          </label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password*</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <h6 className="required">*Required field</h6>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <div className="container">
-        <a href="/auth/amazon" id="LoginWithAmazon">
-          <img
-            border="0"
-            alt="Login with Amazon"
-            src="https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA_gold_156x32.png"
-            width="156"
-            height="32"
-          />
-        </a>
-      </div>
-    </div>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "'password' is required",
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                {displayName}
+              </Button>
+            </Form.Item>
+            {error && error.response && (
+              <div>
+                {' '}
+                <Alert message={error.response.data} type="error" />{' '}
+              </div>
+            )}
+          </Form>
+          <div className="container">
+            <a href="/auth/amazon" id="LoginWithAmazon">
+              <img
+                border="0"
+                alt="Login with Amazon"
+                src="https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA_gold_156x32.png"
+                width="156"
+                height="32"
+              />
+            </a>
+          </div>
+        </Col>
+        <Col span={1} />
+        <Col span={7}>
+          <img width="100%" src="images/loginGif.gif" />
+        </Col>
+        <Col span={8} />
+      </Row>
+    </Layout.Content>
   )
 }
 
@@ -85,26 +136,22 @@ const mapSignup = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    handleSubmit(evt) {
-      evt.preventDefault()
-      const formName = evt.target.name
-      const email = evt.target.email.value
-      const password = evt.target.password.value
+    handleSubmit(formData) {
+      console.log(formData)
+      const {formName, email, password} = formData
       if (!email || !password) {
-        evt.preventDefault()
         alert('A required field is missing.')
         return
       }
       if (formName === 'signup') {
-        const firstName = evt.target.firstName.value
-        const lastName = evt.target.lastName.value
+        const {firstName, lastName} = formData
         if (!firstName || !lastName) {
-          evt.preventDefault()
           alert('A required field is missing.')
           return
         }
         dispatch(authSignUp(firstName, lastName, email, password, formName))
       } else {
+        console.log(email, password, formName)
         dispatch(auth(email, password, formName))
       }
     },
