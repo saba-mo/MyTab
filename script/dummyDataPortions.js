@@ -24,6 +24,26 @@ const portionData = [
       amount: 44.25,
       expenseId: 8,
     },
+    {
+      amount: 44.25,
+      expenseId: 8,
+    },
+    {
+      amount: 44.25,
+      expenseId: 6,
+    },
+    {
+      amount: 44.25,
+      expenseId: 6,
+    },
+    {
+      amount: 44.25,
+      expenseId: 12,
+    },
+    {
+      amount: 42,
+      expenseId: 12,
+    },
   ],
 ]
 

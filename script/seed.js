@@ -95,11 +95,13 @@ async function portionsOfExpenses() {
   // gives an array of objects that are newly created portions of the expenses, ready to assign to Users
   let portionsOfExpensesToAssoc = await Item.findAll()
 
-  // add portions of expenses to specific Users. Ensured that the Users are in the same group and that group has the Expense that the item/portion is part of
+  await usersToAssoc[3].addGroup([1])
+  // await usersToAssoc[0].addGroups([groupsToAssoc[1]])
 
+  // add portions of expenses to specific Users. Ensured that the Users are in the same group and that group has the Expense that the item/portion is part of
   await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[0].id)
   await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[1].id)
-  await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[2].id)
+  await usersToAssoc[3].addItem(portionsOfExpensesToAssoc[2].id)
   await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[3].id)
   await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[4].id)
   await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[5].id)
