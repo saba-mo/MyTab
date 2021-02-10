@@ -45,6 +45,10 @@ async function associations() {
   // gives an array of objects that are newly created expenses
   let expensesToAssoc = await Expense.findAll()
 
+  // manually adding 2 Users to a particular group (Star Kid) for testing
+  await groupsToAssoc[1].addUser(usersToAssoc[3].id)
+  await groupsToAssoc[1].addUser(usersToAssoc[0].id)
+
   // associations creation loops
   // loops through all the groups, assigns two users to each group. Many users will be in more than one group this way
   for (let i = 0; i < groupsToAssoc.length; i++) {
@@ -77,14 +81,6 @@ async function associations() {
   await usersToAssoc[3].addFriends([1])
   let group9 = await Group.create({title: 'Titanic'})
   await group9.addUsers([1, 7, 8, 9])
-
-  // add another friend and group association group
-  let user2 = await User.findByPk(2)
-  await user2.addFriends([6, 5])
-  await usersToAssoc[4].addFriends([2])
-  await usersToAssoc[5].addFriends([2])
-  let group10 = await Group.create({title: 'Princess Bride'})
-  await group10.addUsers([2, 5, 6])
 }
 
 // function to create portions assocations
@@ -92,11 +88,16 @@ async function portionsOfExpenses() {
   // gives an array of objects that are newly created users
   let usersToAssoc = await User.findAll()
 
+  // add friend and group association group
+  let user2 = await User.findByPk(2)
+  await user2.addFriends([6, 5])
+  await usersToAssoc[4].addFriends([2])
+  await usersToAssoc[5].addFriends([2])
+  let group10 = await Group.create({title: 'Princess Bride'})
+  await group10.addUsers([2, 5, 6])
+
   // gives an array of objects that are newly created portions of the expenses, ready to assign to Users
   let portionsOfExpensesToAssoc = await Item.findAll()
-
-  // await gusersToAssoc[3].addGroup([1])
-  // await usersToAssoc[0].addGroups([groupsToAssoc[1]])
 
   // add portions of expenses to specific Users. Ensured that the Users are in the same group and that group has the Expense that the item/portion is part of
   await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[0].id)
@@ -105,6 +106,13 @@ async function portionsOfExpenses() {
   await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[3].id)
   await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[4].id)
   await usersToAssoc[2].addItem(portionsOfExpensesToAssoc[5].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[6].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[7].id)
+  await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[8].id)
+  await usersToAssoc[3].addItem(portionsOfExpensesToAssoc[9].id)
+  await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[10].id)
+  await usersToAssoc[3].addItem(portionsOfExpensesToAssoc[11].id)
+  await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[12].id)
 }
 
 // We've separated the `seed` function from the `runSeed` function.

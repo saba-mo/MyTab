@@ -52,7 +52,7 @@ const expenseData = [
     },
     {
       name: `House Cat`,
-      totalCost: 5.21,
+      totalCost: 25.21,
       groupId: 2,
     },
     {
