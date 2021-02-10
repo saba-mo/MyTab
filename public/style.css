@@ -95,6 +95,14 @@ body {
   ); */
 }
 
+.positiveBalance {
+  color: green;
+}
+
+.negativeBalance {
+  color: red;
+}
+
 form {
   margin: 0 auto;
   border: 2px dashed #2e3f51;

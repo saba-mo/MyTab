@@ -1,8 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_getGroups, _deleteGroup} from '../../store/groups/groups'
+import {_getGroups, _deleteGroup, _loadBalance} from '../../store'
 import {Link} from 'react-router-dom'
-import CreateGroupForm from './CreateGroupForm'
+import {TotalBalance, CreateGroupForm} from '../index'
 
 export class Groups extends React.Component {
   constructor() {
@@ -28,6 +28,7 @@ export class Groups extends React.Component {
       )
     ) {
       this.props.deleteGroup(groupId)
+      this.props.loadBalance(this.props.user.id)
     }
   }
 
@@ -35,6 +36,7 @@ export class Groups extends React.Component {
     if (this.props.groups.length > 0) {
       return (
         <div>
+          <TotalBalance />
           <h4>See the groups you belong to, and create a new one.</h4>
           <div className="editGroupPencil">
             {this.state.showForm ? (
@@ -73,6 +75,7 @@ export class Groups extends React.Component {
     } else {
       return (
         <div>
+          <TotalBalance />
           <h4>See the groups you belong to, and create a new one.</h4>
           <p>No groups to show, want to add one?</p>
           <CreateGroupForm toggleForm={this.toggleShowForm} />
@@ -93,6 +96,7 @@ const mapDispatch = (dispatch) => {
   return {
     getGroups: (userId) => dispatch(_getGroups(userId)),
     deleteGroup: (groupId) => dispatch(_deleteGroup(groupId)),
+    loadBalance: (userId) => dispatch(_loadBalance(userId)),
   }
 }
 
