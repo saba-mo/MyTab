@@ -8,7 +8,7 @@ const portionData = require('./dummyDataPortions')
 
 async function seed() {
   await db.sync({force: true})
-  console.log('db synced!')
+  console.log('database synced!')
 
   await Promise.all(
     userData.map((user) => {
@@ -124,13 +124,13 @@ async function runSeed() {
     await seed()
     await associations()
     await portionsOfExpenses()
-  } catch (err) {
-    console.log('error seeding:', err)
+  } catch (error) {
+    console.error('error seeding: ', error)
     process.exitCode = 1
   } finally {
-    console.log('closing db connection')
+    console.log('closing database connection')
     await db.close()
-    console.log('db connection closed')
+    console.log('database connection closed')
   }
 }
 

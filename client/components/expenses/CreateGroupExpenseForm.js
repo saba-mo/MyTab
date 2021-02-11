@@ -75,7 +75,10 @@ export class CreateGroupExpenseForm extends React.Component {
         owedByMember: this.state.owedByMember,
       })
     } catch (error) {
-      console.log('Failed to handle expense submission due to: ', error)
+      console.error(
+        'Failed to handle expense submission due to this error: ',
+        error
+      )
     }
   }
 
@@ -164,7 +167,7 @@ export class CreateGroupExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
-              Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
+              Remaining: {currency(remainder - totalOwed).format()}
             </div>
           ) : (
             ''

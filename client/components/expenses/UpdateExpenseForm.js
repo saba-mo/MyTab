@@ -161,7 +161,7 @@ export class UpdateExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
-              Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
+              Remaining: {currency(remainder - totalOwed).format()}
             </div>
           ) : (
             ''

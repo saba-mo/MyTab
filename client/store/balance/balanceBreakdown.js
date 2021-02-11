@@ -18,8 +18,8 @@ export const _loadBalance = (userId) => async (dispatch) => {
     const {data} = await axios.get(`/api/balance/${userId}`)
     dispatch(getBalance(data))
   } catch (error) {
-    console.log(
-      "The user's balance should be here, but it is not because: ",
+    console.error(
+      "The user's balance should be here, but it is not because the thunk threw this error: ",
       error
     )
   }
