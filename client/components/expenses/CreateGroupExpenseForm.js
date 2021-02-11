@@ -29,14 +29,12 @@ export class CreateGroupExpenseForm extends React.Component {
       // totalCost and owedId should be numbers
       value = Number(event.target.value)
     }
-
     if (event.target.name === 'paidBy') {
       let owedByMember = this.state.owedByMember
       let memberId = Number(event.target.value)
       delete owedByMember[memberId]
       this.setState({owedByMember})
     }
-
     this.setState({
       [event.target.name]: value,
     })
@@ -65,7 +63,6 @@ export class CreateGroupExpenseForm extends React.Component {
         alert('Cost must be a number.')
         return
       }
-
       event.preventDefault()
       this.props.toggleForm()
       this.props.addGroupExpense(this.props.groupId, {
@@ -89,6 +86,16 @@ export class CreateGroupExpenseForm extends React.Component {
       )
     }
     let remainder = this.state.totalCost
+
+    const paidBy = this.props.groupMembers.filter(
+      (member) => member.id == this.state.paidBy
+    )
+    let paidByName
+    if (paidBy[0].id === this.props.user.id) {
+      paidByName = 'Your'
+    } else {
+      paidByName = paidBy[0].firstName + ' ' + paidBy[0].lastName + "'s"
+    }
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -164,7 +171,7 @@ export class CreateGroupExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
-              Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
+              {paidByName} share: {currency(remainder - totalOwed).format()}
             </div>
           ) : (
             ''
@@ -196,6 +203,7 @@ const mapState = (state) => {
     groupMembers: state.groupMembers,
   }
 }
+
 const mapDispatch = (dispatch) => {
   return {
     addGroupExpense: (groupId, newExpenseObject) =>
@@ -203,4 +211,5 @@ const mapDispatch = (dispatch) => {
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
   }
 }
+
 export default connect(mapState, mapDispatch)(CreateGroupExpenseForm)
