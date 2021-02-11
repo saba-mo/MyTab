@@ -38,9 +38,15 @@ export class GroupBalances extends React.Component {
         let owingUser = item.user
         let amount = item.amount
         if (owingUser.id === user.id) {
-          totalUserOwes += amount
+          if (item.settled === false) {
+            console.log('item ', item)
+            totalUserOwes += amount
+          }
         } else if (owedToUser.id === user.id) {
-          totalOwedToUser += amount
+          console.log('item ', item)
+          if (item.settled === false) {
+            totalOwedToUser += amount
+          }
         }
         expenses.push([
           owedToUser,
