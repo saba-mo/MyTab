@@ -238,6 +238,9 @@ router.delete(
       const expenseId = parseInt(req.params.expenseId)
       const thisExpense = await Expense.findByPk(expenseId)
       if (!thisExpense) res.sendStatus(404)
+      // find all items associated to expense and destroy them, too
+      const expenseItems = await thisExpense.getItems()
+      await expenseItems.forEach((item) => item.destroy())
       await thisExpense.destroy()
       res.sendStatus(204)
     } catch (err) {

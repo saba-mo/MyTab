@@ -15,10 +15,11 @@ export class GroupBalances extends React.Component {
     this.props.loadGroupExpenses(this.props.groupId)
   }
 
-  settleThisPortion(paidBy, itemToSettle) {
+  // takes item object, toggles settle boolean to true, then sends to the thunk along with groupId
+  settleThisPortion(itemToSettle) {
     itemToSettle.settled = true
     const {groupId} = this.props
-    this.props.settleAPortion(paidBy, itemToSettle, groupId)
+    this.props.settleAPortion(itemToSettle, groupId)
   }
 
   render() {
@@ -56,8 +57,8 @@ export class GroupBalances extends React.Component {
     return (
       <div>
         <h3>
-          Total Owed to {user.firstName} {user.lastName}: $
-          {totalOwedToUser.toFixed(2)}
+          Total Owed to {user.firstName} {user.lastName}:{' '}
+          {currency(totalOwedToUser).format()}
         </h3>
         <table>
           <thead>
@@ -81,13 +82,11 @@ export class GroupBalances extends React.Component {
                   <td>
                     {expense[1].firstName} {expense[1].lastName}
                   </td>
-                  <td>${expense[2]}</td>
+                  <td>{currency(expense[2]).format()}</td>
                   <td>
                     <button
                       type="submit"
-                      onClick={() =>
-                        this.settleThisPortion(expense[0], expense[5])
-                      }
+                      onClick={() => this.settleThisPortion(expense[5])}
                     >
                       Settle
                     </button>
@@ -98,8 +97,8 @@ export class GroupBalances extends React.Component {
         </table>
 
         <h3>
-          Total {user.firstName} {user.lastName} Owes: $
-          {totalUserOwes.toFixed(2)}
+          Total {user.firstName} {user.lastName} Owes:{' '}
+          {currency(totalUserOwes).format()}
         </h3>
         <table>
           <thead>
@@ -122,7 +121,7 @@ export class GroupBalances extends React.Component {
                   <td>
                     {expense[1].firstName} {expense[1].lastName}
                   </td>
-                  <td>${expense[2]}</td>
+                  <td>{currency(expense[2]).format()}</td>
                 </tr>
               ))}
           </tbody>
@@ -152,7 +151,7 @@ export class GroupBalances extends React.Component {
                   <td>
                     {expense[1].firstName} {expense[1].lastName}
                   </td>
-                  <td>${expense[2]}</td>
+                  <td>{currency(expense[2]).format()}</td>
                 </tr>
               ))}
           </tbody>
@@ -171,8 +170,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   loadGroupExpenses: (groupId) => dispatch(_loadGroupExpenses(groupId)),
-  settleAPortion: (paidBy, itemToSettle, groupId) =>
-    dispatch(_settleOnePortion(paidBy, itemToSettle, groupId)),
+  settleAPortion: (itemToSettle, groupId) =>
+    dispatch(_settleOnePortion(itemToSettle, groupId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupBalances)

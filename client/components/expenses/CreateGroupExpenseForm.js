@@ -15,11 +15,15 @@ export class CreateGroupExpenseForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
+    this.splitEvenly = this.splitEvenly.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
   }
+
+  // maybe the split evenly button toggles a boolean in state and the handleAmountOwedChange function does this part
+  splitEvenly(totalCost) {}
 
   handleChange(event) {
     let value
@@ -125,6 +129,9 @@ export class CreateGroupExpenseForm extends React.Component {
             </option>
           ))}
         </select>
+        <button onClick={() => this.splitEvenly(this.state.totalCost)}>
+          Split Evenly?
+        </button>
         <h6 className="required">* Required field</h6>
         {this.props.groupMembers.map((member) => (
           <div className="container" key={member.id}>
@@ -159,11 +166,13 @@ export class CreateGroupExpenseForm extends React.Component {
           </div>
         ))}
         <div>
-          <div>Total Cost: ${this.state.totalCost}</div>
-          <div>Total Owed: ${totalOwed}</div>
+          <div>Total Cost: {currency(this.state.totalCost).format()}</div>
+          <div>Total Owed: {currency(totalOwed).format()}</div>
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
-            <div className="error">Remaining: ${remainder - totalOwed}</div>
+            <div className="error">
+              Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
+            </div>
           ) : (
             ''
           )}

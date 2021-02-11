@@ -10,6 +10,8 @@ import groupExpenses from './expenses/expenses'
 import singleExpense from './expenses/singleExpense'
 import singleGroup from './groups/singleGroup'
 import groupMembers from './groups/groupMembers'
+import balance from './balance/balance'
+import singlePortionReducer from './itemsPortions/itemPortion'
 
 const reducer = combineReducers({
   user: user,
@@ -21,6 +23,8 @@ const reducer = combineReducers({
   singleExpense: singleExpense,
   friendsErrorReducer: friendsErrorReducer,
   groupMembers: groupMembers,
+  balance: balance,
+  items: singlePortionReducer,
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
@@ -36,3 +40,5 @@ export * from './expenses/expenses'
 export * from './expenses/singleExpense'
 export * from './groups/singleGroup'
 export * from './groups/groupMembers'
+export * from './balance/balance'
+export * from './itemsPortions/itemPortion'

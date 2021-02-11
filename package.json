@@ -41,6 +41,7 @@
   "author": "Fullstack Academy of Code",
   "license": "MIT",
   "dependencies": {
+    "antd": "^4.12.2",
     "axios": "^0.21.1",
     "compression": "^1.7.3",
     "connect-session-sequelize": "^6.1.1",
@@ -49,6 +50,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "history": "^4.10.0",
+    "less-loader": "^8.0.0",
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
     "passport-amazon": "^1.0.0",
