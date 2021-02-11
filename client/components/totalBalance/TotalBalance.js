@@ -9,30 +9,40 @@ export class TotalBalance extends React.Component {
   }
 
   render() {
-    const {balance} = this.props
+    const {balanceBreakdown} = this.props
 
-    if (balance === 0) {
+    if (balanceBreakdown[0] === 0) {
       return (
         <div>
-          <div>Total Balance</div>
+          <div>Total Balance on MyTab</div>
           <div>You are all settled up</div>
         </div>
       )
-    } else if (balance > 0) {
+    } else if (balanceBreakdown[0] > 0) {
       return (
         <div>
-          <div>Total Balance</div>
+          <div>
+            Total Balance on MyTab: {currency(balanceBreakdown[0]).format()}
+          </div>
           <div className="positiveBalance">
-            You are owed {currency(balance).format()}
+            You are owed {currency(balanceBreakdown[1]).format()}
+          </div>
+          <div className="negativeBalance">
+            You owe {currency(balanceBreakdown[2]).format()}
           </div>
         </div>
       )
     } else {
       return (
         <div>
-          <div>Total Balance</div>
+          <div>
+            Total Balance on MyTab: {currency(balanceBreakdown[0]).format()}
+          </div>
+          <div className="positiveBalance">
+            You are owed {currency(balanceBreakdown[1]).format()}
+          </div>
           <div className="negativeBalance">
-            You owe {currency(balance * -1).format()}
+            You owe {currency(balanceBreakdown[2]).format()}
           </div>
         </div>
       )
@@ -44,7 +54,7 @@ export class TotalBalance extends React.Component {
  * CONTAINER
  */
 const mapState = (state) => ({
-  balance: state.balance,
+  balanceBreakdown: state.balanceBreakdown,
   user: state.user,
 })
 
