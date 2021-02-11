@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {_loadGroupExpenses, _settleOnePortion} from '../../store/'
 import {CreateGroupExpenseForm} from '../index'
 import currency from 'currency.js'
+import BalanceDemo from './antBalanceProfiles'
 
 export class GroupBalances extends React.Component {
   constructor() {
@@ -56,7 +57,8 @@ export class GroupBalances extends React.Component {
 
     return (
       <div>
-        <h3>
+        <BalanceDemo />
+        {/* <h3>
           Total Owed to {user.firstName} {user.lastName}:{' '}
           {currency(totalOwedToUser).format()}
         </h3>
@@ -155,7 +157,7 @@ export class GroupBalances extends React.Component {
                 </tr>
               ))}
           </tbody>
-        </table>
+        </table> */}
       </div>
     )
   }
