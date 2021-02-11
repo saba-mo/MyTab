@@ -19,10 +19,10 @@ const reducer = combineReducers({
   singleGroup: singleGroup,
   friends: friends,
   singleFriend: singleFriend,
-  groupExpenses: groupExpenses,
-  singleExpense: singleExpense,
   friendsErrorReducer: friendsErrorReducer,
   groupMembers: groupMembers,
+  groupExpenses: groupExpenses,
+  singleExpense: singleExpense,
   balanceBreakdown: balanceBreakdown,
   items: singlePortionReducer,
 })

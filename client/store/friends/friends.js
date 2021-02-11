@@ -1,7 +1,6 @@
 import axios from 'axios'
 import {ADD_FRIEND_SUCCESS, DELETE_FRIEND, GET_FRIENDS} from './friendTypes'
 import {
-  addFriendError,
   addFriendSuccess,
   deleteFriend,
   getFriends,
@@ -15,8 +14,8 @@ export const _loadFriends = (userId) => async (dispatch) => {
     const {data} = await axios.get(`/api/friends/${userId}`)
     dispatch(getFriends(data))
   } catch (error) {
-    console.log(
-      'All your friends should be here, but they are not because: ',
+    console.error(
+      'All your friends should be here, but they are not because the thunk threw this error: ',
       error
     )
   }
@@ -38,14 +37,17 @@ export const _addFriend = (userId, email) => async (dispatch) => {
               dispatch(inviteFriend({email}))
               break
             default:
-              console.log('Something is busted in the _addFriend thunk', error)
+              console.error(
+                'Could not add that friend because the thunk threw this error',
+                error
+              )
               break
           }
         })
     }
   } catch (error) {
-    console.log(
-      'Your new friend should be here, but they are not because: ',
+    console.error(
+      'Your new friend should be here, but they are not because the thunk threw this error: ',
       error
     )
   }
@@ -56,8 +58,8 @@ export const _deleteFriend = (userId, friendId) => async (dispatch) => {
     await axios.delete(`/api/friends/${userId}/${friendId}`)
     dispatch(deleteFriend(friendId))
   } catch (error) {
-    console.log(
-      'Your friend should have been deleted, but they are not because: ',
+    console.error(
+      'Your friend should have been deleted, but they are not because the thunk threw this error: ',
       error
     )
   }

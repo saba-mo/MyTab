@@ -23,7 +23,10 @@ export const _loadAnExpense = (groupId, expenseId) => async (dispatch) => {
     )
     dispatch(getAnExpense(data))
   } catch (error) {
-    console.log('Cannot find your expense because: ', error)
+    console.error(
+      'Cannot find your expense because the thunk threw this error: ',
+      error
+    )
   }
 }
 
@@ -37,7 +40,10 @@ export const _updateExpense = (groupId, expenseId, expense) => async (
     )
     dispatch(updateExpense(data))
   } catch (error) {
-    console.log('Cannot update your expense because: ', error)
+    console.error(
+      'Cannot update your expense because the thunk threw this error: ',
+      error
+    )
   }
 }
 

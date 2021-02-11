@@ -1,12 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {logout} from '../../store'
 import {Layout, PageHeader, Content, Tabs} from 'antd'
+import {withRouter} from 'react-router'
 
 const {TabPane} = Tabs
-import {withRouter} from 'react-router'
 
 class Navbar extends React.Component {
   constructor() {

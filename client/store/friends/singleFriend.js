@@ -12,7 +12,10 @@ export const _loadAFriend = (userId, friendId) => async (dispatch) => {
     const {data} = await axios.get(`/api/friends/${userId}/${friendId}`)
     dispatch(getAFriend(data))
   } catch (error) {
-    console.log('Cannot find your friend because: ', error)
+    console.error(
+      'Cannot find your friend because the thunk threw this error: ',
+      error
+    )
   }
 }
 

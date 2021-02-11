@@ -24,7 +24,7 @@ export const _getGroups = (userId) => async (dispatch) => {
     const {data} = await axios.get(`/api/groups/${userId}`)
     dispatch(setGroups(data))
   } catch (err) {
-    console.log("can't get groups!", err)
+    console.error("can't get groups because the thunk threw this error: ", err)
   }
 }
 
@@ -33,7 +33,10 @@ export const _createGroup = (newGroup) => async (dispatch) => {
     const {data} = await axios.post('/api/groups', newGroup)
     dispatch(createGroup(data))
   } catch (err) {
-    console.log("can't create a group!", err)
+    console.error(
+      "can't create a group because the thunk threw this error: ",
+      err
+    )
   }
 }
 
@@ -42,7 +45,10 @@ export const _deleteGroup = (groupId) => async (dispatch) => {
     await axios.delete(`/api/groups/${groupId}`)
     dispatch(deleteGroup(groupId))
   } catch (err) {
-    console.log(err)
+    console.error(
+      "can't delete this group because the thunk threw this error: ",
+      err
+    )
   }
 }
 

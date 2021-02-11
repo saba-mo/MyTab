@@ -24,7 +24,10 @@ export const _getSingleGroup = (groupId) => {
         window.location = `/groups/1`
       }
     } catch (err) {
-      console.log(err.message)
+      console.error(
+        "can't get this group because the thunk threw this error: ",
+        err.message
+      )
     }
   }
 }
@@ -34,7 +37,10 @@ export const _updateGroup = (groupId, group) => async (dispatch) => {
     const {data} = await axios.put(`/api/groups/singleGroup/${groupId}`, group)
     dispatch(updateGroup(data))
   } catch (err) {
-    console.log(err)
+    console.error(
+      "can't update this group because the thunk threw this error: ",
+      err
+    )
   }
 }
 
