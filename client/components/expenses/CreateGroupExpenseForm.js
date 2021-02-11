@@ -16,11 +16,9 @@ export class CreateGroupExpenseForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
   }
-
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
   }
-
   handleChange(event) {
     let value
     if (event.target.name === 'name') {
@@ -29,25 +27,21 @@ export class CreateGroupExpenseForm extends React.Component {
       // totalCost and owedId should be numbers
       value = Number(event.target.value)
     }
-
     if (event.target.name === 'paidBy') {
       let owedByMember = this.state.owedByMember
       let memberId = Number(event.target.value)
       delete owedByMember[memberId]
       this.setState({owedByMember})
     }
-
     this.setState({
       [event.target.name]: value,
     })
   }
-
   handleAmountOwedChange(memberId, amount) {
     let owedByMember = this.state.owedByMember
     owedByMember[memberId] = amount
     this.setState({owedByMember})
   }
-
   handleSubmit(event) {
     try {
       if (
@@ -65,7 +59,6 @@ export class CreateGroupExpenseForm extends React.Component {
         alert('Cost must be a number.')
         return
       }
-
       event.preventDefault()
       this.props.toggleForm()
       this.props.addGroupExpense(this.props.groupId, {
@@ -78,7 +71,6 @@ export class CreateGroupExpenseForm extends React.Component {
       console.log('Failed to handle expense submission due to: ', error)
     }
   }
-
   render() {
     let totalOwed
     if (Object.values(this.state.owedByMember).length === 0) {
@@ -89,6 +81,16 @@ export class CreateGroupExpenseForm extends React.Component {
       )
     }
     let remainder = this.state.totalCost
+
+    const paidBy = this.props.groupMembers.filter(
+      (member) => member.id == this.state.paidBy
+    )
+    let paidByName
+    if (paidBy[0].id === this.props.user.id) {
+      paidByName = 'Your'
+    } else {
+      paidByName = paidBy[0].firstName + ' ' + paidBy[0].lastName + "'s"
+    }
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -165,6 +167,9 @@ export class CreateGroupExpenseForm extends React.Component {
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
               Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
+              {/* change remaining to name's share */}
+              {paidByName} share: $
+              {currency(remainder - totalOwed).value.toFixed(2)}
             </div>
           ) : (
             ''
@@ -188,7 +193,6 @@ export class CreateGroupExpenseForm extends React.Component {
     )
   }
 }
-
 const mapState = (state) => {
   return {
     user: state.user,

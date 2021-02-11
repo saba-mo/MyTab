@@ -10,17 +10,16 @@ export class UpdateExpenseForm extends React.Component {
       name: props.expense.name,
       totalCost: props.expense.totalCost,
       paidBy: props.expense.paidBy[0].id,
+      // how do we populate owedByMember so we can prepopulate?
       owedByMember: {},
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
   }
-
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
   }
-
   handleChange(event) {
     let value
     if (event.target.name === 'name') {
@@ -29,25 +28,21 @@ export class UpdateExpenseForm extends React.Component {
       // totalCost and owedId should be numbers
       value = Number(event.target.value)
     }
-
     if (event.target.name === 'paidBy') {
       let owedByMember = this.state.owedByMember
       let memberId = Number(event.target.value)
       delete owedByMember[memberId]
       this.setState({owedByMember})
     }
-
     this.setState({
       [event.target.name]: value,
     })
   }
-
   handleAmountOwedChange(memberId, amount) {
     let owedByMember = this.state.owedByMember
     owedByMember[memberId] = amount
     this.setState({owedByMember})
   }
-
   handleSubmit(event) {
     if (
       !this.state.name ||
@@ -59,13 +54,11 @@ export class UpdateExpenseForm extends React.Component {
       alert('A required field is missing.')
       return
     }
-
     if (!Number(this.state.totalCost)) {
       event.preventDefault()
       alert('Cost must be a number.')
       return
     }
-
     event.preventDefault()
     this.props.toggleForm()
     this.props.updateExpense(this.props.groupId, this.props.expense.id, {
@@ -75,7 +68,6 @@ export class UpdateExpenseForm extends React.Component {
       owedByMember: this.state.owedByMember,
     })
   }
-
   render() {
     let totalOwed
     if (Object.values(this.state.owedByMember).length === 0) {
@@ -86,6 +78,16 @@ export class UpdateExpenseForm extends React.Component {
       )
     }
     let remainder = this.state.totalCost
+    // groupMembers array is empty
+    // const paidBy = this.props.groupMembers.filter(
+    //   (member) => member.id == this.state.paidBy
+    // )
+    // let paidByName
+    // if (paidBy[0].id === this.props.user.id) {
+    //   paidByName = 'Your'
+    // } else {
+    //   paidByName = paidBy[0].firstName + ' ' + paidBy[0].lastName + "'s"
+    // }
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -136,6 +138,8 @@ export class UpdateExpenseForm extends React.Component {
                 type="number"
                 step="0.01"
                 value={
+                  // try changing this to just 1 ternary and see if it prepoulates
+                  // will only work if this.state.owedByMember already holds a value in state
                   this.state.owedByMember[member.id] === undefined
                     ? ''
                     : this.state.owedByMember[member.id] === 0
@@ -161,6 +165,7 @@ export class UpdateExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
+              {/* change to name/Your */}
               Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
             </div>
           ) : (
@@ -191,7 +196,6 @@ const mapState = (state) => {
     expense: state.singleExpense,
   }
 }
-
 const mapDispatch = (dispatch) => {
   return {
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
@@ -199,5 +203,4 @@ const mapDispatch = (dispatch) => {
       dispatch(_updateExpense(groupId, expenseId, expense)),
   }
 }
-
 export default connect(mapState, mapDispatch)(UpdateExpenseForm)
