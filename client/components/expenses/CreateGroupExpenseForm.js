@@ -15,15 +15,11 @@ export class CreateGroupExpenseForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
-    this.splitEvenly = this.splitEvenly.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
   }
-
-  // maybe the split evenly button toggles a boolean in state and the handleAmountOwedChange function does this part
-  splitEvenly(totalCost) {}
 
   handleChange(event) {
     let value
@@ -94,6 +90,16 @@ export class CreateGroupExpenseForm extends React.Component {
     }
     let remainder = this.state.totalCost
 
+    const paidBy = this.props.groupMembers.filter(
+      (member) => member.id == this.state.paidBy
+    )
+    let paidByName
+    if (paidBy[0].id === this.props.user.id) {
+      paidByName = 'Your'
+    } else {
+      paidByName = paidBy[0].firstName + ' ' + paidBy[0].lastName + "'s"
+    }
+
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="name">Expense Name*</label>
@@ -129,9 +135,6 @@ export class CreateGroupExpenseForm extends React.Component {
             </option>
           ))}
         </select>
-        <button onClick={() => this.splitEvenly(this.state.totalCost)}>
-          Split Evenly?
-        </button>
         <h6 className="required">* Required field</h6>
         {this.props.groupMembers.map((member) => (
           <div className="container" key={member.id}>
@@ -171,7 +174,9 @@ export class CreateGroupExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
-              Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
+              {/* change remaining to name's share */}
+              {paidByName} share: $
+              {currency(remainder - totalOwed).value.toFixed(2)}
             </div>
           ) : (
             ''
