@@ -10,7 +10,6 @@ export class UpdateExpenseForm extends React.Component {
       name: props.expense.name,
       totalCost: props.expense.totalCost,
       paidBy: props.expense.paidBy[0].id,
-      // how do we populate owedByMember so we can prepopulate?
       owedByMember: {},
     }
     this.handleChange = this.handleChange.bind(this)
@@ -147,8 +146,6 @@ export class UpdateExpenseForm extends React.Component {
                 type="number"
                 step="0.01"
                 value={
-                  // try changing this to just 1 ternary and see if it prepoulates
-                  // will only work if this.state.owedByMember already holds a value in state
                   this.state.owedByMember[member.id] === undefined
                     ? ''
                     : this.state.owedByMember[member.id] === 0
