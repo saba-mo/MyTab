@@ -4,13 +4,13 @@ import axios from 'axios'
 const GET_BALANCE = 'GET_BALANCE'
 
 /* ACTION CREATORS */
-const getBalance = (balance) => ({
+const getBalance = (balanceBreakdown) => ({
   type: GET_BALANCE,
-  balance,
+  balanceBreakdown,
 })
 
 /* INITIAL STATE */
-const initialState = 0
+const initialState = []
 
 /* THUNK CREATORS */
 export const _loadBalance = (userId) => async (dispatch) => {
@@ -29,7 +29,7 @@ export const _loadBalance = (userId) => async (dispatch) => {
 const balanceReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_BALANCE:
-      return action.balance
+      return action.balanceBreakdown
     default:
       return state
   }
