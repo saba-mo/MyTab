@@ -72,7 +72,10 @@ export class CreateGroupExpenseForm extends React.Component {
         owedByMember: this.state.owedByMember,
       })
     } catch (error) {
-      console.log('Failed to handle expense submission due to: ', error)
+      console.error(
+        'Failed to handle expense submission due to this error: ',
+        error
+      )
     }
   }
 

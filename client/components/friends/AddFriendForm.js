@@ -21,7 +21,10 @@ class AddFriendForm extends React.Component {
       this.props.addFriend(this.props.user.id, this.state.email)
       this.setState({email: ''})
     } catch (error) {
-      console.log('Hmm, having a hard time with this.', error)
+      console.error(
+        'Hmm, having a hard time adding this friend, here are more details: ',
+        error
+      )
     }
   }
 
