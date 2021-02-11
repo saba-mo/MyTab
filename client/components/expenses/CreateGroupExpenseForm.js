@@ -90,16 +90,6 @@ export class CreateGroupExpenseForm extends React.Component {
     }
     let remainder = this.state.totalCost
 
-    const paidBy = this.props.groupMembers.filter(
-      (member) => member.id == this.state.paidBy
-    )
-    let paidByName
-    if (paidBy[0].id === this.props.user.id) {
-      paidByName = 'Your'
-    } else {
-      paidByName = paidBy[0].firstName + ' ' + paidBy[0].lastName + "'s"
-    }
-
     return (
       <form onSubmit={this.handleSubmit}>
         <label htmlFor="name">Expense Name*</label>
@@ -174,9 +164,7 @@ export class CreateGroupExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
-              {/* change remaining to name's share */}
-              {paidByName} share: $
-              {currency(remainder - totalOwed).value.toFixed(2)}
+              Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
             </div>
           ) : (
             ''

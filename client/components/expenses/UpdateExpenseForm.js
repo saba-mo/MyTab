@@ -10,7 +10,6 @@ export class UpdateExpenseForm extends React.Component {
       name: props.expense.name,
       totalCost: props.expense.totalCost,
       paidBy: props.expense.paidBy[0].id,
-      // how do we populate owedByMember so we can prepopulate?
       owedByMember: {},
     }
     this.handleChange = this.handleChange.bind(this)
@@ -87,16 +86,6 @@ export class UpdateExpenseForm extends React.Component {
       )
     }
     let remainder = this.state.totalCost
-    // groupMembers array is empty
-    // const paidBy = this.props.groupMembers.filter(
-    //   (member) => member.id == this.state.paidBy
-    // )
-    // let paidByName
-    // if (paidBy[0].id === this.props.user.id) {
-    //   paidByName = 'Your'
-    // } else {
-    //   paidByName = paidBy[0].firstName + ' ' + paidBy[0].lastName + "'s"
-    // }
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -147,8 +136,6 @@ export class UpdateExpenseForm extends React.Component {
                 type="number"
                 step="0.01"
                 value={
-                  // try changing this to just 1 ternary and see if it prepoulates
-                  // will only work if this.state.owedByMember already holds a value in state
                   this.state.owedByMember[member.id] === undefined
                     ? ''
                     : this.state.owedByMember[member.id] === 0
@@ -174,7 +161,6 @@ export class UpdateExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
-              {/* change to name/Your */}
               Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
             </div>
           ) : (
