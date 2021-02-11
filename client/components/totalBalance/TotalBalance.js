@@ -14,7 +14,6 @@ export class TotalBalance extends React.Component {
     if (balanceBreakdown[0] === 0) {
       return (
         <div>
-          <div>Total Balance on MyTab</div>
           <div>You are all settled up</div>
         </div>
       )
