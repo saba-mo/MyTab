@@ -30,7 +30,7 @@ if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET) {
   const strategy = new AmazonStrategy(
     amazonConfig,
     (token, refreshToken, profile, done) => {
-      console('profile', profile)
+      console.log('profile', profile)
       const amazonId = profile.id
       const email = profile.emails[0].value
       const name = profile.displayName
