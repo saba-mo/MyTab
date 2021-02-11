@@ -196,6 +196,7 @@ const mapState = (state) => {
     groupMembers: state.groupMembers,
   }
 }
+
 const mapDispatch = (dispatch) => {
   return {
     addGroupExpense: (groupId, newExpenseObject) =>
@@ -203,4 +204,5 @@ const mapDispatch = (dispatch) => {
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
   }
 }
+
 export default connect(mapState, mapDispatch)(CreateGroupExpenseForm)
