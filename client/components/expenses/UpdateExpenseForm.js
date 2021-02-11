@@ -86,6 +86,16 @@ export class UpdateExpenseForm extends React.Component {
       )
     }
     let remainder = this.state.totalCost
+    // groupMembers array is empty
+    // const paidBy = this.props.groupMembers.filter(
+    //   (member) => member.id == this.state.paidBy
+    // )
+    // let paidByName
+    // if (paidBy[0].id === this.props.user.id) {
+    //   paidByName = 'Your'
+    // } else {
+    //   paidByName = paidBy[0].firstName + ' ' + paidBy[0].lastName + "'s"
+    // }
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -161,6 +171,7 @@ export class UpdateExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
+              {/* change to name/Your */}
               Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
             </div>
           ) : (
