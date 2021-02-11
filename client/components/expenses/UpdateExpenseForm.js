@@ -17,9 +17,11 @@ export class UpdateExpenseForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
   }
+
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
   }
+
   handleChange(event) {
     let value
     if (event.target.name === 'name') {
@@ -38,11 +40,13 @@ export class UpdateExpenseForm extends React.Component {
       [event.target.name]: value,
     })
   }
+
   handleAmountOwedChange(memberId, amount) {
     let owedByMember = this.state.owedByMember
     owedByMember[memberId] = amount
     this.setState({owedByMember})
   }
+
   handleSubmit(event) {
     if (
       !this.state.name ||
@@ -68,6 +72,7 @@ export class UpdateExpenseForm extends React.Component {
       owedByMember: this.state.owedByMember,
     })
   }
+
   render() {
     let totalOwed
     if (Object.values(this.state.owedByMember).length === 0) {
@@ -190,12 +195,14 @@ export class UpdateExpenseForm extends React.Component {
     )
   }
 }
+
 const mapState = (state) => {
   return {
     groupMembers: state.groupMembers,
     expense: state.singleExpense,
   }
 }
+
 const mapDispatch = (dispatch) => {
   return {
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
@@ -203,4 +210,5 @@ const mapDispatch = (dispatch) => {
       dispatch(_updateExpense(groupId, expenseId, expense)),
   }
 }
+
 export default connect(mapState, mapDispatch)(UpdateExpenseForm)
