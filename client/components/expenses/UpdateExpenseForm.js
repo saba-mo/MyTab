@@ -73,7 +73,6 @@ export class UpdateExpenseForm extends React.Component {
   }
 
   render() {
-    console.log('PROPS: ', this.props)
     let totalOwed
     if (Object.values(this.state.owedByMember).length === 0) {
       totalOwed = 0
@@ -171,8 +170,7 @@ export class UpdateExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
-              {paidByName} share: $
-              {currency(remainder - totalOwed).value.toFixed(2)}
+              {paidByName} share: {currency(remainder - totalOwed).format()}
             </div>
           ) : (
             ''
