@@ -171,8 +171,6 @@ export class CreateGroupExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
-              Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
-              {/* change remaining to name's share */}
               {paidByName} share: $
               {currency(remainder - totalOwed).value.toFixed(2)}
             </div>
