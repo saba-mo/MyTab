@@ -159,7 +159,7 @@ export class GroupBalances extends React.Component {
                 (expense) => ![expense[0].id, expense[1].id].includes(user.id)
               )
               .map((expense) => (
-                <tr key={expense[4]}>
+                <tr key={expense[5].id}>
                   <td>{expense[3]}</td>
                   <td>
                     {expense[0].firstName} {expense[0].lastName}
