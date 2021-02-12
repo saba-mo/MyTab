@@ -74,7 +74,7 @@ class Routes extends Component {
                   Profile
                 </Menu.Item>
                 <Menu.Item
-                  key={`/groups/${this.props.userId}`}
+                  key={`/groups/${this.props.user.id}`}
                   icon={<VideoCameraOutlined />}
                 >
                   Groups
@@ -93,9 +93,7 @@ class Routes extends Component {
                     onClick: this.toggle,
                   }
                 )}
-                {/* <Col span={20}> */}
-                Welcome, Kat!
-                {/* </Col> */}
+                Welcome, {this.props.user.firstName}!
               </Header>
               <Content
                 className="site-layout-background"
@@ -142,7 +140,7 @@ const mapState = (state) => {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
     isLoggedIn: !!state.user.id,
-    userId: state.user.id,
+    user: state.user,
   }
 }
 

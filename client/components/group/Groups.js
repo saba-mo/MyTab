@@ -102,12 +102,15 @@ export class Groups extends React.Component {
           xxl: 3,
         }}
         dataSource={this.props.groups}
-        renderItem={(item) => (
+        renderItem={(group) => (
           <List.Item>
-            <Card title={item.title}>
+            <Card
+              title={group.title}
+              extra={<Link to={`/groups/singleGroup/${group.id}`}>Open</Link>}
+            >
               {[
                 <a key="list-loadmore-edit">edit</a>,
-                <a key="list-loadmore-more">more</a>,
+                <a key="list-loadmore-more">remove</a>,
               ]}
             </Card>
           </List.Item>
