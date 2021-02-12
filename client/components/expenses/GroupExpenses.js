@@ -65,6 +65,25 @@ export class GroupExpenses extends React.Component {
         </div>
         <div id="group-expense-list">
           {this.noExpenses(groupExpenses)}
+          <List
+            className="group-expenses"
+            itemLayout="horizontal"
+            dataSource={groupExpenses}
+            renderItem={(item) => (
+              <List.Item
+                actions={[
+                  <a key="group-expense" onClick={() => console.log('delete')}>
+                    Delete expense
+                  </a>,
+                  <a key="group-expense" onClick={() => console.log('edit')}>
+                    Edit expense
+                  </a>,
+                ]}
+              >
+                <List.Item.Meta avatar={<Avatar src="" />} title={item.name} />
+              </List.Item>
+            )}
+          />
 
           <ul>
             {groupExpenses.map((expense) => {
