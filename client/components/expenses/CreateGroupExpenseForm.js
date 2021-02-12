@@ -7,7 +7,8 @@ import {Form, Input, Button, Select} from 'antd'
 const {Option} = Select
 const layout = {
   labelCol: {
-    span: 8,
+    // changed from 8 to 0 so it wouldn't cut off "name owes" part
+    span: 0,
   },
   wrapperCol: {
     span: 16,
@@ -21,40 +22,94 @@ const tailLayout = {
 }
 
 export class CreateGroupExpenseForm extends React.Component {
-  formRef = React.createRef()
-  onGenderChange = (value) => {
-    switch (value) {
-      case 'male':
-        this.formRef.current.setFieldsValue({
-          note: 'Hi, man!',
-        })
-        return
+  constructor(props) {
+    super()
+    this.state = {
+      name: '',
+      totalCost: '',
+      paidBy: props.user.id,
+      owedByMember: {},
+    }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
+  }
 
-      case 'female':
-        this.formRef.current.setFieldsValue({
-          note: 'Hi, lady!',
-        })
-        return
+  componentDidMount() {
+    this.props.loadGroupMembers(this.props.groupId)
+  }
 
-      case 'other':
-        this.formRef.current.setFieldsValue({
-          note: 'Hi there!',
-        })
-        
+  handleChange(event) {
+    let value
+    if (event.target.name === 'name') {
+      value = event.target.value
+    } else {
+      // totalCost and owedId should be numbers
+      value = Number(event.target.value)
+    }
+    if (event.target.name === 'paidBy') {
+      let owedByMember = this.state.owedByMember
+      let memberId = Number(event.target.value)
+      delete owedByMember[memberId]
+      this.setState({owedByMember})
+    }
+    this.setState({
+      [event.target.name]: value,
+    })
+  }
+
+  handleAmountOwedChange(memberId, amount) {
+    let owedByMember = this.state.owedByMember
+    owedByMember[memberId] = amount
+    this.setState({owedByMember})
+  }
+
+  handleSubmit(event) {
+    try {
+      if (
+        !this.state.name ||
+        !this.state.totalCost ||
+        !this.state.paidBy ||
+        this.state.paidBy === 'select'
+      ) {
+        event.preventDefault()
+        alert('A required field is missing.')
+        return
+      }
+      if (!Number(this.state.totalCost)) {
+        event.preventDefault()
+        alert('Cost must be a number.')
+        return
+      }
+      event.preventDefault()
+      this.props.toggleForm()
+      this.props.addGroupExpense(this.props.groupId, {
+        name: this.state.name,
+        totalCost: currency(this.state.totalCost).value,
+        paidBy: this.state.paidBy,
+        owedByMember: this.state.owedByMember,
+      })
+    } catch (error) {
+      console.error(
+        'Failed to handle expense submission due to this error: ',
+        error
+      )
     }
   }
+
+  formRef = React.createRef()
   onFinish = (values) => {
     console.log(values)
   }
   onReset = () => {
     this.formRef.current.resetFields()
   }
-  onFill = () => {
-    this.formRef.current.setFieldsValue({
-      note: 'Hello world!',
-      gender: 'male',
-    })
-  }
+  // onFill = () => {
+  //   this.formRef.current.setFieldsValue({
+  //     note: 'Hello world!',
+  //     gender: 'male',
+  //   })
+  // }
 
   render() {
     return (
@@ -65,19 +120,43 @@ export class CreateGroupExpenseForm extends React.Component {
         onFinish={this.onFinish}
       >
         <Form.Item
-          name="note"
-          label="Note"
+          name="name"
+          label="Expense Name"
+          // do value and onChange go here or under Input?
           rules={[
             {
               required: true,
             },
           ]}
         >
-          <Input />
+          <Input
+            value={this.state.name}
+            onChange={this.handleChange}
+            placeholder="Ex: Quarantine Brunch"
+          />
         </Form.Item>
         <Form.Item
-          name="gender"
-          label="Gender"
+          name="totalCost"
+          label="Cost"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input
+            placeholder="Ex: 100 or 9.39"
+            onChange={this.handleChange}
+            value={this.state.totalCost === 0 ? '' : this.state.totalCost}
+            min={0}
+            type="number"
+            step="0.01"
+          />
+        </Form.Item>
+        <Form.Item
+          name="paidBy"
+          label="Paid By"
+          initialValue={this.state.paidBy}
           rules={[
             {
               required: true,
@@ -85,15 +164,53 @@ export class CreateGroupExpenseForm extends React.Component {
           ]}
         >
           <Select
-            placeholder="Select a option and change input text above"
+            // change placeholder to logged in user
+            // placeholder="Select a option and change input text above"
+            // initialValue={this.state.paidBy}
+            // change onGender
             onChange={this.onGenderChange}
             allowClear
           >
-            <Option value="male">male</Option>
-            <Option value="female">female</Option>
-            <Option value="other">other</Option>
+            <Option value="member">select</Option>
+            {this.props.groupMembers.map((member) => (
+              <Option key={`member-${member.id}`} value={member.id}>
+                {member.firstName} {member.lastName}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
+
+        {this.props.groupMembers.map((member) => (
+          <div className="container" key={member.id}>
+            <Form.Item
+              name="owedBy"
+              label={`${member.firstName} ${member.lastName} owes`}
+            >
+              <Input
+                // is value doing what it should?
+                value={
+                  this.state.owedByMember[member.id] === undefined
+                    ? ''
+                    : this.state.owedByMember[member.id] === 0
+                    ? ''
+                    : this.state.owedByMember[member.id]
+                }
+                disabled={member.id == this.state.paidBy}
+                placeholder={member.id == this.state.paidBy ? 'Paid' : '$'}
+                min={0}
+                type="number"
+                step="0.01"
+                onChange={(event) =>
+                  this.handleAmountOwedChange(
+                    member.id,
+                    Number(event.target.value)
+                  )
+                }
+              />
+            </Form.Item>
+          </div>
+        ))}
+
         <Form.Item
           noStyle
           shouldUpdate={(prevValues, currentValues) =>
@@ -118,13 +235,10 @@ export class CreateGroupExpenseForm extends React.Component {
         </Form.Item>
         <Form.Item {...tailLayout}>
           <Button type="primary" htmlType="submit">
-            Submit
+            Create Expense
           </Button>
           <Button htmlType="button" onClick={this.onReset}>
             Reset
-          </Button>
-          <Button type="link" htmlType="button" onClick={this.onFill}>
-            Fill form
           </Button>
         </Form.Item>
       </Form>
@@ -256,11 +370,11 @@ export class CreateGroupExpenseForm extends React.Component {
   //         name="paidBy"
   //       >
   //         <option value="member">select</option>
-  //         {this.props.groupMembers.map((member) => (
-  //           <option key={`member-${member.id}`} value={member.id}>
-  //             {member.firstName} {member.lastName}
-  //           </option>
-  //         ))}
+  // {this.props.groupMembers.map((member) => (
+  //   <option key={`member-${member.id}`} value={member.id}>
+  //     {member.firstName} {member.lastName}
+  //   </option>
+  // ))}
   //       </select>
   //       <h6 className="required">* Required field</h6>
   //       {this.props.groupMembers.map((member) => (
