@@ -4,7 +4,6 @@ import {connect} from 'react-redux'
 import {_loadGroupExpenses, _loadGroupMembers} from '../../store'
 import {CreateGroupExpenseForm} from '../index'
 import currency from 'currency.js'
-import {List, Avatar} from 'antd'
 
 export class GroupExpenses extends React.Component {
   constructor() {
@@ -63,9 +62,8 @@ export class GroupExpenses extends React.Component {
             />
           )}
         </div>
-        <div id="group-expense-list">
+        <div id="full-expense-list">
           {this.noExpenses(groupExpenses)}
-
           <ul>
             {groupExpenses.map((expense) => {
               return (
