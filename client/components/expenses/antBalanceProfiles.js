@@ -28,11 +28,11 @@ class BalanceDemo extends React.Component {
 
   render() {
     let filteredExpenses = []
-    if (this.state.tableName === 'Owed to you') {
+    if (this.state.tableName === 'You lent') {
       filteredExpenses = this.props.expenses.filter(
         (expense) => expense.owedToUserId === this.props.user.id
       )
-    } else if (this.state.tableName === 'What you owe') {
+    } else if (this.state.tableName === 'You borrowed') {
       filteredExpenses = this.props.expenses.filter(
         (expense) => expense.owingUserId === this.props.user.id
       )
@@ -50,11 +50,11 @@ class BalanceDemo extends React.Component {
         <List
           dataSource={[
             {
-              name: 'Owed to you',
+              name: 'You lent',
               amount: this.props.totalOwedToUser,
             },
             {
-              name: 'What you owe',
+              name: 'You borrowed',
               amount: this.props.totalUserOwes,
             },
             {
