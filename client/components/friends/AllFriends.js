@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {_loadFriends, _deleteFriend} from '../../store'
 import {AddFriendForm, TotalBalance} from '../../components'
+import LoadMoreList from './loadMoreList'
 
 export class AllFriends extends React.Component {
   constructor(props) {
@@ -35,49 +36,49 @@ export class AllFriends extends React.Component {
     const friendList = this.props.friends
     const user = this.props.user.id
     return (
-      <div>
-        <TotalBalance />
-        <main>
-          <h2>My Friends on MyTab</h2>
-        </main>
-        <div className="editGroupPencil">
-          {this.state.showForm ? (
-            <AddFriendForm toggleForm={this.toggleShowForm} />
-          ) : (
-            <img
-              className="groupImg"
-              src="/images/plus.png"
-              height="64px"
-              width="64px"
-              title="Add a friend"
-              onClick={this.toggleShowForm}
-            />
-          )}
-        </div>
-        {this.noFriends(friendList)}
-        <div id="full-friend-list">
-          <ul>
-            {friendList.map((friendItem) => {
-              return (
-                <div key={`friend-${friendItem.id}`}>
-                  <Link to={`/friend/${friendItem.id}`}>
-                    {friendItem.firstName} {friendItem.lastName}
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => this.handleDelete(user, friendItem.id)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              )
-            })}
-          </ul>
-        </div>
-        {/* <div id="add-friend">
-          <AddFriendForm />
-        </div> */}
-      </div>
+      <LoadMoreList />
+      //   <TotalBalance />
+      //   <main>
+      //     <h2>My Friends on MyTab</h2>
+      //   </main>
+      //   <div className="editGroupPencil">
+      //     {this.state.showForm ? (
+      //       <AddFriendForm toggleForm={this.toggleShowForm} />
+      //     ) : (
+      //       <img
+      //         className="groupImg"
+      //         src="/images/plus.png"
+      //         height="64px"
+      //         width="64px"
+      //         title="Add a friend"
+      //         onClick={this.toggleShowForm}
+      //       />
+      //     )}
+      //   </div>
+      //   {this.noFriends(friendList)}
+      //   <div id="full-friend-list">
+      //     <ul>
+      //       {friendList.map((friendItem) => {
+      //         return (
+      //           <div key={`friend-${friendItem.id}`}>
+      //             <Link to={`/friend/${friendItem.id}`}>
+      //               {friendItem.firstName} {friendItem.lastName}
+      //             </Link>
+      //             <button
+      //               type="button"
+      //               onClick={() => this.handleDelete(user, friendItem.id)}
+      //             >
+      //               Remove
+      //             </button>
+      //           </div>
+      //         )
+      //       })}
+      //     </ul>
+      //   </div>
+      //   {/* <div id="add-friend">
+      //     <AddFriendForm />
+      //   </div> */}
+      // </div>
     )
   }
 }
