@@ -32,7 +32,7 @@ export class Groups extends React.Component {
     this.state = {showForm: false}
 
     this.toggleShowForm = this.toggleShowForm.bind(this)
-    // this.handleDeleteGroup = this.handleDeleteGroup.bind(this)
+    this.handleDeleteGroup = this.handleDeleteGroup.bind(this)
   }
 
   componentDidMount() {
@@ -43,16 +43,16 @@ export class Groups extends React.Component {
     this.setState({showForm: !this.state.showForm})
   }
 
-  // handleDeleteGroup(groupId) {
-  //   if (
-  //     window.confirm(
-  //       'Are you sure? You will be deleting the group and expenses for all members.'
-  //     )
-  //   ) {
-  //     this.props.deleteGroup(groupId)
-  //     this.props.loadBalance(this.props.user.id)
-  //   }
-  // }
+  handleDeleteGroup(groupId) {
+    if (
+      window.confirm(
+        'Are you sure? You will be deleting the group and expenses for all members.'
+      )
+    ) {
+      this.props.deleteGroup(groupId)
+      this.props.loadBalance(this.props.user.id)
+    }
+  }
 
   // <Row className="justify-content-md-center ">
   // {this.props.spotify.songsRecommended.map(track => {
@@ -92,31 +92,40 @@ export class Groups extends React.Component {
     console.log('this.props.groups', this.props.groups)
     if (this.props.groups.length > 0) {
       return (
-        <List
-          grid={{
-            gutter: 16,
-            xs: 1,
-            sm: 2,
-            md: 4,
-            lg: 4,
-            xl: 6,
-            xxl: 3,
-          }}
-          dataSource={this.props.groups}
-          renderItem={(group) => (
-            <List.Item>
-              <Card
-                title={group.title}
-                extra={<Link to={`/groups/singleGroup/${group.id}`}>Open</Link>}
-              >
-                {[
-                  <a key="list-loadmore-edit">edit</a>,
-                  <a key="list-loadmore-more">remove</a>,
-                ]}
-              </Card>
-            </List.Item>
-          )}
-        />
+        <div>
+          <List
+            grid={{
+              gutter: 16,
+              xs: 1,
+              sm: 2,
+              md: 4,
+              lg: 4,
+              xl: 6,
+              xxl: 3,
+            }}
+            dataSource={this.props.groups}
+            renderItem={(group) => (
+              <List.Item>
+                <Card
+                  title={group.title}
+                  extra={
+                    <Link to={`/groups/singleGroup/${group.id}`}>Open</Link>
+                  }
+                >
+                  {[
+                    <a
+                      key="list-loadmore-more"
+                      onClick={() => this.handleDeleteGroup(group.id)}
+                    >
+                      remove
+                    </a>,
+                  ]}
+                </Card>
+              </List.Item>
+            )}
+          />
+          <CreateGroupForm toggleForm={this.toggleShowForm} />
+        </div>
       )
     } else {
       return (
