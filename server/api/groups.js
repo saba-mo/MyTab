@@ -43,9 +43,11 @@ router.delete('/:groupId', async (req, res, next) => {
     const groupExpenses = await Expense.findAll({
       where: {groupId: req.params.groupId},
     })
-    // destroy all of them in the db
+    // destroy all of them and their associated items in the db
     for (let i = 0; i < groupExpenses.length; i++) {
       let expense = groupExpenses[i]
+      const expenseItems = await expense.getItems()
+      expenseItems.forEach((item) => item.destroy())
       await expense.destroy()
     }
 
