@@ -10,7 +10,7 @@ import groupExpenses from './expenses/expenses'
 import singleExpense from './expenses/singleExpense'
 import singleGroup from './groups/singleGroup'
 import groupMembers from './groups/groupMembers'
-import balance from './balance/balance'
+import balanceBreakdown from './balance/balanceBreakdown'
 import singlePortionReducer from './itemsPortions/itemPortion'
 
 const reducer = combineReducers({
@@ -19,11 +19,11 @@ const reducer = combineReducers({
   singleGroup: singleGroup,
   friends: friends,
   singleFriend: singleFriend,
-  groupExpenses: groupExpenses,
-  singleExpense: singleExpense,
   friendsErrorReducer: friendsErrorReducer,
   groupMembers: groupMembers,
-  balance: balance,
+  groupExpenses: groupExpenses,
+  singleExpense: singleExpense,
+  balanceBreakdown: balanceBreakdown,
   items: singlePortionReducer,
 })
 const middleware = composeWithDevTools(
@@ -40,5 +40,5 @@ export * from './expenses/expenses'
 export * from './expenses/singleExpense'
 export * from './groups/singleGroup'
 export * from './groups/groupMembers'
-export * from './balance/balance'
+export * from './balance/balanceBreakdown'
 export * from './itemsPortions/itemPortion'

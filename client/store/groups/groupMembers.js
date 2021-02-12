@@ -30,8 +30,8 @@ export const _loadGroupMembers = (groupId) => async (dispatch) => {
     const {data} = await axios.get(`/api/groups/singleGroup/${groupId}/members`)
     dispatch(getGroupMembers(data))
   } catch (error) {
-    console.log(
-      "All the group's members should be here, but they are not because: ",
+    console.error(
+      "All the group's members should be here, but they are not because the thunk threw this error: ",
       error
     )
   }
@@ -45,8 +45,8 @@ export const _addGroupMember = (groupId, member) => async (dispatch) => {
     )
     dispatch(addGroupMember(data))
   } catch (error) {
-    console.log(
-      "Your friend should have been added to the group, but they weren't because: ",
+    console.error(
+      "Your friend should have been added to the group, but they weren't because the thunk threw this error: ",
       error
     )
   }
@@ -66,8 +66,8 @@ export const _deleteGroupMember = (groupId, memberId) => async (dispatch) => {
       dispatch(deleteGroupMember(memberId))
     }
   } catch (error) {
-    console.log(
-      'Your group member should have been deleted, but it was not because: ',
+    console.error(
+      'Your group member should have been deleted, but it was not because the thunk threw this error: ',
       error
     )
   }

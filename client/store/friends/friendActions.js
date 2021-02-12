@@ -1,5 +1,4 @@
 import {
-  ADD_FRIEND_ERROR,
   ADD_FRIEND_SUCCESS,
   DELETE_FRIEND,
   GET_FRIENDS,
@@ -16,11 +15,6 @@ export const getFriends = (friends) => ({
 export const addFriendSuccess = (friend) => ({
   type: ADD_FRIEND_SUCCESS,
   friend,
-})
-
-export const addFriendError = (error) => ({
-  type: ADD_FRIEND_ERROR,
-  error: error,
 })
 
 export const inviteFriend = (email) => ({

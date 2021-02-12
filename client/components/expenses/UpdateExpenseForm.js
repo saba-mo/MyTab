@@ -29,14 +29,12 @@ export class UpdateExpenseForm extends React.Component {
       // totalCost and owedId should be numbers
       value = Number(event.target.value)
     }
-
     if (event.target.name === 'paidBy') {
       let owedByMember = this.state.owedByMember
       let memberId = Number(event.target.value)
       delete owedByMember[memberId]
       this.setState({owedByMember})
     }
-
     this.setState({
       [event.target.name]: value,
     })
@@ -59,13 +57,11 @@ export class UpdateExpenseForm extends React.Component {
       alert('A required field is missing.')
       return
     }
-
     if (!Number(this.state.totalCost)) {
       event.preventDefault()
       alert('Cost must be a number.')
       return
     }
-
     event.preventDefault()
     this.props.toggleForm()
     this.props.updateExpense(this.props.groupId, this.props.expense.id, {
@@ -86,6 +82,19 @@ export class UpdateExpenseForm extends React.Component {
       )
     }
     let remainder = this.state.totalCost
+
+    const paidBy = this.props.groupMembers.filter(
+      (member) => member.id == this.state.paidBy
+    )
+
+    let paidByName
+    if (paidBy.length) {
+      if (paidBy[0].id == this.props.user.id) {
+        paidByName = 'Your'
+      } else {
+        paidByName = paidBy[0].firstName + ' ' + paidBy[0].lastName + "'s"
+      }
+    }
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -161,7 +170,7 @@ export class UpdateExpenseForm extends React.Component {
           {remainder - totalOwed &&
           remainder - totalOwed != this.state.totalCost ? (
             <div className="error">
-              Remaining: ${currency(remainder - totalOwed).value.toFixed(2)}
+              {paidByName} share: {currency(remainder - totalOwed).format()}
             </div>
           ) : (
             ''
@@ -185,10 +194,12 @@ export class UpdateExpenseForm extends React.Component {
     )
   }
 }
+
 const mapState = (state) => {
   return {
     groupMembers: state.groupMembers,
     expense: state.singleExpense,
+    user: state.user,
   }
 }
 

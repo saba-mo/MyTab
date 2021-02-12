@@ -27,7 +27,7 @@ const expenseData = [
     },
     {
       name: 'Brazilian otter',
-      totalCost: 31.17,
+      totalCost: 2031.17,
       groupId: 2,
     },
     {
@@ -52,7 +52,7 @@ const expenseData = [
     },
     {
       name: `House Cat`,
-      totalCost: 5.21,
+      totalCost: 25.21,
       groupId: 2,
     },
     {

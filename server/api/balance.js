@@ -15,7 +15,7 @@ router.get('/:userId', async (req, res, next) => {
     // find unsettled items associated to user - what the user owes - and total the amounts
     const itemsUserOwes = await user.getItems({where: {settled: false}})
     // total user owes to other members
-    const amountUserOwes = itemsUserOwes.reduce(
+    let amountUserOwes = itemsUserOwes.reduce(
       (accum, item) => accum + item.amount,
       0
     )
@@ -36,8 +36,11 @@ router.get('/:userId', async (req, res, next) => {
     }
 
     let balance = amountUserOwed - amountUserOwes
+    amountUserOwed = currency(amountUserOwed).value
+    amountUserOwes = currency(amountUserOwes).value
     balance = currency(balance).value
-    res.json(balance)
+    const balanceBreakdown = [balance, amountUserOwed, amountUserOwes]
+    res.json(balanceBreakdown)
   } catch (err) {
     next(err)
   }

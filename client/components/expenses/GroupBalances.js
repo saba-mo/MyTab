@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {_loadGroupExpenses, _settleOnePortion} from '../../store/'
 import {CreateGroupExpenseForm} from '../index'
@@ -9,18 +8,22 @@ import BalanceDemo from './antBalanceProfiles'
 export class GroupBalances extends React.Component {
   constructor() {
     super()
+    this.state = {}
     this.settleThisPortion = this.settleThisPortion.bind(this)
+    this.render = this.render.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupExpenses(this.props.groupId)
   }
 
-  // takes item object, toggles settle boolean to true, then sends to the thunk along with groupId
+  // takes item object, toggles boolean value of "settled" to true, then sends to the thunk along with groupId
   settleThisPortion(itemToSettle) {
     itemToSettle.settled = true
     const {groupId} = this.props
     this.props.settleAPortion(itemToSettle, groupId)
+    this.setState({})
+    this.render()
   }
 
   render() {
@@ -40,9 +43,13 @@ export class GroupBalances extends React.Component {
         let owingUser = item.user
         let amount = item.amount
         if (owingUser.id === user.id) {
-          totalUserOwes += amount
+          if (item.settled === false) {
+            totalUserOwes += amount
+          }
         } else if (owedToUser.id === user.id) {
-          totalOwedToUser += amount
+          if (item.settled === false) {
+            totalOwedToUser += amount
+          }
         }
         expenses.push([
           owedToUser,
@@ -67,7 +74,7 @@ export class GroupBalances extends React.Component {
             <tr>
               <th>Expense</th>
               <th>Paid By</th>
-              <th>Ower</th>
+              <th>Owes Funds</th>
               <th>Amount</th>
               <th />
             </tr>
@@ -76,7 +83,7 @@ export class GroupBalances extends React.Component {
             {expenses
               .filter((expense) => expense[0].id === user.id)
               .map((expense) => (
-                <tr key={expense[4]}>
+                <tr key={expense[5].id}>
                   <td>{expense[3]}</td>
                   <td>
                     {expense[0].firstName} {expense[0].lastName}
@@ -107,15 +114,16 @@ export class GroupBalances extends React.Component {
             <tr>
               <th>Expense</th>
               <th>Paid By</th>
-              <th>Ower</th>
+              <th>Owes Funds</th>
               <th>Amount</th>
+              <th />
             </tr>
           </thead>
           <tbody>
             {expenses
               .filter((expense) => expense[1].id === user.id)
               .map((expense) => (
-                <tr key={expense[4]}>
+                <tr key={expense[5].id}>
                   <td>{expense[3]}</td>
                   <td>
                     {expense[0].firstName} {expense[0].lastName}
@@ -124,18 +132,26 @@ export class GroupBalances extends React.Component {
                     {expense[1].firstName} {expense[1].lastName}
                   </td>
                   <td>{currency(expense[2]).format()}</td>
+                  <td>
+                    <button
+                      type="submit"
+                      onClick={() => this.settleThisPortion(expense[5])}
+                    >
+                      Settle
+                    </button>
+                  </td>
                 </tr>
               ))}
           </tbody>
         </table>
 
-        <h3>Other expenses: </h3>
+        <h3>Other group expenses: </h3>
         <table>
           <thead>
             <tr>
               <th>Expense</th>
               <th>Paid By</th>
-              <th>Ower</th>
+              <th>Owes Funds</th>
               <th>Amount</th>
             </tr>
           </thead>
@@ -145,7 +161,7 @@ export class GroupBalances extends React.Component {
                 (expense) => ![expense[0].id, expense[1].id].includes(user.id)
               )
               .map((expense) => (
-                <tr key={expense[4]}>
+                <tr key={expense[5].id}>
                   <td>{expense[3]}</td>
                   <td>
                     {expense[0].firstName} {expense[0].lastName}

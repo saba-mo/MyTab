@@ -282,23 +282,66 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
     const memberId = Number(req.body.memberId)
     const groupId = Number(req.params.groupId)
     const group = await Group.findByPk(groupId)
+    const groupMembers = await group.getUsers({
+      attributes: ['id', 'email', 'firstName', 'lastName'],
+    })
 
-    // find user object so later we can check if they have an existing balance
-    const thisUser = await User.findByPk(memberId, {include: {model: Group}})
-    // filter array of groups user is in so that we only have one array element and therefore know the index of this group
-    const thisGroupArray = thisUser.groups.filter(
-      (currentGroup) => currentGroup.user_group.group_Id === groupId
-    )
-    // if the member has a balance in that group (positive or negative), we should not allow the user to remove the member
-    // instead, we send back the list of all group members so the front end can check what to display
-    if (thisGroupArray[0].user_group.balance !== 0) {
-      const groupMembers = await group.getUsers({
-        attributes: ['id', 'email', 'firstName', 'lastName'],
-      })
-      res.json(groupMembers)
+    const findUnsettledItems = (arr) => {
+      const unsettledItemsArr = []
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].settled === false) {
+          unsettledItemsArr.push(arr[i])
+        }
+      }
+      return unsettledItemsArr
     }
-    // else move forward with removing user from group
-    else {
+
+    // FIRST, check if user paid for (is associcated to) any expenses in this group that still have outstanding items; if so, do not remove this user
+    const thisUser = await User.findByPk(memberId)
+    const userExpenses = await thisUser.getExpenses()
+    const userExpensesInThisGroup = userExpenses.filter(
+      (expense) => expense.groupId === groupId
+    )
+    let userExpensesUnsettledItems = []
+    for (let i = 0; i < userExpensesInThisGroup.length; i++) {
+      let expense = userExpensesInThisGroup[i]
+      expense.dataValues.items = await expense.getItems()
+      userExpensesUnsettledItems.push(
+        findUnsettledItems(expense.dataValues.items)
+      )
+    }
+    // SECOND, check if user's id is associated to any UNSETTLED items that belong to someone else's expense in this group; if so, do not remove this user
+    const groupExpenses = await Expense.findAll({
+      where: {groupId},
+      include: {model: User},
+    })
+    // filter out expenses associated to user, as those have already been checked
+    const othersGroupExpenses = groupExpenses.filter(
+      (expense) => expense.users[0].id !== memberId
+    )
+    let othersExpensesUnsettledItems = []
+    for (let i = 0; i < othersGroupExpenses.length; i++) {
+      let expense = othersGroupExpenses[i]
+      expense.dataValues.items = await expense.getItems()
+      othersExpensesUnsettledItems.push(
+        findUnsettledItems(expense.dataValues.items)
+      )
+    }
+    // filter out the items that are not associated to this user
+    const unsettledItemsUserOwes = []
+    for (let i = 0; i < othersExpensesUnsettledItems.length; i++) {
+      let itemsArr = othersExpensesUnsettledItems[i]
+      unsettledItemsUserOwes.push(
+        itemsArr.filter((item) => item.userId === memberId)
+      )
+    }
+
+    if (
+      userExpensesUnsettledItems.flat().length ||
+      unsettledItemsUserOwes.flat().length
+    ) {
+      res.json(groupMembers)
+    } else {
       await group.removeUser(memberId)
       res.sendStatus(204)
     }
@@ -307,23 +350,15 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
   }
 })
 
-// UPDATE one portion of an expense within a group
+// UPDATE one portion of an expense within a group by updating Item table column boolean to TRUE
 router.put(
   '/singleGroup/:groupId/expenses/:expenseId/:itemId',
   async (req, res, next) => {
     try {
-      console.log('req: ', req.body)
-      console.log('params ', req.params)
       const thisPortion = await Item.findByPk(req.params.itemId)
       const updatedPortion = await thisPortion.update({
         settled: req.body.itemToSettle.settled,
       })
-      // const thisExpense = await Expense.findByPk(req.params.expenseId)
-      // const updatedExpense = await thisExpense.update({
-      //   name: req.body.name,
-      //   totalCost: req.body.totalCost,
-      // })
-      // await updatedExpense.setUsers([req.body.paidBy])
       res.json(updatedPortion)
     } catch (err) {
       next(err)

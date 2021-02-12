@@ -32,8 +32,8 @@ export const _loadGroupExpenses = (groupId) => async (dispatch) => {
     )
     dispatch(getGroupExpenses(data))
   } catch (error) {
-    console.log(
-      "All the group's expenses should be here, but they are not because: ",
+    console.error(
+      "All the group's expenses should be here, but the thunk threw this error instead: ",
       error
     )
   }
@@ -47,8 +47,8 @@ export const _addGroupExpense = (groupId, expense) => async (dispatch) => {
     )
     dispatch(addGroupExpense(data))
   } catch (error) {
-    console.log(
-      "Your expense should have been added to the group, but it wasn't because: ",
+    console.error(
+      'Your expense should have been added to the group, but the thunk threw this error instead: ',
       error
     )
   }
@@ -61,8 +61,8 @@ export const _deleteGroupExpense = (groupId, expenseId) => async (dispatch) => {
     )
     dispatch(deleteGroupExpense(expenseId))
   } catch (error) {
-    console.log(
-      'Your group expense should have been deleted, but it was not because: ',
+    console.error(
+      'Your group expense should have been deleted, but the thunk threw this error instead: ',
       error
     )
   }
