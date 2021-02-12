@@ -17,12 +17,7 @@ export const _getSingleGroup = (groupId) => {
   return async (dispatch) => {
     try {
       const {data} = await axios.get(`/api/groups/singleGroup/${groupId}`)
-      if (data.title) {
-        dispatch(setSingleGroup(data))
-      } else {
-        // if we go with this, need to change 1 to user Id
-        window.location = `/groups/1`
-      }
+      dispatch(setSingleGroup(data))
     } catch (err) {
       console.error(
         "can't get this group because the thunk threw this error: ",

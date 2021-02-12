@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {_getSingleGroup, _updateGroup} from '../../store/groups/singleGroup'
+import {_getSingleGroup, _updateGroup} from '../../store'
 import GroupExpenses from '../expenses/GroupExpenses'
 import GroupBalances from '../expenses/GroupBalances'
 import UpdateGroupForm from './UpdateGroupForm'
@@ -40,19 +40,10 @@ export class SingleGroup extends React.Component {
 
   componentDidMount() {
     this.props.getSingleGroup(this.props.match.params.groupId)
-    // load group members so we can filter and see if logged in user is in this group
-    // log members array to make sure it's populated here
-
-    // then, change values to reflect if logged in user is in this group
-    // if (this.props.user.id !== Number(this.props.match.params.userId)) {
-    //   window.location = '/home'
-    // }
   }
 
   render() {
     const singleGroup = this.props.singleGroup || {}
-    console.log('tis group: ', singleGroup)
-    console.log('this user: ', this.props.user)
 
     if (!singleGroup) return <div>LOADING</div>
 
