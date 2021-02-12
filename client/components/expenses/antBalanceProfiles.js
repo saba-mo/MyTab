@@ -55,7 +55,7 @@ class BalanceDemo extends React.Component {
                   <Avatar src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" />
                 }
                 title={<a href="https://ant.design/index-cn">{item.name}</a>}
-                description="Progresser XTech"
+                description="$100.88"
               />
             </List.Item>
           )}
