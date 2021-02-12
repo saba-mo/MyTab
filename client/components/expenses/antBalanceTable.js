@@ -28,7 +28,7 @@ const data = [
   },
 ]
 
-class Demo extends React.Component {
+class AntBalanceTable extends React.Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
@@ -53,11 +53,11 @@ class Demo extends React.Component {
     })
   }
 
-  setAgeSort = () => {
+  setAmountSort = () => {
     this.setState({
       sortedInfo: {
         order: 'descend',
-        columnKey: 'age',
+        columnKey: 'amount',
       },
     })
   }
@@ -68,71 +68,58 @@ class Demo extends React.Component {
     filteredInfo = filteredInfo || {}
     const columns = [
       {
-        title: 'Expense',
-        dataIndex: 'name',
-        key: 'name',
-        filters: [
-          {text: 'Joe', value: 'Joe'},
-          {text: 'Jim', value: 'Jim'},
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
+        title: 'Owed to user',
+        dataIndex: 'owedToUser',
+        key: 'owedToUser',
         ellipsis: true,
       },
       {
-        title: 'Paid By',
-        dataIndex: 'address',
-        key: 'address',
-        filters: [
-          {text: 'London', value: 'London'},
-          {text: 'New York', value: 'New York'},
-        ],
-        filteredValue: filteredInfo.address || null,
-        onFilter: (value, record) => record.address.includes(value),
-        sorter: (a, b) => a.address.length - b.address.length,
-        sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
-        ellipsis: true,
-      },
-      {
-        title: 'Who Owes',
-        dataIndex: 'address',
-        key: 'address',
-        filters: [
-          {text: 'London', value: 'London'},
-          {text: 'New York', value: 'New York'},
-        ],
-        filteredValue: filteredInfo.address || null,
-        onFilter: (value, record) => record.address.includes(value),
-        sorter: (a, b) => a.address.length - b.address.length,
-        sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
+        title: 'Owing user',
+        dataIndex: 'owingUser',
+        key: 'owingUser',
+        sorter: (a, b) => a.owingUser - b.owingUser,
+        sortOrder: sortedInfo.columnKey === 'owingUser' && sortedInfo.order,
         ellipsis: true,
       },
       {
         title: 'Amount',
-        dataIndex: 'age',
-        key: 'age',
-        sorter: (a, b) => a.age - b.age,
-        sortOrder: sortedInfo.columnKey === 'age' && sortedInfo.order,
+        dataIndex: 'amount',
+        key: 'amount',
+        sorter: (a, b) => a - b,
+        sortOrder: sortedInfo.columnKey === 'amount' && sortedInfo.order,
         ellipsis: true,
+      },
+      {
+        title: 'Expense Name',
+        dataIndex: 'expenseName',
+        key: 'expenseName',
+        sorter: (a, b) => a.expenseName - b.expenseName,
+        sortOrder: sortedInfo.columnKey === 'expenseName' && sortedInfo.order,
+        ellipsis: true,
+      },
+      {
+        title: 'Settle',
+        key: 'item',
+        render: (record) => (
+          <button
+            type="submit"
+            onClick={() => {
+              this.props.settleThisPortion(record.item)
+            }}
+          >
+            Settle
+          </button>
+        ),
       },
     ]
     return (
-      <>
-        <Space style={{marginBottom: 16}}>
-          <Button onClick={this.setAgeSort}>Sort Amount</Button>
-          <Button onClick={this.clearFilters}>Clear filters</Button>
-          <Button onClick={this.clearAll}>Clear filters and sorters</Button>
-        </Space>
-        <Table
-          columns={columns}
-          dataSource={data}
-          onChange={this.handleChange}
-        />
-      </>
+      <Table
+        columns={columns}
+        dataSource={this.props.expenses}
+        onChange={this.handleChange}
+      />
     )
   }
 }
 
-export default Demo
+export default AntBalanceTable

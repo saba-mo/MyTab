@@ -1,7 +1,7 @@
 import React from 'react'
 import {Table, Button, Space} from 'antd'
 import {Drawer, List, Avatar, Divider, Col, Row} from 'antd'
-import Demo from './antBalanceTable'
+import AntBalanceTable from './antBalanceTable'
 
 const DescriptionItem = ({title, content}) => (
   <div className="site-description-item-profile-wrapper">
@@ -11,11 +11,12 @@ const DescriptionItem = ({title, content}) => (
 )
 
 class BalanceDemo extends React.Component {
-  state = {visible: false}
+  state = {visible: false, tableName: ''}
 
-  showDrawer = () => {
+  showDrawer = (tableName) => {
     this.setState({
       visible: true,
+      tableName: tableName,
     })
   }
 
@@ -26,18 +27,39 @@ class BalanceDemo extends React.Component {
   }
 
   render() {
+    let filteredExpenses = []
+    if (this.state.tableName === 'Owed to you') {
+      filteredExpenses = this.props.expenses.filter(
+        (expense) => expense.owedToUserId === this.props.user.id
+      )
+    } else if (this.state.tableName === 'What you owe') {
+      filteredExpenses = this.props.expenses.filter(
+        (expense) => expense.owingUserId === this.props.user.id
+      )
+    } else if (this.state.tableName === 'Friends owe each other') {
+      filteredExpenses = this.props.expenses.filter(
+        (expense) =>
+          ![expense.owingUserId, expense.owedToUserId].includes(
+            this.props.user.id
+          )
+      )
+    }
+
     return (
       <>
         <List
           dataSource={[
             {
               name: 'Owed to you',
+              amount: this.props.totalOwedToUser,
             },
             {
               name: 'What you owe',
+              amount: this.props.totalUserOwes,
             },
             {
-              name: 'Friends owe eachother',
+              name: 'Friends owe each other',
+              amount: '',
             },
           ]}
           bordered
@@ -45,7 +67,7 @@ class BalanceDemo extends React.Component {
             <List.Item
               key={item.id}
               actions={[
-                <a onClick={this.showDrawer} key={`a-${item.id}`}>
+                <a onClick={() => this.showDrawer(item.name)} key={item.id}>
                   View Details
                 </a>,
               ]}
@@ -54,8 +76,8 @@ class BalanceDemo extends React.Component {
                 avatar={
                   <Avatar src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" />
                 }
-                title={<a href="https://ant.design/index-cn">{item.name}</a>}
-                description="$100.88"
+                title={item.name}
+                description={item.amount}
               />
             </List.Item>
           )}
@@ -67,7 +89,10 @@ class BalanceDemo extends React.Component {
           onClose={this.onClose}
           visible={this.state.visible}
         >
-          <Demo />
+          <AntBalanceTable
+            expenses={filteredExpenses}
+            settleThisPortion={this.props.settleThisPortion}
+          />
         </Drawer>
       </>
     )
