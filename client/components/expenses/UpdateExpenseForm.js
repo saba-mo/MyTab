@@ -97,100 +97,109 @@ export class UpdateExpenseForm extends React.Component {
     }
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label htmlFor="name">Edit Name*:</label>
-        <input
-          type="text"
-          name="name"
-          value={this.state.name}
-          onChange={this.handleChange}
-          placeholder="Ex: Quarantine Brunch"
-        />
-        <label htmlFor="totalCost">Edit Cost*:</label>
-        <div>$</div>
-        <input
-          className="form-state"
-          type="number"
-          name="totalCost"
-          step="0.01"
-          min={0}
-          value={this.state.totalCost === 0 ? '' : this.state.totalCost}
-          onChange={this.handleChange}
-          placeholder="Ex: 100 or 9.39"
-        />
-        <label htmlFor="paidBy">Edit Paid By*</label>
-        <select
-          value={this.state.paidBy}
-          onChange={this.handleChange}
-          name="paidBy"
-        >
-          <option value="member">select</option>
-          {this.props.groupMembers.map((member) => (
-            <option key={`member-${member.id}`} value={member.id}>
-              {member.firstName} {member.lastName}
-            </option>
-          ))}
-        </select>
-        <h6 className="required">* Required field</h6>
-        {this.props.groupMembers.map((member) => (
-          <div className="container" key={member.id}>
-            <div>
-              {member.firstName} {member.lastName}
-            </div>
-            <div>
-              Amount Owed: $
-              <input
-                disabled={member.id === this.state.paidBy}
-                min={0}
-                type="number"
-                step="0.01"
-                value={
-                  this.state.owedByMember[member.id] === undefined
-                    ? ''
-                    : this.state.owedByMember[member.id] === 0
-                    ? ''
-                    : this.state.owedByMember[member.id]
-                }
-                placeholder={
-                  member.id === this.state.paidBy ? 'Paid by' : undefined
-                }
-                onChange={(event) =>
-                  this.handleAmountOwedChange(
-                    member.id,
-                    Number(event.target.value)
-                  )
-                }
-              />
-            </div>
+      <div className="expense-form-container">
+        <form onSubmit={this.handleSubmit}>
+          <label htmlFor="name">Edit Name:</label>
+          <input
+            className="expense-form"
+            type="text"
+            name="name"
+            value={this.state.name}
+            onChange={this.handleChange}
+            placeholder="Ex: Quarantine Brunch"
+            required
+          />
+          <label htmlFor="totalCost">Edit Cost:</label>
+          <input
+            className="form-state, expense-form"
+            type="number"
+            name="totalCost"
+            step="0.01"
+            min={0}
+            value={this.state.totalCost === 0 ? '' : this.state.totalCost}
+            onChange={this.handleChange}
+            placeholder="Ex: 100 or 9.39"
+            required
+          />
+          <label htmlFor="paidBy">Edit Paid By</label>
+          <select
+            className="expense-form"
+            value={this.state.paidBy}
+            onChange={this.handleChange}
+            name="paidBy"
+            required
+          >
+            <option value="member">select</option>
+            {this.props.groupMembers.map((member) => (
+              <option key={`member-${member.id}`} value={member.id}>
+                {member.firstName} {member.lastName}
+              </option>
+            ))}
+          </select>
+          <div className="expense-form">
+            {this.props.groupMembers.map((member) => (
+              <div className="container" key={member.id}>
+                <div>
+                  {member.firstName} {member.lastName} owes:
+                  <input
+                    disabled={member.id === this.state.paidBy}
+                    className="expense-form"
+                    min={0}
+                    type="number"
+                    step="0.01"
+                    value={
+                      this.state.owedByMember[member.id] === undefined
+                        ? ''
+                        : this.state.owedByMember[member.id] === 0
+                        ? ''
+                        : this.state.owedByMember[member.id]
+                    }
+                    placeholder={
+                      member.id === this.state.paidBy ? 'Paid by' : undefined
+                    }
+                    onChange={(event) =>
+                      this.handleAmountOwedChange(
+                        member.id,
+                        Number(event.target.value)
+                      )
+                    }
+                  />
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-        <div>
-          <div>Total Cost: {currency(this.state.totalCost).format()}</div>
-          <div>Total Owed: {currency(totalOwed).format()}</div>
-          {remainder - totalOwed &&
-          remainder - totalOwed != this.state.totalCost ? (
+          <div>
+            <div>Total Cost: {currency(this.state.totalCost).format()}</div>
+            <div>Total Owed: {currency(totalOwed).format()}</div>
+            {remainder - totalOwed &&
+            remainder - totalOwed != this.state.totalCost ? (
+              <div className="error">
+                {paidByName} share: {currency(remainder - totalOwed).format()}
+              </div>
+            ) : (
+              ''
+            )}
+          </div>
+
+          {totalOwed > this.state.totalCost && (
             <div className="error">
-              {paidByName} share: {currency(remainder - totalOwed).format()}
+              Total Cost cannot be greater than Total Owed
             </div>
-          ) : (
-            ''
           )}
-        </div>
-        <button
-          type="submit"
-          disabled={totalOwed === 0 || totalOwed > this.state.totalCost}
-        >
-          Update Expense
-        </button>
-        {totalOwed > this.state.totalCost && (
-          <div className="error">
-            Total Cost cannot be greater than Total Owed
+          {totalOwed === 0 && (
+            <div className="error">Total Owed must be greater than 0</div>
+          )}
+          <div>
+            <button
+              type="submit"
+              className="create-expense-button"
+              disabled={totalOwed === 0 || totalOwed > this.state.totalCost}
+            >
+              Update Expense
+            </button>
           </div>
-        )}
-        {totalOwed === 0 && (
-          <div className="error">Total Owed must be greater than 0</div>
-        )}
-      </form>
+        </form>
+      </div>
     )
   }
 }
