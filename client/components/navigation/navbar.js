@@ -28,7 +28,7 @@ class Navbar extends React.Component {
       <PageHeader
         className="site-page-header-responsive"
         title="MyTab"
-        subTitle="Track shared expenses worry free with MyTab"
+        subTitle="Track shared expenses worry free"
         footer={
           <Tabs defaultActiveKey="1" onChange={this.clickTab}>
             {this.props.isLoggedIn ? (

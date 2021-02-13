@@ -27,13 +27,13 @@ import {List, Card} from 'antd'
 // ];
 
 export class Groups extends React.Component {
-  // constructor() {
-  //   super()
-  //   this.state = {showForm: false}
+  constructor() {
+    super()
+    this.state = {showForm: false}
 
-  //   this.toggleShowForm = this.toggleShowForm.bind(this)
-  //   this.handleDeleteGroup = this.handleDeleteGroup.bind(this)
-  // }
+    this.toggleShowForm = this.toggleShowForm.bind(this)
+    this.handleDeleteGroup = this.handleDeleteGroup.bind(this)
+  }
 
   componentDidMount() {
     this.props.getGroups(this.props.match.params.userId)
@@ -43,20 +43,20 @@ export class Groups extends React.Component {
     }
   }
 
-  // toggleShowForm() {
-  //   this.setState({showForm: !this.state.showForm})
-  // }
+  toggleShowForm() {
+    this.setState({showForm: !this.state.showForm})
+  }
 
-  // handleDeleteGroup(groupId) {
-  //   if (
-  //     window.confirm(
-  //       'Are you sure? You will be deleting the group and expenses for all members.'
-  //     )
-  //   ) {
-  //     this.props.deleteGroup(groupId)
-  //     this.props.loadBalance(this.props.user.id)
-  //   }
-  // }
+  handleDeleteGroup(groupId) {
+    if (
+      window.confirm(
+        'Are you sure? You will be deleting the group and expenses for all members.'
+      )
+    ) {
+      this.props.deleteGroup(groupId)
+      this.props.loadBalance(this.props.user.id)
+    }
+  }
 
   // <Row className="justify-content-md-center ">
   // {this.props.spotify.songsRecommended.map(track => {
@@ -94,33 +94,53 @@ export class Groups extends React.Component {
 
   render() {
     console.log('this.props.groups', this.props.groups)
-    return (
-      <List
-        grid={{
-          gutter: 16,
-          xs: 1,
-          sm: 2,
-          md: 4,
-          lg: 4,
-          xl: 6,
-          xxl: 3,
-        }}
-        dataSource={this.props.groups}
-        renderItem={(group) => (
-          <List.Item>
-            <Card
-              title={group.title}
-              extra={<Link to={`/groups/singleGroup/${group.id}`}>Open</Link>}
-            >
-              {[
-                <a key="list-loadmore-edit">edit</a>,
-                <a key="list-loadmore-more">remove</a>,
-              ]}
-            </Card>
-          </List.Item>
-        )}
-      />
-    )
+    if (this.props.groups.length > 0) {
+      return (
+        <div>
+          <List
+            grid={{
+              gutter: 16,
+              xs: 1,
+              sm: 2,
+              md: 4,
+              lg: 4,
+              xl: 6,
+              xxl: 3,
+            }}
+            dataSource={this.props.groups}
+            renderItem={(group) => (
+              <List.Item>
+                <Card
+                  title={group.title}
+                  extra={
+                    <Link to={`/groups/singleGroup/${group.id}`}>Open</Link>
+                  }
+                >
+                  {[
+                    <a
+                      key="list-loadmore-more"
+                      onClick={() => this.handleDeleteGroup(group.id)}
+                    >
+                      remove
+                    </a>,
+                  ]}
+                </Card>
+              </List.Item>
+            )}
+          />
+          <CreateGroupForm toggleForm={this.toggleShowForm} />
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <TotalBalance />
+          <h4>See the groups you belong to, and create a new one.</h4>
+          <p>No groups to show, want to add one?</p>
+          <CreateGroupForm toggleForm={this.toggleShowForm} />
+        </div>
+      )
+    }
   }
 }
 // if (this.props.groups.length > 0) {
