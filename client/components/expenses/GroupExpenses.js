@@ -1,7 +1,11 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {_loadGroupExpenses, _loadGroupMembers} from '../../store'
+import {
+  _loadGroupExpenses,
+  _loadGroupMembers,
+  _deleteGroupExpense,
+} from '../../store'
 import {CreateGroupExpenseForm} from '../index'
 import currency from 'currency.js'
 import {List, Avatar} from 'antd'
@@ -13,6 +17,7 @@ export class GroupExpenses extends React.Component {
 
     this.toggleShowForm = this.toggleShowForm.bind(this)
     this.checkMembersList = this.checkMembersList.bind(this)
+    this.deleteExpense = this.deleteExpense.bind(this)
   }
 
   componentDidMount() {
@@ -30,6 +35,17 @@ export class GroupExpenses extends React.Component {
 
   toggleShowForm() {
     this.setState({showForm: !this.state.showForm})
+  }
+
+  deleteExpense(expenseId) {
+    if (
+      window.confirm(
+        'Are you sure you want to delete this expense? This will remove this expense for all members involved.'
+      )
+    ) {
+      const {groupId} = this.props
+      this.props.deleteGroupExpense(groupId, expenseId)
+    }
   }
 
   noExpenses = (expenseList) => {
@@ -72,7 +88,10 @@ export class GroupExpenses extends React.Component {
             renderItem={(item) => (
               <List.Item
                 actions={[
-                  <a key="group-expense" onClick={() => console.log('delete')}>
+                  <a
+                    key="group-expense"
+                    onClick={() => this.deleteExpense(item.id)}
+                  >
                     Delete expense
                   </a>,
                   <a key="group-expense" onClick={() => console.log('edit')}>
@@ -80,28 +99,26 @@ export class GroupExpenses extends React.Component {
                   </a>,
                 ]}
               >
-                <List.Item.Meta avatar={<Avatar src="" />} title={item.name} />
+                <List.Item.Meta
+                  avatar={
+                    <Avatar src="https://i.pinimg.com/564x/f5/95/b8/f595b89bc0216e93537cf81ff799cbef.jpg" />
+                  }
+                  title={
+                    <Link
+                      to={`/groups/singleGroup/${item.groupId}/expenses/${item.id}`}
+                    >
+                      {item.name}
+                    </Link>
+                  }
+                />
+                <div>
+                  {currency(item.totalCost).format()} paid by:{' '}
+                  {item.users[0].firstName} {item.users[0].lastName}
+                </div>
               </List.Item>
             )}
           />
-
-          <ul>
-            {groupExpenses.map((expense) => {
-              return (
-                <div key={`expense-${expense.id}`}>
-                  <Link
-                    to={`/groups/singleGroup/${expense.groupId}/expenses/${expense.id}`}
-                  >
-                    {expense.name}
-                  </Link>
-                  Paid by {expense.users[0].firstName}{' '}
-                  {expense.users[0].lastName}{' '}
-                  {currency(expense.totalCost).format()}
-                </div>
-              )
-            })}
-          </ul>
-          <h3>Total: {currency(groupTotal).format()}</h3>
+          <h3>Total group expenses: {currency(groupTotal).format()}</h3>
         </div>
       </div>
     )
@@ -119,6 +136,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   loadGroupExpenses: (groupId) => dispatch(_loadGroupExpenses(groupId)),
   loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
+  deleteGroupExpense: (groupId, expenseId) =>
+    dispatch(_deleteGroupExpense(groupId, expenseId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupExpenses)
