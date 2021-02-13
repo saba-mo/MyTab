@@ -51,20 +51,28 @@ export class GroupBalances extends React.Component {
             totalOwedToUser += amount
           }
         }
-        expenses.push([
-          owedToUser,
-          owingUser,
-          amount,
-          expense.name,
-          expense.id,
+        expenses.push({
+          owedToUserId: owedToUser.id,
+          owedToUser: owedToUser.firstName,
+          owingUserId: owingUser.id,
+          owingUser: owingUser.firstName,
+          amount: currency(amount).format(),
+          expenseName: expense.name,
+          expenseId: expense.id,
           item,
-        ])
+        })
       })
     })
 
     return (
       <div>
-        <BalanceDemo />
+        <BalanceDemo
+          expenses={expenses}
+          totalOwedToUser={currency(totalOwedToUser).format()}
+          totalUserOwes={currency(totalUserOwes).format()}
+          settleThisPortion={this.settleThisPortion}
+          user={user}
+        />
         {/* <h3>
           Total Owed to {user.firstName} {user.lastName}:{' '}
           {currency(totalOwedToUser).format()}

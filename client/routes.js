@@ -16,8 +16,8 @@ import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
+  TeamOutlined,
+  SmileOutlined,
 } from '@ant-design/icons'
 import Groups from './components/group/Groups'
 import SingleGroups from './components/group/SingleGroups'
@@ -75,11 +75,11 @@ class Routes extends Component {
                 </Menu.Item>
                 <Menu.Item
                   key={`/groups/${this.props.user.id}`}
-                  icon={<VideoCameraOutlined />}
+                  icon={<TeamOutlined />}
                 >
                   Groups
                 </Menu.Item>
-                <Menu.Item key="/friends" icon={<UploadOutlined />}>
+                <Menu.Item key="/friends" icon={<SmileOutlined />}>
                   Friends
                 </Menu.Item>
               </Menu>
