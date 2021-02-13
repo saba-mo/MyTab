@@ -1,16 +1,16 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {_loadFriends, _deleteFriend} from '../../store'
 import {AddFriendForm, TotalBalance} from '../../components'
-import {List, Avatar, Skeleton} from 'antd'
 
 export class AllFriends extends React.Component {
   constructor(props) {
     super(props)
     this.state = {showForm: false}
 
-    this.toggleShowForm = this.toggleShowForm.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.toggleShowForm = this.toggleShowForm.bind(this)
   }
 
   componentDidMount() {
@@ -54,35 +54,25 @@ export class AllFriends extends React.Component {
             />
           )}
         </div>
+        {this.noFriends(friendList)}
         <div id="full-friend-list">
-          {this.noFriends(friendList)}
-          <List
-            className="friends-list"
-            itemLayout="horizontal"
-            dataSource={friendList}
-            renderItem={(item) => (
-              <List.Item
-                actions={[
-                  <a
-                    key="friend"
-                    onClick={() => this.handleDelete(user, item.id)}
+          <ul>
+            {friendList.map((friendItem) => {
+              return (
+                <div key={`friend-${friendItem.id}`}>
+                  <Link to={`/friend/${friendItem.id}`}>
+                    {friendItem.firstName} {friendItem.lastName}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => this.handleDelete(user, friendItem.id)}
                   >
-                    Remove friend
-                  </a>,
-                ]}
-              >
-                <Skeleton avatar title={false} loading={item.loading} active>
-                  <List.Item.Meta
-                    avatar={
-                      <Avatar src="https://i.pinimg.com/564x/b0/5d/22/b05d222fdf7ff4d4fbc2902b536cc9b2.jpg" />
-                    }
-                    title={`${item.firstName} ${item.lastName}`}
-                  />
-                  <div> {item.email}</div>
-                </Skeleton>
-              </List.Item>
-            )}
-          />
+                    Remove
+                  </button>
+                </div>
+              )
+            })}
+          </ul>
         </div>
       </div>
     )

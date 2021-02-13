@@ -28,16 +28,19 @@ class AntBalanceTable extends React.Component {
       {
         title: 'Settle',
         key: 'item',
-        render: (record) => (
-          <button
-            type="submit"
-            onClick={() => {
-              this.props.settleThisPortion(record.item)
-            }}
-          >
-            Settle
-          </button>
-        ),
+        render: (record) =>
+          record.item.settled === false ? (
+            <button
+              type="submit"
+              onClick={() => {
+                this.props.settleThisPortion(record.item)
+              }}
+            >
+              Settle
+            </button>
+          ) : (
+            <div>settled</div>
+          ),
       },
     ]
     return (

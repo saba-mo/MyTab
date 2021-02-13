@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {_getSingleGroup, _updateGroup} from '../../store/groups/singleGroup'
+import {_getSingleGroup, _updateGroup} from '../../store'
 import GroupExpenses from '../expenses/GroupExpenses'
 import GroupBalances from '../expenses/GroupBalances'
 import UpdateGroupForm from './UpdateGroupForm'
