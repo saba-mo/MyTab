@@ -12,7 +12,13 @@ const AuthForm = (props) => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <Layout.Content>
+    <Layout.Content
+      className="site-layout-background"
+      style={{
+        margin: '24px 16px',
+        minHeight: 600,
+      }}
+    >
       <Row>
         <Col span={1} />
         <Col span={7}>
@@ -76,33 +82,33 @@ const AuthForm = (props) => {
             >
               <Input.Password />
             </Form.Item>
-
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                {displayName}
-              </Button>
-            </Form.Item>
-            {error && error.response && (
-              <div>
-                {' '}
-                <Alert message={error.response.data} type="error" />{' '}
-              </div>
-            )}
+            <Row>
+              <Form.Item span={5}>
+                <Button type="primary" htmlType="submit">
+                  {displayName}
+                </Button>
+              </Form.Item>
+              {error && error.response && (
+                <div>
+                  {' '}
+                  <Alert message={error.response.data} type="error" />{' '}
+                </div>
+              )}
+              <Col span={1} />
+              <a href="/auth/amazon" id="LoginWithAmazon">
+                <img
+                  border="0"
+                  alt="Login with Amazon"
+                  src="https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA_gold_156x32.png"
+                  width="156"
+                  height="32"
+                />
+              </a>
+            </Row>
           </Form>
-          <div className="container">
-            <a href="/auth/amazon" id="LoginWithAmazon">
-              <img
-                border="0"
-                alt="Login with Amazon"
-                src="https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA_gold_156x32.png"
-                width="156"
-                height="32"
-              />
-            </a>
-          </div>
         </Col>
         <Col span={1} />
-        <Col span={7}>
+        <Col span={12}>
           <img width="100%" src="images/loginGif.gif" />
         </Col>
         <Col span={8} />
