@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_createGroup} from '../../store/groups/groups'
+import {_createGroup} from '../../store/'
 
 export class CreateGroupForm extends React.Component {
   constructor() {

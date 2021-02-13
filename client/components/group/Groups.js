@@ -5,27 +5,6 @@ import {Link} from 'react-router-dom'
 import {TotalBalance, CreateGroupForm} from '../index'
 import {List, Card} from 'antd'
 
-// const data = [
-//   {
-//     title: 'Title 1',
-//   },
-//   {
-//     title: 'Title 2',
-//   },
-//   {
-//     title: 'Title 3',
-//   },
-//   {
-//     title: 'Title 4',
-//   },
-//   {
-//     title: 'Title 5',
-//   },
-//   {
-//     title: 'Title 6',
-//   },
-// ];
-
 export class Groups extends React.Component {
   constructor() {
     super()
@@ -58,40 +37,6 @@ export class Groups extends React.Component {
     }
   }
 
-  // <Row className="justify-content-md-center ">
-  // {this.props.spotify.songsRecommended.map(track => {
-  //   return (
-  //     <Col
-  //       xs="auto"
-  //       sm="auto"
-  //       md="auto"
-  //       lg="auto"
-  //       xl="auto"
-  //       key={track.played_at}
-  //       style={{padding: '15px'}}
-  //     >
-  //       <Card style={{width: '25rem'}}>
-  //         <Card.Header className="titleOfTrack">
-  //           {track.album.artists[0].name}
-  //         </Card.Header>
-  // <Row className="justify-content-md-center ">
-  // {this.props.spotify.recentlyPlayed.items.map(item => {
-  //   const date = new Date(item.played_at).toLocaleString('en-US')
-
-  //   return (
-  //     <Col
-  //       xs="auto"
-  //       sm="auto"
-  //       md="auto"
-  //       lg="auto"
-  //       xl="auto"
-  //       key={item.played_at}
-  //       style={{padding: '15px'}}
-  //     >
-  //       <Card style={{width: '25rem'}}>
-  //         <Card.Header>{item.track.artists[0].name}</Card.Header>
-  //         <Card.Img
-
   render() {
     if (this.props.groups.length > 0) {
       return (
@@ -120,7 +65,7 @@ export class Groups extends React.Component {
                       key="list-loadmore-more"
                       onClick={() => this.handleDeleteGroup(group.id)}
                     >
-                      remove
+                      Delete
                     </a>,
                   ]}
                 </Card>
@@ -142,55 +87,61 @@ export class Groups extends React.Component {
     }
   }
 }
-// if (this.props.groups.length > 0) {
-//   return (
-//     <div>
-//       <TotalBalance />
-//       <h4>See the groups you belong to, and create a new one.</h4>
-//       <div className="editGroupPencil">
-//         {this.state.showForm ? (
-//           <CreateGroupForm toggleForm={this.toggleShowForm} />
-//         ) : (
-//           <img
-//             className="groupImg"
-//             src="/images/plus.png"
-//             height="64px"
-//             width="64px"
-//             title="Add a group"
-//             onClick={this.toggleShowForm}
-//           />
-//         )}
-//       </div>
-//       {this.props.groups.map((group) => {
-//         return (
-//           <div key={group.id}>
-//             <Link to={`/groups/singleGroup/${group.id}`}>
-//               <div>Group Name: {group.title}</div>
-//             </Link>
-//             <button
-//               type="button"
-//               onClick={() => this.handleDeleteGroup(group.id)}
-//             >
-//               X
-//             </button>
-//             {/* <img src={group.imageUrl} alt="Group Image" /> */}
-//             {/* <Link to={`/groups/${group.id}`}>View Detail</Link> */}
-//             {/* <button type="button" onClick={() => this.props.deleteGroup(group)}>X</button> */}
-//           </div>
-//         )
-//       })}
-//     </div>
-//   )
-// } else {
-//   return (
-//     <div>
-//       <TotalBalance />
-//       <h4>See the groups you belong to, and create a new one.</h4>
-//       <p>No groups to show, want to add one?</p>
-//       <CreateGroupForm toggleForm={this.toggleShowForm} />
-//     </div>
-//   )
-// }
+
+/*
+*
+Code below is code prior to adding Ant Design
+*
+if (this.props.groups.length > 0) {
+  return (
+    <div>
+      <TotalBalance />
+      <h4>See the groups you belong to, and create a new one.</h4>
+      <div className="editGroupPencil">
+        {this.state.showForm ? (
+          <CreateGroupForm toggleForm={this.toggleShowForm} />
+        ) : (
+          <img
+            className="groupImg"
+            src="/images/plus.png"
+            height="64px"
+            width="64px"
+            title="Add a group"
+            onClick={this.toggleShowForm}
+          />
+        )}
+      </div>
+      {this.props.groups.map((group) => {
+        return (
+          <div key={group.id}>
+            <Link to={`/groups/singleGroup/${group.id}`}>
+              <div>Group Name: {group.title}</div>
+            </Link>
+            <button
+              type="button"
+              onClick={() => this.handleDeleteGroup(group.id)}
+            >
+              X
+            </button>
+            <img src={group.imageUrl} alt="Group Image" />
+            <Link to={`/groups/${group.id}`}>View Detail</Link>
+            <button type="button" onClick={() => this.props.deleteGroup(group)}>X</button>
+          </div>
+        )
+      })}
+    </div>
+  )
+} else {
+  return (
+    <div>
+      <TotalBalance />
+      <h4>See the groups you belong to, and create a new one.</h4>
+      <p>No groups to show, want to add one?</p>
+      <CreateGroupForm toggleForm={this.toggleShowForm} />
+    </div>
+  )
+}
+*/
 
 const mapState = (state) => {
   return {

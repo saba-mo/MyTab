@@ -30,6 +30,7 @@ export const _getGroups = (userId) => async (dispatch) => {
 
 export const _createGroup = (newGroup) => async (dispatch) => {
   try {
+    // future addition: first create a check for a group existing, that this user is a part of, with the same name
     const {data} = await axios.post('/api/groups', newGroup)
     dispatch(createGroup(data))
   } catch (err) {
