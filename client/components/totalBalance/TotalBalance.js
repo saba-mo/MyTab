@@ -40,7 +40,7 @@ export class TotalBalance extends React.Component {
             <Col span={12}>
               <Card>
                 <Statistic
-                  title="You are owed"
+                  title="You lent"
                   value={currency(balanceBreakdown[1]).format()}
                   precision={2}
                   valueStyle={{color: 'blue'}}
@@ -53,7 +53,7 @@ export class TotalBalance extends React.Component {
             <Col span={12}>
               <Card>
                 <Statistic
-                  title="You owe"
+                  title="You borrowed"
                   value={currency(balanceBreakdown[2]).format()}
                   precision={2}
                   valueStyle={{color: 'orange'}}
@@ -83,7 +83,7 @@ export class TotalBalance extends React.Component {
             <Col span={12}>
               <Card>
                 <Statistic
-                  title="You are owed"
+                  title="You lent"
                   value={currency(balanceBreakdown[1]).format()}
                   precision={2}
                   valueStyle={{color: 'blue'}}
@@ -96,7 +96,7 @@ export class TotalBalance extends React.Component {
             <Col span={12}>
               <Card>
                 <Statistic
-                  title="You owe"
+                  title="You borrowed"
                   value={currency(balanceBreakdown[2]).format()}
                   precision={2}
                   valueStyle={{color: 'orange'}}
