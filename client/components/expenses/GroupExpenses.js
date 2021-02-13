@@ -8,7 +8,7 @@ import {
 } from '../../store'
 import {CreateGroupExpenseForm} from '../index'
 import currency from 'currency.js'
-import {List, Avatar} from 'antd'
+import {List, Avatar, Button} from 'antd'
 
 export class GroupExpenses extends React.Component {
   constructor() {
@@ -62,7 +62,7 @@ export class GroupExpenses extends React.Component {
     )
 
     return (
-      <div>
+      <div className="toggle-button-container">
         <div className="editGroupPencil">
           {this.state.showForm ? (
             <CreateGroupExpenseForm
@@ -70,14 +70,14 @@ export class GroupExpenses extends React.Component {
               groupId={this.props.groupId}
             />
           ) : (
-            <img
-              className="groupImg"
-              src="/images/plus.png"
-              height="64px"
-              width="64px"
-              title="Create an expense"
+            <Button
+              className="toggle-button"
+              type="primary"
               onClick={this.checkMembersList}
-            />
+              size="small"
+            >
+              + Add New Expense
+            </Button>
           )}
         </div>
         <div id="group-expense-list">

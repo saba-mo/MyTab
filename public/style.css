@@ -209,16 +209,16 @@ input:focus {
 }
 
 .tab_buttons_div {
-  background-color: #61a3ee;
+  background-color: #1890ff;
   text-align: center;
 }
 
 a.grp_tab_btns:hover {
-  color: #0400ff;
+  color: white;
 }
 
 .grp_tab_btns.selectedTab {
-  color: #0400ff;
+  color: white;
 }
 
 .single-expense-navbar {
@@ -229,6 +229,14 @@ a.grp_tab_btns:hover {
 
 .required {
   text-align: right;
+}
+
+.toggle-button {
+  float: right;
+}
+
+#group-expense-list {
+  padding-top: 40px;
 }
 
 footer {

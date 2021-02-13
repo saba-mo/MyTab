@@ -67,7 +67,7 @@ export class SingleGroup extends React.Component {
               )}
             </div>
             <div>
-              <div className="tab_buttons_div">
+              <h5 className="tab_buttons_div">
                 <a
                   className={`grp_tab_btns ${
                     this.state.tabName === 'expenses' ? 'selectedTab' : ''
@@ -75,7 +75,7 @@ export class SingleGroup extends React.Component {
                   onClick={this.tabChange.bind(this, 'expenses')}
                 >
                   {' '}
-                  Expenses |{' '}
+                  Expenses &emsp;{' '}
                 </a>
                 <a
                   className={`grp_tab_btns ${
@@ -84,7 +84,7 @@ export class SingleGroup extends React.Component {
                   onClick={this.tabChange.bind(this, 'members')}
                 >
                   {' '}
-                  Members |{' '}
+                  Members &emsp;{' '}
                 </a>
                 <a
                   className={`grp_tab_btns ${
@@ -95,7 +95,7 @@ export class SingleGroup extends React.Component {
                   {' '}
                   Balances{' '}
                 </a>
-              </div>
+              </h5>
               {this.renderTab()}
             </div>
           </div>
