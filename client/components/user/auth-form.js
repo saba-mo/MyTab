@@ -137,7 +137,6 @@ const mapSignup = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     handleSubmit(formData) {
-      console.log(formData)
       const {formName, email, password} = formData
       if (!email || !password) {
         alert('A required field is missing.')
@@ -151,7 +150,6 @@ const mapDispatch = (dispatch) => {
         }
         dispatch(authSignUp(firstName, lastName, email, password, formName))
       } else {
-        console.log(email, password, formName)
         dispatch(auth(email, password, formName))
       }
     },

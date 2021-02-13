@@ -15,7 +15,6 @@ class Navbar extends React.Component {
   }
 
   clickTab(href) {
-    console.log(href)
     if (href === '#') {
       this.props.handleClick()
     } else {
