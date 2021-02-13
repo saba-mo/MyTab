@@ -45,7 +45,7 @@ export class SingleGroup extends React.Component {
   render() {
     const singleGroup = this.props.singleGroup || {}
 
-    if (!singleGroup) return <div>Unable to complete request</div>
+    if (!singleGroup) return <div>LOADING</div>
 
     return (
       <div>
