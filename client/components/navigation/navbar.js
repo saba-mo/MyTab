@@ -15,7 +15,6 @@ class Navbar extends React.Component {
   }
 
   clickTab(href) {
-    console.log(href)
     if (href === '#') {
       this.props.handleClick()
     } else {
@@ -33,7 +32,6 @@ class Navbar extends React.Component {
           <Tabs defaultActiveKey="1" onChange={this.clickTab}>
             {this.props.isLoggedIn ? (
               <>
-                <TabPane tab="Home" key="/home" />
                 <TabPane tab="Logout" key="#" />
               </>
             ) : (
