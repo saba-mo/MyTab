@@ -133,6 +133,7 @@ export class CreateGroupExpenseForm extends React.Component {
         {...layout}
         ref={this.formRef}
         name="control-ref"
+        colon={false}
         // onFinish={this.onFinish}
         onFinish={this.handleSubmit}
       >
@@ -148,7 +149,9 @@ export class CreateGroupExpenseForm extends React.Component {
           <Input
             value={this.state.name}
             type="text"
-            onChange={this.handleChange}
+            onValuesChange={this.handleChange}
+            // onChange={this.handleChange}
+            // onValuesChange={(event) => this.handleChange(event.target.value)}
             placeholder="Ex: Quarantine Brunch"
           />
         </Form.Item>
@@ -156,7 +159,7 @@ export class CreateGroupExpenseForm extends React.Component {
         <Form.Item
           // where does className='forme-state' go?
           name="totalCost"
-          label="Cost"
+          label="Cost $"
           rules={[
             {
               required: true,
@@ -197,7 +200,7 @@ export class CreateGroupExpenseForm extends React.Component {
           <div className="container" key={member.id}>
             <Form.Item
               name="owedBy"
-              label={`${member.firstName} ${member.lastName} owes`}
+              label={`${member.firstName} ${member.lastName} owes $`}
             >
               <Input
                 // is value doing what it should?
