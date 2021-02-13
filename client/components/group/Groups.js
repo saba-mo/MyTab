@@ -93,7 +93,6 @@ export class Groups extends React.Component {
   //         <Card.Img
 
   render() {
-    console.log('this.props.groups', this.props.groups)
     if (this.props.groups.length > 0) {
       return (
         <div>
