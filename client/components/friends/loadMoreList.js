@@ -97,7 +97,7 @@ class LoadMoreList extends React.Component {
             <Skeleton avatar title={false} loading={item.loading} active>
               <List.Item.Meta
                 avatar={
-                  <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                  <Avatar src="https://i.pinimg.com/564x/b0/5d/22/b05d222fdf7ff4d4fbc2902b536cc9b2.jpg" />
                 }
                 title={<a href="https://ant.design">{item.name.last}</a>}
                 description="Ant Design, a design language for background applications, is refined by Ant UED Team"

@@ -15,7 +15,11 @@ export class Groups extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getGroups(this.props.user.id)
+    this.props.getGroups(this.props.match.params.userId)
+    // check if user is trying to access someone else's groups list
+    if (this.props.user.id !== Number(this.props.match.params.userId)) {
+      window.location = '/home'
+    }
   }
 
   toggleShowForm() {
