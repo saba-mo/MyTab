@@ -211,6 +211,9 @@ input:focus {
 .tab_buttons_div {
   background-color: #1890ff;
   text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 50px;
 }
 
 a.grp_tab_btns:hover {
@@ -231,12 +234,19 @@ a.grp_tab_btns:hover {
   text-align: right;
 }
 
+.edit-button {
+  float: right;
+  cursor: pointer;
+  background-color: #1890ff;
+  color: white;
+}
+
 .toggle-button {
   float: right;
 }
 
 #group-expense-list {
-  padding-top: 40px;
+  padding-top: 30px;
 }
 
 footer {

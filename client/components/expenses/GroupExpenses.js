@@ -63,23 +63,6 @@ export class GroupExpenses extends React.Component {
 
     return (
       <div className="toggle-button-container">
-        <div className="editGroupPencil">
-          {this.state.showForm ? (
-            <CreateGroupExpenseForm
-              toggleForm={this.toggleShowForm}
-              groupId={this.props.groupId}
-            />
-          ) : (
-            <Button
-              className="toggle-button"
-              type="primary"
-              onClick={this.checkMembersList}
-              size="small"
-            >
-              + Add New Expense
-            </Button>
-          )}
-        </div>
         <div id="group-expense-list">
           {this.noExpenses(groupExpenses)}
           <List
@@ -95,9 +78,9 @@ export class GroupExpenses extends React.Component {
                   >
                     Delete expense
                   </a>,
-                  <a key="group-expense" onClick={() => console.log('edit')}>
-                    Edit expense
-                  </a>,
+                  // <a key="group-expense" onClick={() => console.log('edit')}>
+                  //   Edit expense
+                  // </a>,
                 ]}
               >
                 <List.Item.Meta
@@ -120,6 +103,23 @@ export class GroupExpenses extends React.Component {
             )}
           />
           <h3>Total group expenses: {currency(groupTotal).format()}</h3>
+        </div>
+        <div className="editGroupPencil">
+          {this.state.showForm ? (
+            <CreateGroupExpenseForm
+              toggleForm={this.toggleShowForm}
+              groupId={this.props.groupId}
+            />
+          ) : (
+            <Button
+              className="toggle-button"
+              type="primary"
+              onClick={this.checkMembersList}
+              size="small"
+            >
+              + Add Expense
+            </Button>
+          )}
         </div>
       </div>
     )

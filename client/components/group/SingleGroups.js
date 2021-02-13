@@ -1,11 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {_getSingleGroup, _updateGroup} from '../../store'
 import GroupExpenses from '../expenses/GroupExpenses'
 import GroupBalances from '../expenses/GroupBalances'
 import UpdateGroupForm from './UpdateGroupForm'
 import {GroupMembers} from '../../components'
+import {EditOutlined} from '@ant-design/icons'
+import {Button} from 'antd'
 
 export class SingleGroup extends React.Component {
   constructor() {
@@ -56,14 +57,24 @@ export class SingleGroup extends React.Component {
               {this.state.showForm ? (
                 <UpdateGroupForm toggleForm={this.toggleShowForm} />
               ) : (
-                <img
-                  className="groupImg"
-                  src="/images/pencil.png"
-                  title="Update group name"
-                  // height="400px"
-                  // width="407.406px"
+                // <img
+                //   className="edit-group"
+                //   src="/images/pencil.png"
+                //   title="Update group name"
+                //   height="30px"
+                //   width="33px"
+                //   onClick={this.toggleShowForm}
+                // />
+                <Button
+                  className="edit-button"
+                  icon={<EditOutlined />}
                   onClick={this.toggleShowForm}
-                />
+                  size="small"
+                >
+                  Edit Name
+                </Button>
+
+                // <EditOutlined onClick={this.toggleShowForm} />
               )}
             </div>
             <div>

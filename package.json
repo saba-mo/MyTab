@@ -41,6 +41,7 @@
   "author": "Fullstack Academy of Code",
   "license": "MIT",
   "dependencies": {
+    "@ant-design/icons": "^4.5.0",
     "antd": "^4.12.2",
     "axios": "^0.21.1",
     "compression": "^1.7.3",
