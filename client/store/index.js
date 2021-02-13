@@ -12,9 +12,11 @@ import singleGroup from './groups/singleGroup'
 import groupMembers from './groups/groupMembers'
 import balanceBreakdown from './balance/balanceBreakdown'
 import singlePortionReducer from './itemsPortions/itemPortion'
+import allUsers from './user/allUsers'
 
 const reducer = combineReducers({
   user: user,
+  allUsers: allUsers,
   groups: groups,
   singleGroup: singleGroup,
   friends: friends,
@@ -42,3 +44,4 @@ export * from './groups/singleGroup'
 export * from './groups/groupMembers'
 export * from './balance/balanceBreakdown'
 export * from './itemsPortions/itemPortion'
+export * from './user/allUsers'

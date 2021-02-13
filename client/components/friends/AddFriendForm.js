@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_addFriend} from '../../store'
+import {_addFriend, _loadFriends, _loadAllUsers} from '../../store'
 
 class AddFriendForm extends React.Component {
   constructor() {
@@ -8,6 +8,11 @@ class AddFriendForm extends React.Component {
     this.state = {email: ''}
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  componentDidMount() {
+    this.props.loadFriends(this.props.user.id)
+    this.props.loadAllUsers()
   }
 
   handleChange(event) {
@@ -18,8 +23,23 @@ class AddFriendForm extends React.Component {
     event.preventDefault()
     this.props.toggleForm()
     try {
-      this.props.addFriend(this.props.user.id, this.state.email)
-      this.setState({email: ''})
+      const checkIfFriends = this.props.friends.filter(
+        (friend) => friend.email === this.state.email
+      )
+      const checkIfUser = this.props.allUsers.filter(
+        (user) => user.email === this.state.email
+      )
+
+      if (this.props.user.email === this.state.email) {
+        alert('You cannot add yourself.')
+      } else if (checkIfFriends.length) {
+        alert('You are already friends.')
+      } else if (!checkIfUser.length) {
+        alert('Ask your friend to make a MyTab account so you can add them!')
+      } else {
+        this.props.addFriend(this.props.user.id, this.state.email)
+        this.setState({email: ''})
+      }
     } catch (error) {
       console.error(
         'Hmm, having a hard time adding this friend, here are more details: ',
@@ -58,11 +78,15 @@ class AddFriendForm extends React.Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    friends: state.friends,
+    allUsers: state.allUsers,
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   addFriend: (userId, email) => dispatch(_addFriend(userId, email)),
+  loadFriends: (userId) => dispatch(_loadFriends(userId)),
+  loadAllUsers: () => dispatch(_loadAllUsers()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddFriendForm)
