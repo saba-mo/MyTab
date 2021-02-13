@@ -1,10 +1,10 @@
 /*!
- * 
+ *
  * antd v4.12.2
- * 
+ *
  * Copyright 2015-present, Alipay, Inc.
  * All rights reserved.
- *       
+ *
  */
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
@@ -56,6 +56,15 @@ html {
 @-ms-viewport {
   width: device-width;
 }
+
+.positiveBalance {
+  color: green;
+}
+
+.negativeBalance {
+  color: red;
+}
+
 body {
   margin: 0;
   color: rgba(0, 0, 0, 0.85);

@@ -1,10 +1,11 @@
 const router = require('express').Router()
 const {User, Item} = require('../db/models')
 module.exports = router
+const {isIdentity} = require('../express-gate-auth')
 const currency = require('currency.js')
 
 // GET the logged in user's total balance across all groups
-router.get('/:userId', async (req, res, next) => {
+router.get('/:userId', isIdentity, async (req, res, next) => {
   try {
     //   find the user
     const user = await User.findByPk(req.params.userId)

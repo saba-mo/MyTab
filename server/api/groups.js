@@ -1,9 +1,10 @@
 const router = require('express').Router()
 const currency = require('currency.js')
 const {Group, User, Expense, Item} = require('../db/models')
+const {isInGroup, isIdentity} = require('../express-gate-auth')
 
 //GET all groups
-router.get('/:userId', async (req, res, next) => {
+router.get('/:userId', isIdentity, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.userId, {
       include: [{model: Group}],
@@ -15,7 +16,7 @@ router.get('/:userId', async (req, res, next) => {
 })
 
 //GET a single group
-router.get('/singleGroup/:groupId', async (req, res, next) => {
+router.get('/singleGroup/:groupId', isInGroup, async (req, res, next) => {
   try {
     const group = await Group.findByPk(req.params.groupId)
     res.json(group)
@@ -74,24 +75,28 @@ router.put('/singleGroup/:groupId', async (req, res, next) => {
 })
 
 // GET all of group's expenses
-router.get('/singleGroup/:groupId/expenses', async (req, res, next) => {
-  try {
-    const groupId = parseInt(req.params.groupId)
-    if (isNaN(groupId)) return res.sendStatus(404)
+router.get(
+  '/singleGroup/:groupId/expenses',
+  isInGroup,
+  async (req, res, next) => {
+    try {
+      const groupId = parseInt(req.params.groupId)
+      if (isNaN(groupId)) return res.sendStatus(404)
 
-    const thisGroup = await Group.findByPk(groupId)
-    if (!thisGroup) res.sendStatus(404)
+      const thisGroup = await Group.findByPk(groupId)
+      if (!thisGroup) res.sendStatus(404)
 
-    const groupExpenses = await thisGroup.getExpenses({
-      attributes: ['id', 'name', 'totalCost', 'groupId'],
-      include: [{model: User}, {model: Item, include: {model: User}}],
-    })
+      const groupExpenses = await thisGroup.getExpenses({
+        attributes: ['id', 'name', 'totalCost', 'groupId'],
+        include: [{model: User}, {model: Item, include: {model: User}}],
+      })
 
-    res.json(groupExpenses)
-  } catch (err) {
-    next(err)
+      res.json(groupExpenses)
+    } catch (err) {
+      next(err)
+    }
   }
-})
+)
 
 // GET single group expense
 router.get(
@@ -247,22 +252,26 @@ router.delete(
 )
 
 // GET all of group's members
-router.get('/singleGroup/:groupId/members', async (req, res, next) => {
-  try {
-    const groupId = parseInt(req.params.groupId)
-    if (isNaN(groupId)) return res.sendStatus(404)
+router.get(
+  '/singleGroup/:groupId/members',
+  isInGroup,
+  async (req, res, next) => {
+    try {
+      const groupId = parseInt(req.params.groupId)
+      if (isNaN(groupId)) return res.sendStatus(404)
 
-    const thisGroup = await Group.findByPk(groupId)
-    if (!thisGroup) res.sendStatus(404)
+      const thisGroup = await Group.findByPk(groupId)
+      if (!thisGroup) res.sendStatus(404)
 
-    const groupMembers = await thisGroup.getUsers({
-      attributes: ['id', 'email', 'firstName', 'lastName'],
-    })
-    res.json(groupMembers)
-  } catch (err) {
-    next(err)
+      const groupMembers = await thisGroup.getUsers({
+        attributes: ['id', 'email', 'firstName', 'lastName'],
+      })
+      res.json(groupMembers)
+    } catch (err) {
+      next(err)
+    }
   }
-})
+)
 
 // ADD a group member
 router.post('/singleGroup/:groupId/members', async (req, res, next) => {
