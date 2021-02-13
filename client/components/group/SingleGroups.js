@@ -45,19 +45,14 @@ export class SingleGroup extends React.Component {
   render() {
     const singleGroup = this.props.singleGroup || {}
 
-    if (!singleGroup) return <div>LOADING</div>
+    if (!singleGroup) return <div>Unable to complete request</div>
 
     return (
       <div>
         <main>
-          <div className="pages-view-navbar">
-            <Link to={`/groups/${this.props.user.id}`}>
-              <h3>Back to All Groups </h3>
-            </Link>
-          </div>
           <div>
             <div className="editGroupPencil">
-              <h3>{this.props.singleGroup.title}</h3>
+              <h2>{this.props.singleGroup.title}</h2>
               {this.state.showForm ? (
                 <UpdateGroupForm toggleForm={this.toggleShowForm} />
               ) : (
@@ -103,23 +98,6 @@ export class SingleGroup extends React.Component {
               </div>
               {this.renderTab()}
             </div>
-            {/* <img className = "main-image" src={robot.imageUrl} />
-            <p> name: {robot.name}</p>
-            <p> fuelType: {robot.fuelType}</p>
-            <p> fuelLevel: {robot.fuelLevel}</p>
-            <h1>ROBOT Edit Form</h1>
-            <Form robot = {this.state.robotForm} errorMessage={this.state.errorMessage} handleChange={this.handleChange} handleSubmit={this.handleSubmit} />
-            <p> projects: </p>
-              {robot.projects.length === 0
-                ?
-                  <div>There are no projects currently assigned to this robot!</div>
-                :
-                  robot.projects.map((project) => {
-                    return (<p key = {project.id}> <Link to={`/projects/${project.id}`}>{project.title}</Link>
-                     <button type="button" onClick= {() => this.props.clickUnassignProject(robot.id, project.id)} >Unassign</button>
-                            </p>)
-                  })
-              } */}
           </div>
         </main>
       </div>
