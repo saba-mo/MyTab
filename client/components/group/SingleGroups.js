@@ -57,14 +57,6 @@ export class SingleGroup extends React.Component {
               {this.state.showForm ? (
                 <UpdateGroupForm toggleForm={this.toggleShowForm} />
               ) : (
-                // <img
-                //   className="edit-group"
-                //   src="/images/pencil.png"
-                //   title="Update group name"
-                //   height="30px"
-                //   width="33px"
-                //   onClick={this.toggleShowForm}
-                // />
                 <Button
                   className="edit-button"
                   icon={<EditOutlined />}
@@ -73,8 +65,6 @@ export class SingleGroup extends React.Component {
                 >
                   Edit Name
                 </Button>
-
-                // <EditOutlined onClick={this.toggleShowForm} />
               )}
             </div>
             <div>
