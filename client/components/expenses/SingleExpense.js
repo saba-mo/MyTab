@@ -40,11 +40,11 @@ class SingleExpense extends React.Component {
 
     return (
       <div className="expense-individual">
-        {/* <div className="pages-view-navbar"> */}
-        {/* <Link to={`/groups/singleGroup/${expense.groupId}`}>
+        <div className="pages-view-navbar">
+          <Link to={`/groups/singleGroup/${expense.groupId}`}>
             <h3>Back to Group Expenses </h3>
-          </Link> */}
-        {/* </div> */}
+          </Link>
+        </div>
         <h4>
           {expense.name}
           {currency(expense.totalCost).format()}
