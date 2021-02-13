@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_loadFriends, _deleteFriend} from '../../store'
-import {AddFriendForm, TotalBalance} from '../../components'
+import {AddFriendForm} from '../../components'
 import {List, Avatar, Skeleton} from 'antd'
 
 export class AllFriends extends React.Component {
@@ -36,7 +36,6 @@ export class AllFriends extends React.Component {
     const user = this.props.user.id
     return (
       <div>
-        <TotalBalance />
         <main>
           <h2>My Friends on MyTab</h2>
         </main>

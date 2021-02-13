@@ -57,6 +57,10 @@ html {
   width: device-width;
 }
 
+/* .landingPageGif {
+  float: right
+} */
+
 .expense-form-container {
   border-radius: 5px;
   background-color: #f2f2f2;
