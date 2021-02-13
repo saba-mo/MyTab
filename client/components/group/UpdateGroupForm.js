@@ -34,7 +34,7 @@ export class UpdateGroupForm extends React.Component {
           value={this.state.title}
           onChange={this.handleChange}
         />
-        <button type="submit">Edit</button>
+        <button type="submit">Save</button>
       </form>
     )
   }
