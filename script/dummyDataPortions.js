@@ -9,11 +9,11 @@ const portionData = [
       expenseId: 2,
     },
     {
-      amount: 10,
+      amount: 6,
       expenseId: 3,
     },
     {
-      amount: 8.68,
+      amount: 7,
       expenseId: 3,
     },
     {
@@ -35,15 +35,15 @@ const portionData = [
       settled: true,
     },
     {
-      amount: 1000,
+      amount: 985,
       expenseId: 6,
     },
     {
-      amount: 400,
+      amount: 35,
       expenseId: 6,
     },
     {
-      amount: 98.99,
+      amount: 510,
       expenseId: 6,
     },
     {
@@ -51,7 +51,7 @@ const portionData = [
       expenseId: 12,
     },
     {
-      amount: 33.5,
+      amount: 33,
       expenseId: 12,
     },
   ],
