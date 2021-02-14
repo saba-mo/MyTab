@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {_loadGroupMembers, _updateExpense} from '../../store'
 import currency from 'currency.js'
+import {notification} from 'antd'
 
 export class UpdateExpenseForm extends React.Component {
   constructor(props) {
@@ -15,10 +16,28 @@ export class UpdateExpenseForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
+    this.openSuccessNotification = this.openSuccessNotification.bind(this)
+    this.openFailureNotification = this.openFailureNotification.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
+  }
+
+  openSuccessNotification = (type) => {
+    notification[type]({
+      message: 'Updated!',
+      description: 'Your expense has been updated.',
+      placement: 'bottomRight',
+    })
+  }
+
+  openFailureNotification = (type) => {
+    notification[type]({
+      message: 'Request failed',
+      description: 'You are missing a required field.',
+      placement: 'bottomRight',
+    })
   }
 
   handleChange(event) {
@@ -54,12 +73,8 @@ export class UpdateExpenseForm extends React.Component {
       this.state.paidBy === 'select'
     ) {
       event.preventDefault()
-      alert('A required field is missing.')
-      return
-    }
-    if (!Number(this.state.totalCost)) {
-      event.preventDefault()
-      alert('Cost must be a number.')
+      // alert('A required field is missing.')
+      this.openFailureNotification('error')
       return
     }
     event.preventDefault()
@@ -70,6 +85,7 @@ export class UpdateExpenseForm extends React.Component {
       paidBy: this.state.paidBy,
       owedByMember: this.state.owedByMember,
     })
+    this.openSuccessNotification('success')
   }
 
   render() {
