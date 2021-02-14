@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_addFriend, _loadFriends, _loadAllUsers} from '../../store'
+import {Button, notification} from 'antd'
 
 class AddFriendForm extends React.Component {
   constructor() {
@@ -8,6 +9,16 @@ class AddFriendForm extends React.Component {
     this.state = {email: ''}
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.openSuccessNotification = this.openSuccessNotification.bind(this)
+    this.openFailureSelfNotification = this.openFailureSelfNotification.bind(
+      this
+    )
+    this.openFailureNoAccountNotification = this.openFailureNoAccountNotification.bind(
+      this
+    )
+    this.openFailureAlreadyFriendsNotification = this.openFailureAlreadyFriendsNotification.bind(
+      this
+    )
   }
 
   componentDidMount() {
@@ -17,6 +28,35 @@ class AddFriendForm extends React.Component {
 
   handleChange(event) {
     this.setState({[event.target.name]: event.target.value})
+  }
+
+  openSuccessNotification = (type) => {
+    notification[type]({
+      message: 'Friend Added',
+      description: 'You are now friends on MyTab.',
+    })
+  }
+
+  openFailureSelfNotification = (type) => {
+    notification[type]({
+      message: 'Request failed',
+      description: 'You cannot add yourself.',
+    })
+  }
+
+  openFailureNoAccountNotification = (type) => {
+    notification[type]({
+      message: 'Request failed',
+      description:
+        'Ask your friend to make a MyTab account so you can add them!',
+    })
+  }
+
+  openFailureAlreadyFriendsNotification = (type) => {
+    notification[type]({
+      message: 'Request failed',
+      description: 'You are already friends',
+    })
   }
 
   handleSubmit(event) {
@@ -31,14 +71,18 @@ class AddFriendForm extends React.Component {
       )
 
       if (this.props.user.email === this.state.email) {
-        alert('You cannot add yourself.')
+        // alert('You cannot add yourself.')
+        this.openFailureSelfNotification('error')
       } else if (checkIfFriends.length) {
-        alert('You are already friends.')
+        // alert('You are already friends.')
+        this.openFailureAlreadyFriendsNotification('error')
       } else if (!checkIfUser.length) {
-        alert('Ask your friend to make a MyTab account so you can add them!')
+        // alert('Ask your friend to make a MyTab account so you can add them!')
+        this.openFailureNoAccountNotification('error')
       } else {
         this.props.addFriend(this.props.user.id, this.state.email)
         this.setState({email: ''})
+        this.openSuccessNotification('success')
       }
     } catch (error) {
       console.error(
@@ -58,6 +102,7 @@ class AddFriendForm extends React.Component {
               <h5>Find your friend by their email.</h5>
               <p>Friends must first create an account with MyTab.</p>
             </label>
+            <br />
             <input
               className="friend-form"
               name="email"
@@ -67,6 +112,7 @@ class AddFriendForm extends React.Component {
               onChange={this.handleChange}
             />
           </div>
+
           <div>
             <button type="submit">Add My Friend</button>
           </div>
