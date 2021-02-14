@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_addFriend, _loadFriends, _loadAllUsers} from '../../store'
-import {Button, notification} from 'antd'
+import {notification} from 'antd'
 
 class AddFriendForm extends React.Component {
   constructor() {
@@ -55,7 +55,7 @@ class AddFriendForm extends React.Component {
   openFailureAlreadyFriendsNotification = (type) => {
     notification[type]({
       message: 'Request failed',
-      description: 'You are already friends',
+      description: 'You are already friends.',
     })
   }
 
@@ -71,13 +71,10 @@ class AddFriendForm extends React.Component {
       )
 
       if (this.props.user.email === this.state.email) {
-        // alert('You cannot add yourself.')
         this.openFailureSelfNotification('error')
       } else if (checkIfFriends.length) {
-        // alert('You are already friends.')
         this.openFailureAlreadyFriendsNotification('error')
       } else if (!checkIfUser.length) {
-        // alert('Ask your friend to make a MyTab account so you can add them!')
         this.openFailureNoAccountNotification('error')
       } else {
         this.props.addFriend(this.props.user.id, this.state.email)
