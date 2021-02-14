@@ -51,14 +51,15 @@ class AddFriendForm extends React.Component {
   render() {
     const {email} = this.state
     return (
-      <div>
+      <div className="friend-form-container">
         <form onSubmit={this.handleSubmit}>
           <div>
             <label htmlFor="email">
-              <div>Add your friends here by entering their email address.</div>
-              <small>Friends must first create an account with MyTab.</small>
+              <h5>Find your friend by their email.</h5>
+              <p>Friends must first create an account with MyTab.</p>
             </label>
             <input
+              className="friend-form"
               name="email"
               type="email"
               value={email}

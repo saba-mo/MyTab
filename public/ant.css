@@ -66,12 +66,25 @@ html {
   background-color: #f2f2f2;
   padding: 20px;
   border: 1px dotted black;
-  margin-right: 600px;
-  margin-bottom: 50px;
 }
 
 .expense-form {
   width: 100%;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.friend-form-container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  border: 1px dotted black;
+  width: 50%;
+}
+
+.friend-form {
   margin-bottom: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
