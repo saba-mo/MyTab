@@ -10,14 +10,13 @@ export class UpdateExpenseForm extends React.Component {
     this.state = {
       name: props.expense.name,
       totalCost: props.expense.totalCost,
-      paidBy: props.expense.paidBy[0].id,
+      paidBy: props.user.id,
       owedByMember: {},
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
     this.openSuccessNotification = this.openSuccessNotification.bind(this)
-    this.openFailureNotification = this.openFailureNotification.bind(this)
   }
 
   componentDidMount() {
@@ -28,14 +27,6 @@ export class UpdateExpenseForm extends React.Component {
     notification[type]({
       message: 'Updated!',
       description: 'Your expense has been updated.',
-      placement: 'bottomRight',
-    })
-  }
-
-  openFailureNotification = (type) => {
-    notification[type]({
-      message: 'Request failed',
-      description: 'You are missing a required field.',
       placement: 'bottomRight',
     })
   }
@@ -66,17 +57,6 @@ export class UpdateExpenseForm extends React.Component {
   }
 
   handleSubmit(event) {
-    if (
-      !this.state.name ||
-      !this.state.totalCost ||
-      !this.state.paidBy ||
-      this.state.paidBy === 'select'
-    ) {
-      event.preventDefault()
-      // alert('A required field is missing.')
-      this.openFailureNotification('error')
-      return
-    }
     event.preventDefault()
     this.props.toggleForm()
     this.props.updateExpense(this.props.groupId, this.props.expense.id, {
@@ -137,7 +117,7 @@ export class UpdateExpenseForm extends React.Component {
             placeholder="Ex: 100 or 9.39"
             required
           />
-          <label htmlFor="paidBy">Edit Paid By</label>
+          <label htmlFor="paidBy">Edit Paid By:</label>
           <select
             className="expense-form"
             value={this.state.paidBy}
@@ -145,7 +125,6 @@ export class UpdateExpenseForm extends React.Component {
             name="paidBy"
             required
           >
-            <option value="member">select</option>
             {this.props.groupMembers.map((member) => (
               <option key={`member-${member.id}`} value={member.id}>
                 {member.firstName} {member.lastName}

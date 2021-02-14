@@ -58,21 +58,6 @@ export class CreateGroupExpenseForm extends React.Component {
 
   handleSubmit(event) {
     try {
-      if (
-        !this.state.name ||
-        !this.state.totalCost ||
-        !this.state.paidBy ||
-        this.state.paidBy === 'select'
-      ) {
-        event.preventDefault()
-        alert('A required field is missing.')
-        return
-      }
-      if (!Number(this.state.totalCost)) {
-        event.preventDefault()
-        alert('Cost must be a number.')
-        return
-      }
       event.preventDefault()
       this.props.toggleForm()
       this.props.addGroupExpense(this.props.groupId, {
@@ -144,7 +129,6 @@ export class CreateGroupExpenseForm extends React.Component {
             name="paidBy"
             required
           >
-            <option value="member">select</option>
             {this.props.groupMembers.map((member) => (
               <option key={`member-${member.id}`} value={member.id}>
                 {member.firstName} {member.lastName}
