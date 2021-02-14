@@ -19,6 +19,7 @@ export class GroupExpenses extends React.Component {
     this.checkMembersList = this.checkMembersList.bind(this)
     this.deleteExpense = this.deleteExpense.bind(this)
     this.openSuccessNotification = this.openSuccessNotification.bind(this)
+    this.openFailureNotification = this.openFailureNotification.bind(this)
   }
 
   componentDidMount() {
@@ -34,11 +35,19 @@ export class GroupExpenses extends React.Component {
     })
   }
 
+  openFailureNotification = (type) => {
+    notification[type]({
+      message: 'Required failed',
+      description: 'Add a group member before creating a group expense.',
+      placement: 'bottomRight',
+    })
+  }
+
   checkMembersList() {
     if (this.props.groupMembers.length > 1) {
       this.toggleShowForm()
     } else {
-      alert('Add a group member before creating a group expense.')
+      this.openFailureNotification('error')
     }
   }
 
