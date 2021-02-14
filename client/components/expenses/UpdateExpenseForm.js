@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_loadGroupMembers, _updateExpense} from '../../store'
+import {_loadGroupMembers, _updateExpense, _loadAnExpense} from '../../store'
 import currency from 'currency.js'
 
 export class UpdateExpenseForm extends React.Component {
@@ -9,7 +9,8 @@ export class UpdateExpenseForm extends React.Component {
     this.state = {
       name: props.expense.name,
       totalCost: props.expense.totalCost,
-      paidBy: props.expense.paidBy[0].id,
+      paidBy: props.user.id,
+      // paidBy: props.expense.paidBy[0].id,
       owedByMember: {},
     }
     this.handleChange = this.handleChange.bind(this)
@@ -19,6 +20,7 @@ export class UpdateExpenseForm extends React.Component {
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
+    this.props.loadAnExpense(this.props.groupId, this.props.expenseId)
   }
 
   handleChange(event) {
@@ -63,7 +65,7 @@ export class UpdateExpenseForm extends React.Component {
       return
     }
     event.preventDefault()
-    this.props.toggleForm()
+    this.props.onClose()
     this.props.updateExpense(this.props.groupId, this.props.expense.id, {
       name: this.state.name,
       totalCost: currency(this.state.totalCost).value,
@@ -83,12 +85,15 @@ export class UpdateExpenseForm extends React.Component {
     }
     let remainder = this.state.totalCost
 
-    const paidBy = this.props.groupMembers.filter(
-      (member) => member.id == this.state.paidBy
-    )
+    let paidBy
+    if (this.state.paidBy) {
+      paidBy = this.props.groupMembers.filter(
+        (member) => member.id == this.state.paidBy
+      )
+    }
 
     let paidByName
-    if (paidBy.length) {
+    if (paidBy && paidBy.length) {
       if (paidBy[0].id == this.props.user.id) {
         paidByName = 'Your'
       } else {
@@ -207,7 +212,7 @@ export class UpdateExpenseForm extends React.Component {
 const mapState = (state) => {
   return {
     groupMembers: state.groupMembers,
-    expense: state.singleExpense,
+    // expense: state.singleExpense,
     user: state.user,
   }
 }
@@ -217,6 +222,8 @@ const mapDispatch = (dispatch) => {
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
     updateExpense: (groupId, expenseId, expense) =>
       dispatch(_updateExpense(groupId, expenseId, expense)),
+    loadAnExpense: (groupId, expenseId) =>
+      dispatch(_loadAnExpense(groupId, expenseId)),
   }
 }
 

@@ -6,9 +6,9 @@ import {
   _loadGroupMembers,
   _deleteGroupExpense,
 } from '../../store'
-import {CreateGroupExpenseForm} from '../index'
+import {CreateGroupExpenseForm, UpdateExpenseForm} from '../index'
 import currency from 'currency.js'
-import {List, Avatar, Button} from 'antd'
+import {List, Avatar, Button, Drawer} from 'antd'
 
 export class GroupExpenses extends React.Component {
   constructor() {
@@ -18,6 +18,20 @@ export class GroupExpenses extends React.Component {
     this.toggleShowForm = this.toggleShowForm.bind(this)
     this.checkMembersList = this.checkMembersList.bind(this)
     this.deleteExpense = this.deleteExpense.bind(this)
+  }
+
+  state = {visible: false}
+
+  showDrawer = () => {
+    this.setState({
+      visible: true,
+    })
+  }
+
+  onClose = () => {
+    this.setState({
+      visible: false,
+    })
   }
 
   componentDidMount() {
@@ -55,6 +69,7 @@ export class GroupExpenses extends React.Component {
   }
 
   render() {
+    // console.log('ge props: ', this.props)
     const {groupExpenses} = this.props
     const groupTotal = groupExpenses.reduce(
       (accumulator, currentValue) => accumulator + currentValue.totalCost,
@@ -78,21 +93,36 @@ export class GroupExpenses extends React.Component {
                   >
                     Delete expense
                   </a>,
-                  // <a key="group-expense" onClick={() => console.log('edit')}>
-                  //   Edit expense
-                  // </a>,
+                  // does this need a key? see antBalanceProfiles
+                  <a key="group-expense" onClick={() => this.showDrawer()}>
+                    Edit expense
+                  </a>,
                 ]}
               >
+                <Drawer
+                  width={640}
+                  placement="right"
+                  closable={false}
+                  onClose={this.onClose}
+                  visible={this.state.visible}
+                >
+                  <UpdateExpenseForm
+                    onClose={this.onClose}
+                    groupId={this.props.groupId}
+                    expenseId={item.id}
+                    expense={item}
+                  />
+                </Drawer>
                 <List.Item.Meta
                   avatar={
                     <Avatar src="https://i.pinimg.com/564x/f5/95/b8/f595b89bc0216e93537cf81ff799cbef.jpg" />
                   }
                   title={
-                    <Link
-                      to={`/groups/singleGroup/${item.groupId}/expenses/${item.id}`}
-                    >
-                      {item.name}
-                    </Link>
+                    // <Link
+                    //   to={`/groups/singleGroup/${item.groupId}/expenses/${item.id}`}
+                    // >
+                    item.name
+                    // </Link>
                   }
                 />
                 <div>
