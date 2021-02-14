@@ -1,7 +1,20 @@
 import React from 'react'
-import {Table, Button, Space} from 'antd'
+import {Table, notification, Button, Space} from 'antd'
 
 class AntBalanceTable extends React.Component {
+  settle(item) {
+    this.props.settleThisPortion(item)
+    this.openSuccessNotification('success')
+  }
+
+  openSuccessNotification = (type) => {
+    notification[type]({
+      message: 'Settled!',
+      description: 'The charge is all settled up.',
+      placement: 'bottomRight',
+    })
+  }
+
   render() {
     const columns = [
       {
@@ -33,7 +46,7 @@ class AntBalanceTable extends React.Component {
             <button
               type="submit"
               onClick={() => {
-                this.props.settleThisPortion(record.item)
+                this.settle(record.item)
               }}
             >
               Settle

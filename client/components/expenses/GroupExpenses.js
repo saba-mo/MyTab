@@ -29,7 +29,7 @@ export class GroupExpenses extends React.Component {
   openSuccessNotification = (type) => {
     notification[type]({
       message: 'Deleted',
-      description: 'The expense has been removed from this group.',
+      description: 'The expense has been removed.',
       placement: 'bottomRight',
     })
   }
