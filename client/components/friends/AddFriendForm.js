@@ -34,6 +34,7 @@ class AddFriendForm extends React.Component {
     notification[type]({
       message: 'Friend Added',
       description: 'You are now friends on MyTab.',
+      placement: 'bottomRight',
     })
   }
 
@@ -41,6 +42,7 @@ class AddFriendForm extends React.Component {
     notification[type]({
       message: 'Request failed',
       description: 'You cannot add yourself.',
+      placement: 'bottomRight',
     })
   }
 
@@ -49,6 +51,7 @@ class AddFriendForm extends React.Component {
       message: 'Request failed',
       description:
         'Ask your friend to make a MyTab account so you can add them!',
+      placement: 'bottomRight',
     })
   }
 
@@ -56,6 +59,7 @@ class AddFriendForm extends React.Component {
     notification[type]({
       message: 'Request failed',
       description: 'You are already friends.',
+      placement: 'bottomRight',
     })
   }
 
