@@ -8,7 +8,7 @@ import {
 } from '../../store'
 import {CreateGroupExpenseForm} from '../index'
 import currency from 'currency.js'
-import {List, Avatar} from 'antd'
+import {List, Avatar, Button} from 'antd'
 
 export class GroupExpenses extends React.Component {
   constructor() {
@@ -62,24 +62,7 @@ export class GroupExpenses extends React.Component {
     )
 
     return (
-      <div>
-        <div className="editGroupPencil">
-          {this.state.showForm ? (
-            <CreateGroupExpenseForm
-              toggleForm={this.toggleShowForm}
-              groupId={this.props.groupId}
-            />
-          ) : (
-            <img
-              className="groupImg"
-              src="/images/plus.png"
-              height="64px"
-              width="64px"
-              title="Create an expense"
-              onClick={this.checkMembersList}
-            />
-          )}
-        </div>
+      <div className="toggle-button-container">
         <div id="group-expense-list">
           {this.noExpenses(groupExpenses)}
           <List
@@ -95,9 +78,9 @@ export class GroupExpenses extends React.Component {
                   >
                     Delete expense
                   </a>,
-                  <a key="group-expense" onClick={() => console.log('edit')}>
-                    Edit expense
-                  </a>,
+                  // <a key="group-expense" onClick={() => console.log('edit')}>
+                  //   Edit expense
+                  // </a>,
                 ]}
               >
                 <List.Item.Meta
@@ -120,6 +103,23 @@ export class GroupExpenses extends React.Component {
             )}
           />
           <h3>Total group expenses: {currency(groupTotal).format()}</h3>
+        </div>
+        <div className="editGroupPencil">
+          {this.state.showForm ? (
+            <CreateGroupExpenseForm
+              toggleForm={this.toggleShowForm}
+              groupId={this.props.groupId}
+            />
+          ) : (
+            <Button
+              className="toggle-button"
+              type="primary"
+              onClick={this.checkMembersList}
+              size="small"
+            >
+              + Add Expense
+            </Button>
+          )}
         </div>
       </div>
     )
