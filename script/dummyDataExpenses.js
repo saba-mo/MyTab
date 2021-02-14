@@ -1,17 +1,17 @@
 const expenseData = [
   [
     {
-      name: 'Phascogale',
+      name: 'Hold an owl',
       totalCost: 89.73,
       groupId: 1,
     },
     {
-      name: 'Flycatcher',
+      name: 'fancy pants coffee',
       totalCost: 18.42,
       groupId: 1,
     },
     {
-      name: 'Rhea',
+      name: 'Coffee',
       totalCost: 18.68,
       groupId: 2,
     },
@@ -21,12 +21,12 @@ const expenseData = [
       groupId: 3,
     },
     {
-      name: 'Fisher',
+      name: 'Fishing license',
       totalCost: 8.98,
       groupId: 1,
     },
     {
-      name: 'Brazilian otter',
+      name: 'Champagne Brunch!',
       totalCost: 2031.17,
       groupId: 2,
     },
@@ -36,7 +36,7 @@ const expenseData = [
       groupId: 4,
     },
     {
-      name: 'Great Egret',
+      name: 'Archery lessons',
       totalCost: 87.75,
       groupId: 2,
     },
@@ -51,13 +51,13 @@ const expenseData = [
       groupId: 3,
     },
     {
-      name: `House Cat`,
+      name: `breakfast burritos`,
       totalCost: 25.21,
       groupId: 2,
     },
     {
-      name: `House Dog`,
-      totalCost: 100,
+      name: `Theme park tickets`,
+      totalCost: 99,
       groupId: 2,
     },
   ],
