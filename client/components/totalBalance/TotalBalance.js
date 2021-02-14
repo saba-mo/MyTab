@@ -15,10 +15,20 @@ export class TotalBalance extends React.Component {
     if (balanceBreakdown[0] === 0) {
       return (
         <div>
-          <Card>
-            <div>Total Balance on MyTab</div>
-            <div>You are all settled up</div>
-          </Card>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Card>
+                <Statistic
+                  title="Total Balance on MyTab"
+                  value="You are all settled up!"
+                  valueStyle={{color: '#000000'}}
+                />
+              </Card>
+            </Col>
+            {/* <Col span={12}>
+            <img width="100%" src="images/creditPay.gif" />
+          </Col> */}
+          </Row>
         </div>
       )
     } else if (balanceBreakdown[0] > 0) {
@@ -62,6 +72,9 @@ export class TotalBalance extends React.Component {
               </Card>
             </Col>
           </Row>
+          {/* <Col span={12}>
+            <img width="100%" src="images/creditPay.gif" />
+          </Col> */}
         </div>
       )
     } else {
@@ -105,6 +118,9 @@ export class TotalBalance extends React.Component {
               </Card>
             </Col>
           </Row>
+          {/* <Col span={12} className="landingPageGif">
+            <img width="100%" src="images/creditPay.gif" />
+          </Col> */}
         </div>
       )
     }

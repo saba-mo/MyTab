@@ -71,7 +71,7 @@ class Routes extends Component {
                 defaultSelectedKeys={[history.location.pathname]}
               >
                 <Menu.Item key="/home" icon={<UserOutlined />}>
-                  Profile
+                  Home
                 </Menu.Item>
                 <Menu.Item
                   key={`/groups/${this.props.user.id}`}

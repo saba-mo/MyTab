@@ -1,8 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_loadFriends, _deleteFriend} from '../../store'
-import {AddFriendForm, TotalBalance} from '../../components'
-import {List, Avatar, Skeleton} from 'antd'
+import {AddFriendForm} from '../../components'
+import {List, Avatar, Skeleton, Button} from 'antd'
 
 export class AllFriends extends React.Component {
   constructor(props) {
@@ -36,24 +36,9 @@ export class AllFriends extends React.Component {
     const user = this.props.user.id
     return (
       <div>
-        <TotalBalance />
         <main>
           <h2>My Friends on MyTab</h2>
         </main>
-        <div className="editGroupPencil">
-          {this.state.showForm ? (
-            <AddFriendForm toggleForm={this.toggleShowForm} />
-          ) : (
-            <img
-              className="groupImg"
-              src="/images/plus.png"
-              height="64px"
-              width="64px"
-              title="Add a friend"
-              onClick={this.toggleShowForm}
-            />
-          )}
-        </div>
         <div id="full-friend-list">
           {this.noFriends(friendList)}
           <List
@@ -83,6 +68,20 @@ export class AllFriends extends React.Component {
               </List.Item>
             )}
           />
+        </div>
+        <div className="editGroupPencil">
+          {this.state.showForm ? (
+            <AddFriendForm toggleForm={this.toggleShowForm} />
+          ) : (
+            <Button
+              className="toggle-button"
+              type="primary"
+              onClick={this.toggleShowForm}
+              size="small"
+            >
+              + Add Friend
+            </Button>
+          )}
         </div>
       </div>
     )

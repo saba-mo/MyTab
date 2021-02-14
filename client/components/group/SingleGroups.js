@@ -1,11 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {_getSingleGroup, _updateGroup} from '../../store'
 import GroupExpenses from '../expenses/GroupExpenses'
 import GroupBalances from '../expenses/GroupBalances'
 import UpdateGroupForm from './UpdateGroupForm'
 import {GroupMembers} from '../../components'
+import {EditOutlined} from '@ant-design/icons'
+import {Button} from 'antd'
 
 export class SingleGroup extends React.Component {
   constructor() {
@@ -56,18 +57,18 @@ export class SingleGroup extends React.Component {
               {this.state.showForm ? (
                 <UpdateGroupForm toggleForm={this.toggleShowForm} />
               ) : (
-                <img
-                  className="groupImg"
-                  src="/images/pencil.png"
-                  title="Update group name"
-                  // height="400px"
-                  // width="407.406px"
+                <Button
+                  className="edit-button"
+                  icon={<EditOutlined />}
                   onClick={this.toggleShowForm}
-                />
+                  size="small"
+                >
+                  Edit Name
+                </Button>
               )}
             </div>
             <div>
-              <div className="tab_buttons_div">
+              <h5 className="tab_buttons_div">
                 <a
                   className={`grp_tab_btns ${
                     this.state.tabName === 'expenses' ? 'selectedTab' : ''
@@ -75,7 +76,7 @@ export class SingleGroup extends React.Component {
                   onClick={this.tabChange.bind(this, 'expenses')}
                 >
                   {' '}
-                  Expenses |{' '}
+                  Expenses &emsp;{' '}
                 </a>
                 <a
                   className={`grp_tab_btns ${
@@ -84,7 +85,7 @@ export class SingleGroup extends React.Component {
                   onClick={this.tabChange.bind(this, 'members')}
                 >
                   {' '}
-                  Members |{' '}
+                  Members &emsp;{' '}
                 </a>
                 <a
                   className={`grp_tab_btns ${
@@ -95,7 +96,7 @@ export class SingleGroup extends React.Component {
                   {' '}
                   Balances{' '}
                 </a>
-              </div>
+              </h5>
               {this.renderTab()}
             </div>
           </div>

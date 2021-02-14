@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {_getGroups, _deleteGroup, _loadBalance} from '../../store'
 import {Link} from 'react-router-dom'
 import {TotalBalance, CreateGroupForm} from '../index'
-import {List, Card} from 'antd'
+import {List, Card, Col} from 'antd'
 
 export class Groups extends React.Component {
   constructor() {
@@ -54,19 +54,16 @@ export class Groups extends React.Component {
             dataSource={this.props.groups}
             renderItem={(group) => (
               <List.Item>
-                <Card
-                  title={group.title}
-                  extra={
-                    <Link to={`/groups/singleGroup/${group.id}`}>Open</Link>
-                  }
-                >
+                <Card title={group.title}>
+                  <Link to={`/groups/singleGroup/${group.id}`}>Open</Link>
+                  <Col span={1} />
                   {[
-                    <a
+                    <Link
                       key="list-loadmore-more"
                       onClick={() => this.handleDeleteGroup(group.id)}
                     >
                       Delete
-                    </a>,
+                    </Link>,
                   ]}
                 </Card>
               </List.Item>
