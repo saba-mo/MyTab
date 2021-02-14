@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {_addGroupExpense, _loadGroupMembers} from '../../store'
 import currency from 'currency.js'
+import {notification} from 'antd'
 
 export class CreateGroupExpenseForm extends React.Component {
   constructor(props) {
@@ -15,10 +16,19 @@ export class CreateGroupExpenseForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
+    this.openSuccessNotification = this.openSuccessNotification.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
+  }
+
+  openSuccessNotification = (type) => {
+    notification[type]({
+      message: 'Added!',
+      description: 'Your expense has been added.',
+      placement: 'bottomRight',
+    })
   }
 
   handleChange(event) {
@@ -71,6 +81,7 @@ export class CreateGroupExpenseForm extends React.Component {
         paidBy: this.state.paidBy,
         owedByMember: this.state.owedByMember,
       })
+      this.openSuccessNotification('success')
     } catch (error) {
       console.error(
         'Failed to handle expense submission due to this error: ',
