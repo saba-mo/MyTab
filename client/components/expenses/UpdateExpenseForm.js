@@ -1,16 +1,20 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_loadGroupMembers, _updateExpense, _loadAnExpense} from '../../store'
+import {_loadGroupMembers, _updateExpense} from '../../store'
 import currency from 'currency.js'
 
 export class UpdateExpenseForm extends React.Component {
+  // expense prop coming from GroupExpenses
   constructor(props) {
     super(props)
     this.state = {
-      name: props.expense.name,
-      totalCost: props.expense.totalCost,
+      name: '',
+      totalCost: '',
+      // name: props.expense.name,
+      // totalCost: props.expense.totalCost,
       paidBy: props.user.id,
-      // paidBy: props.expense.paidBy[0].id,
+      // paidBy: props.expense.users[0].id,
+      // paidBy: props.paidBy,
       owedByMember: {},
     }
     this.handleChange = this.handleChange.bind(this)
@@ -20,7 +24,6 @@ export class UpdateExpenseForm extends React.Component {
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
-    this.props.loadAnExpense(this.props.groupId, this.props.expenseId)
   }
 
   handleChange(event) {
@@ -71,6 +74,12 @@ export class UpdateExpenseForm extends React.Component {
       totalCost: currency(this.state.totalCost).value,
       paidBy: this.state.paidBy,
       owedByMember: this.state.owedByMember,
+    })
+    this.setState({
+      name: '',
+      totalCost: '',
+      paidBy: this.props.user.id,
+      owedByMember: {},
     })
   }
 
@@ -212,7 +221,6 @@ export class UpdateExpenseForm extends React.Component {
 const mapState = (state) => {
   return {
     groupMembers: state.groupMembers,
-    // expense: state.singleExpense,
     user: state.user,
   }
 }
@@ -222,8 +230,6 @@ const mapDispatch = (dispatch) => {
     loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
     updateExpense: (groupId, expenseId, expense) =>
       dispatch(_updateExpense(groupId, expenseId, expense)),
-    loadAnExpense: (groupId, expenseId) =>
-      dispatch(_loadAnExpense(groupId, expenseId)),
   }
 }
 

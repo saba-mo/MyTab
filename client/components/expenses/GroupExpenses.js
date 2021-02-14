@@ -20,11 +20,12 @@ export class GroupExpenses extends React.Component {
     this.deleteExpense = this.deleteExpense.bind(this)
   }
 
-  state = {visible: false}
+  state = {visible: false, item: {}}
 
-  showDrawer = () => {
+  showDrawer = (item) => {
     this.setState({
       visible: true,
+      item: item,
     })
   }
 
@@ -32,6 +33,7 @@ export class GroupExpenses extends React.Component {
     this.setState({
       visible: false,
     })
+    this.props.loadGroupExpenses(this.props.groupId)
   }
 
   componentDidMount() {
@@ -69,7 +71,6 @@ export class GroupExpenses extends React.Component {
   }
 
   render() {
-    // console.log('ge props: ', this.props)
     const {groupExpenses} = this.props
     const groupTotal = groupExpenses.reduce(
       (accumulator, currentValue) => accumulator + currentValue.totalCost,
@@ -94,7 +95,7 @@ export class GroupExpenses extends React.Component {
                     Delete expense
                   </a>,
                   // does this need a key? see antBalanceProfiles
-                  <a key="group-expense" onClick={() => this.showDrawer()}>
+                  <a key="group-expense" onClick={() => this.showDrawer(item)}>
                     Edit expense
                   </a>,
                 ]}
@@ -109,24 +110,18 @@ export class GroupExpenses extends React.Component {
                   <UpdateExpenseForm
                     onClose={this.onClose}
                     groupId={this.props.groupId}
-                    expenseId={item.id}
-                    expense={item}
+                    expense={this.state.item}
                   />
                 </Drawer>
                 <List.Item.Meta
                   avatar={
                     <Avatar src="https://i.pinimg.com/564x/f5/95/b8/f595b89bc0216e93537cf81ff799cbef.jpg" />
                   }
-                  title={
-                    // <Link
-                    //   to={`/groups/singleGroup/${item.groupId}/expenses/${item.id}`}
-                    // >
-                    item.name
-                    // </Link>
-                  }
+                  title={item.name}
                 />
                 <div>
                   {currency(item.totalCost).format()} paid by:{' '}
+                  {/* paid by name does not re render with update unless you hard refresh */}
                   {item.users[0].firstName} {item.users[0].lastName}
                 </div>
               </List.Item>
