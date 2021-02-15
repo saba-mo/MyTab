@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {_getGroups, _deleteGroup, _loadBalance} from '../../store'
 import {Link} from 'react-router-dom'
 import {TotalBalance, CreateGroupForm} from '../index'
-import {List, Card, Col} from 'antd'
+import {List, Card, Col, notification} from 'antd'
 
 export class Groups extends React.Component {
   constructor() {
@@ -12,6 +12,7 @@ export class Groups extends React.Component {
 
     this.toggleShowForm = this.toggleShowForm.bind(this)
     this.handleDeleteGroup = this.handleDeleteGroup.bind(this)
+    this.openSuccessNotification = this.openSuccessNotification.bind(this)
   }
 
   componentDidMount() {
@@ -20,6 +21,14 @@ export class Groups extends React.Component {
     if (this.props.user.id !== Number(this.props.match.params.userId)) {
       window.location = '/home'
     }
+  }
+
+  openSuccessNotification = (type) => {
+    notification[type]({
+      message: 'Group Deleted',
+      description: 'The group no longer exists.',
+      placement: 'bottomRight',
+    })
   }
 
   toggleShowForm() {
@@ -34,6 +43,7 @@ export class Groups extends React.Component {
     ) {
       this.props.deleteGroup(groupId)
       this.props.loadBalance(this.props.user.id)
+      this.openSuccessNotification('success')
     }
   }
 

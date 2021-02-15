@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {_loadGroupMembers, _updateExpense} from '../../store'
 import currency from 'currency.js'
+import {notification} from 'antd'
 
 export class UpdateExpenseForm extends React.Component {
   constructor(props) {
@@ -9,16 +10,25 @@ export class UpdateExpenseForm extends React.Component {
     this.state = {
       name: props.expense.name,
       totalCost: props.expense.totalCost,
-      paidBy: props.expense.paidBy[0].id,
+      paidBy: props.user.id,
       owedByMember: {},
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
+    this.openSuccessNotification = this.openSuccessNotification.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
+  }
+
+  openSuccessNotification = (type) => {
+    notification[type]({
+      message: 'Updated!',
+      description: 'Your expense has been updated.',
+      placement: 'bottomRight',
+    })
   }
 
   handleChange(event) {
@@ -47,21 +57,6 @@ export class UpdateExpenseForm extends React.Component {
   }
 
   handleSubmit(event) {
-    if (
-      !this.state.name ||
-      !this.state.totalCost ||
-      !this.state.paidBy ||
-      this.state.paidBy === 'select'
-    ) {
-      event.preventDefault()
-      alert('A required field is missing.')
-      return
-    }
-    if (!Number(this.state.totalCost)) {
-      event.preventDefault()
-      alert('Cost must be a number.')
-      return
-    }
     event.preventDefault()
     this.props.toggleForm()
     this.props.updateExpense(this.props.groupId, this.props.expense.id, {
@@ -70,6 +65,7 @@ export class UpdateExpenseForm extends React.Component {
       paidBy: this.state.paidBy,
       owedByMember: this.state.owedByMember,
     })
+    this.openSuccessNotification('success')
   }
 
   render() {
@@ -121,7 +117,7 @@ export class UpdateExpenseForm extends React.Component {
             placeholder="Ex: 100 or 9.39"
             required
           />
-          <label htmlFor="paidBy">Edit Paid By</label>
+          <label htmlFor="paidBy">Edit Paid By:</label>
           <select
             className="expense-form"
             value={this.state.paidBy}
@@ -129,7 +125,6 @@ export class UpdateExpenseForm extends React.Component {
             name="paidBy"
             required
           >
-            <option value="member">select</option>
             {this.props.groupMembers.map((member) => (
               <option key={`member-${member.id}`} value={member.id}>
                 {member.firstName} {member.lastName}
