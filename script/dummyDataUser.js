@@ -1,9 +1,9 @@
 const userData = [
   [
     {
-      firstName: 'Kyle',
-      lastName: 'Woltman',
-      email: 'kwoltman0@china.com.cn',
+      firstName: 'Kat',
+      lastName: 'Yang',
+      email: 'kat@this.com',
       password: 'password',
     },
     {
@@ -14,7 +14,7 @@ const userData = [
     },
     {
       firstName: 'Hillary',
-      lastName: 'J',
+      lastName: 'Jenkins',
       email: 'hillary@this.com',
       password: 'password',
     },
@@ -25,9 +25,9 @@ const userData = [
       password: 'password',
     },
     {
-      firstName: 'Kat',
-      lastName: 'Yang',
-      email: 'kat@this.com',
+      firstName: 'Kyle',
+      lastName: 'Woltman',
+      email: 'kwoltman0@china.com.cn',
       password: 'password',
     },
     {
