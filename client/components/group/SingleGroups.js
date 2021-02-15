@@ -1,10 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_getSingleGroup, _updateGroup} from '../../store'
-import GroupExpenses from '../expenses/GroupExpenses'
-import GroupBalances from '../expenses/GroupBalances'
-import UpdateGroupForm from './UpdateGroupForm'
-import {GroupMembers} from '../../components'
+import {
+  GroupMembers,
+  GroupExpenses,
+  UpdateGroupForm,
+  GroupBalances,
+} from '../../components'
 import {EditOutlined} from '@ant-design/icons'
 import {Button} from 'antd'
 

@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {TotalBalance} from '../index'
 
 const UserHome = (props) => {
   const {firstName} = props
-  const {userId} = props
 
   return (
     <div>

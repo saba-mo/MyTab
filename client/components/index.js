@@ -14,4 +14,8 @@ export {default as GroupMembers} from './friends/GroupMembers'
 export {default as UpdateExpenseForm} from './expenses/UpdateExpenseForm'
 export {default as TotalBalance} from './totalBalance/TotalBalance'
 export {default as CreateGroupForm} from './group/CreateGroupForm'
+export {default as UpdateGroupForm} from './group/UpdateGroupForm'
+export {default as GroupBalances} from './expenses/GroupBalances'
+export {default as SingleGroups} from './group/SingleGroups'
 // export {default as AddGroupMemberForm} from './group/holdAddGroupMemberForm'
+

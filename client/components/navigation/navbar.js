@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {logout} from '../../store'
-import {Layout, PageHeader, Content, Tabs} from 'antd'
+import {PageHeader, Tabs} from 'antd'
 import {withRouter} from 'react-router'
 
 const {TabPane} = Tabs

@@ -25,9 +25,6 @@ export class TotalBalance extends React.Component {
                 />
               </Card>
             </Col>
-            {/* <Col span={12}>
-            <img width="100%" src="images/creditPay.gif" />
-          </Col> */}
           </Row>
         </div>
       )
@@ -72,9 +69,6 @@ export class TotalBalance extends React.Component {
               </Card>
             </Col>
           </Row>
-          {/* <Col span={12}>
-            <img width="100%" src="images/creditPay.gif" />
-          </Col> */}
         </div>
       )
     } else {
@@ -118,9 +112,6 @@ export class TotalBalance extends React.Component {
               </Card>
             </Col>
           </Row>
-          {/* <Col span={12} className="landingPageGif">
-            <img width="100%" src="images/creditPay.gif" />
-          </Col> */}
         </div>
       )
     }

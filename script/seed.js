@@ -1,4 +1,3 @@
-const {Op} = require('sequelize')
 const db = require('../server/db')
 const {User, Group, Expense, Item} = require('../server/db/models')
 const groupData = require('./dummyDataGroups')

@@ -1,33 +1,33 @@
 const userData = [
   [
     {
+      firstName: 'Kat',
+      lastName: 'Yang',
+      email: 'kat@this.com',
+      password: 'password',
+    },
+    {
+      firstName: 'Saba',
+      lastName: 'Mohtasham Schuttloffel',
+      email: 'saba@this.com',
+      password: 'password',
+    },
+    {
+      firstName: 'Hillary',
+      lastName: 'Jenkins',
+      email: 'hillary@this.com',
+      password: 'password',
+    },
+    {
+      firstName: 'Jess',
+      lastName: 'Jones',
+      email: 'jess@this.com',
+      password: 'password',
+    },
+    {
       firstName: 'Kyle',
       lastName: 'Woltman',
       email: 'kwoltman0@china.com.cn',
-      password: 'password',
-    },
-    {
-      firstName: 'Daria',
-      lastName: 'Jacobs',
-      email: 'djacobsz1@ning.com',
-      password: 'password',
-    },
-    {
-      firstName: 'Lisa',
-      lastName: 'Frondt',
-      email: 'lfrondt2@jiathis.com',
-      password: 'password',
-    },
-    {
-      firstName: 'Greta',
-      lastName: 'Munson',
-      email: 'gmunson3@fastcompany.com',
-      password: 'password',
-    },
-    {
-      firstName: 'Sal',
-      lastName: 'Tamas',
-      email: 'stamas4@goo.gl',
       password: 'password',
     },
     {

@@ -10,6 +10,8 @@ import {
   Friend,
   AddFriendForm,
   SingleExpense,
+  Groups,
+  SingleGroups,
 } from './components'
 import {me} from './store'
 import {
@@ -19,9 +21,7 @@ import {
   TeamOutlined,
   SmileOutlined,
 } from '@ant-design/icons'
-import Groups from './components/group/Groups'
-import SingleGroups from './components/group/SingleGroups'
-import {Layout, Menu, Col, Row} from 'antd'
+import {Layout, Menu} from 'antd'
 const {Header, Sider, Content} = Layout
 import history from './history'
 
