@@ -1,8 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_loadGroupMembers, _deleteGroupMember} from '../../store'
-import {AddGroupMemberForm} from '../index'
-import {List, Avatar, Button, Skeleton} from 'antd'
+import {
+  _loadFriends,
+  _loadGroupMembers,
+  _addGroupMember,
+  _deleteGroupMember,
+} from '../../store'
+import {List, Avatar, Button, Skeleton, Menu, Dropdown, message} from 'antd'
+import {DownOutlined} from '@ant-design/icons'
 
 // ant example loads 3 (the number stored in count) fake data inputs that are randomly generated every time fakeDataUrl is called
 // const count = 3
@@ -12,7 +17,6 @@ export class GroupMembers extends React.Component {
   constructor() {
     super()
     this.state = {
-      showForm: false,
       numberOfMembers: 0,
       // initLoading: true,
       // loading: false,
@@ -20,18 +24,18 @@ export class GroupMembers extends React.Component {
       // list: [],
     }
 
-    this.toggleShowForm = this.toggleShowForm.bind(this)
     this.attemptToRemoveMember = this.attemptToRemoveMember.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.friendsNotInGroup = this.friendsNotInGroup.bind(this)
     // this.onLoadMore = this.onLoadMore.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
+    this.props.loadFriends(this.props.user.id)
   }
 
-  toggleShowForm() {
-    this.setState({showForm: !this.state.showForm})
-  }
   // Ant process for componentDidMount:
   // the component mounts with 3 randomly generated names for the data array from fakeDataUrl and they are placed in the list array
   // componentDidMount() {
@@ -90,13 +94,41 @@ export class GroupMembers extends React.Component {
   //   })
   // }
 
+  // filters out user's friends that are already in group so they don't appear in dropdown menu
+  friendsNotInGroup(friends, groupMembers) {
+    const availableFriends = []
+    for (let i = 0; i < friends.length; i++) {
+      let friend = friends[i]
+      const inGroup = groupMembers.filter((member) => member.id === friend.id)
+      if (!inGroup.length) {
+        availableFriends.push(friend)
+      }
+    }
+    return availableFriends
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value,
+    })
+  }
+
+  handleSubmit({key}) {
+    if (key == 0) {
+      message.info(`Choose a friend`)
+      return
+    }
+    this.props.addGroupMember(this.props.groupId, {member: key})
+    message.info(`You added a friend`)
+  }
+
   // if group member has outstanding balance in the group, alert they cannot be removed, else remove them
-  async attemptToRemoveMember(groupId, memberId, lengthOfMembersArray) {
+  async attemptToRemoveMember(groupId, memberId, lengthOfMembersArray, item) {
     this.setState({numberOfMembers: lengthOfMembersArray})
     await this.props.deleteGroupMember(groupId, memberId)
     if (this.props.groupMembers.length === this.state.numberOfMembers) {
-      alert('You cannot remove a member with a balance in the group.')
-    }
+      message.info('You cannot remove a member with a balance in the group.')
+    } else message.info(`You have removed ${item.firstName} from this group`)
   }
 
   noMembers = (memberList) => {
@@ -108,6 +140,10 @@ export class GroupMembers extends React.Component {
   render() {
     const {groupMembers} = this.props
     const lengthOfMembersArray = groupMembers.length
+    const friendsNotInGroup = this.friendsNotInGroup(
+      this.props.friends || [],
+      this.props.groupMembers || []
+    )
 
     // const {initLoading, loading} = this.state
     // const loadMore =
@@ -124,23 +160,20 @@ export class GroupMembers extends React.Component {
     //     </div>
     //   ) : null
 
+    //drop down menu for choosing a friend to add to the group
+    const addFriendMenu = (
+      <Menu onClick={this.handleSubmit}>
+        <Menu.Item key="0">Choose a friend</Menu.Item>
+        {friendsNotInGroup.map((friend) => (
+          <Menu.Item key={`${friend.id}`} value={friend.id}>
+            {friend.firstName} {friend.lastName}
+          </Menu.Item>
+        ))}
+      </Menu>
+    )
+
     return (
       <div>
-        {this.state.showForm ? (
-          <AddGroupMemberForm
-            toggleForm={this.toggleShowForm}
-            groupId={this.props.groupId}
-          />
-        ) : (
-          <img
-            className="groupImg"
-            src="/images/plus.png"
-            height="64px"
-            width="64px"
-            title="Add a member"
-            onClick={this.toggleShowForm}
-          />
-        )}
         <div id="full-member-list">
           {this.noMembers(groupMembers)}
           <List
@@ -158,7 +191,8 @@ export class GroupMembers extends React.Component {
                       this.attemptToRemoveMember(
                         this.props.groupId,
                         item.id,
-                        lengthOfMembersArray
+                        lengthOfMembersArray,
+                        item
                       )
                     }
                   >
@@ -178,6 +212,16 @@ export class GroupMembers extends React.Component {
             )}
           />
         </div>
+        <div id="add-friend-dropdown">
+          <Dropdown overlay={addFriendMenu}>
+            <a
+              className="add-to-group-dropdown"
+              onClick={(e) => e.preventDefault()}
+            >
+              Add a friend to this group <DownOutlined />
+            </a>
+          </Dropdown>
+        </div>
       </div>
     )
   }
@@ -187,6 +231,7 @@ const mapStateToProps = (state) => {
   return {
     groupMembers: state.groupMembers,
     user: state.user,
+    friends: state.friends,
   }
 }
 
@@ -194,6 +239,9 @@ const mapDispatchToProps = (dispatch) => ({
   loadGroupMembers: (groupId) => dispatch(_loadGroupMembers(groupId)),
   deleteGroupMember: (groupId, memberId) =>
     dispatch(_deleteGroupMember(groupId, memberId)),
+  loadFriends: (userId) => dispatch(_loadFriends(userId)),
+  addGroupMember: (groupId, memberId) =>
+    dispatch(_addGroupMember(groupId, memberId)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupMembers)
