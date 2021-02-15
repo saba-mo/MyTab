@@ -6,7 +6,6 @@ import {
   _addGroupMember,
   _deleteGroupMember,
 } from '../../store'
-import {AddGroupMemberForm} from '../index'
 import {List, Avatar, Button, Skeleton, Menu, Dropdown, message} from 'antd'
 import {DownOutlined} from '@ant-design/icons'
 
@@ -18,8 +17,6 @@ export class GroupMembers extends React.Component {
   constructor() {
     super()
     this.state = {
-      member: '',
-      showForm: false,
       numberOfMembers: 0,
       // initLoading: true,
       // loading: false,
@@ -27,13 +24,11 @@ export class GroupMembers extends React.Component {
       // list: [],
     }
 
-    this.toggleShowForm = this.toggleShowForm.bind(this)
     this.attemptToRemoveMember = this.attemptToRemoveMember.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.friendsNotInGroup = this.friendsNotInGroup.bind(this)
     // this.onLoadMore = this.onLoadMore.bind(this)
-    this.onClick = this.onClick.bind(this)
   }
 
   componentDidMount() {
@@ -41,9 +36,6 @@ export class GroupMembers extends React.Component {
     this.props.loadFriends(this.props.user.id)
   }
 
-  toggleShowForm() {
-    this.setState({showForm: !this.state.showForm})
-  }
   // Ant process for componentDidMount:
   // the component mounts with 3 randomly generated names for the data array from fakeDataUrl and they are placed in the list array
   // componentDidMount() {
@@ -121,24 +113,22 @@ export class GroupMembers extends React.Component {
     })
   }
 
-  handleSubmit(event) {
-    if (!this.state.member) {
-      event.preventDefault()
-      alert('A required field is missing.')
+  handleSubmit({key}) {
+    if (key == 0) {
+      message.info(`Choose a friend`)
       return
     }
-    event.preventDefault()
-    this.props.addGroupMember(this.props.groupId, {member: this.state.member})
-    this.setState({member: ''})
+    this.props.addGroupMember(this.props.groupId, {member: key})
+    message.info(`You added a friend`)
   }
 
   // if group member has outstanding balance in the group, alert they cannot be removed, else remove them
-  async attemptToRemoveMember(groupId, memberId, lengthOfMembersArray) {
+  async attemptToRemoveMember(groupId, memberId, lengthOfMembersArray, item) {
     this.setState({numberOfMembers: lengthOfMembersArray})
     await this.props.deleteGroupMember(groupId, memberId)
     if (this.props.groupMembers.length === this.state.numberOfMembers) {
-      alert('You cannot remove a member with a balance in the group.')
-    }
+      message.info('You cannot remove a member with a balance in the group.')
+    } else message.info(`You have removed ${item.firstName} from this group`)
   }
 
   noMembers = (memberList) => {
@@ -170,44 +160,20 @@ export class GroupMembers extends React.Component {
     //     </div>
     //   ) : null
 
-    // onClick({key}) {
-    //   message.info(`Click on item ${key}`)
-    // }
-
+    //drop down menu for choosing a friend to add to the group
     const addFriendMenu = (
-      <Menu onClick={this.onClick}>
-        <Menu.Item key="1">1st menu item</Menu.Item>
-        <Menu.Item key="2">2nd menu item</Menu.Item>
-        <Menu.Item key="3">3rd menu item</Menu.Item>
+      <Menu onClick={this.handleSubmit}>
+        <Menu.Item key="0">Choose a friend</Menu.Item>
+        {friendsNotInGroup.map((friend) => (
+          <Menu.Item key={`${friend.id}`} value={friend.id}>
+            {friend.firstName} {friend.lastName}
+          </Menu.Item>
+        ))}
       </Menu>
     )
 
     return (
       <div>
-        {this.state.showForm ? (
-          <AddGroupMemberForm
-            toggleForm={this.toggleShowForm}
-            groupId={this.props.groupId}
-          />
-        ) : (
-          <img
-            className="groupImg"
-            src="/images/plus.png"
-            height="64px"
-            width="64px"
-            title="Add a member"
-            onClick={this.toggleShowForm}
-          />
-        )}
-        <Dropdown overlay={addFriendMenu}>
-          <a
-            className="add-to-group-dropdown"
-            onClick={(e) => e.preventDefault()}
-          >
-            Add a friend to this group <DownOutlined />
-          </a>
-        </Dropdown>
-
         <div id="full-member-list">
           {this.noMembers(groupMembers)}
           <List
@@ -225,7 +191,8 @@ export class GroupMembers extends React.Component {
                       this.attemptToRemoveMember(
                         this.props.groupId,
                         item.id,
-                        lengthOfMembersArray
+                        lengthOfMembersArray,
+                        item
                       )
                     }
                   >
@@ -244,6 +211,16 @@ export class GroupMembers extends React.Component {
               </List.Item>
             )}
           />
+        </div>
+        <div id="add-friend-dropdown">
+          <Dropdown overlay={addFriendMenu}>
+            <a
+              className="add-to-group-dropdown"
+              onClick={(e) => e.preventDefault()}
+            >
+              Add a friend to this group <DownOutlined />
+            </a>
+          </Dropdown>
         </div>
       </div>
     )
