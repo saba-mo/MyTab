@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {_addGroupExpense, _loadGroupMembers} from '../../store'
 import currency from 'currency.js'
+import {notification} from 'antd'
 
 export class CreateGroupExpenseForm extends React.Component {
   constructor(props) {
@@ -15,10 +16,19 @@ export class CreateGroupExpenseForm extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleAmountOwedChange = this.handleAmountOwedChange.bind(this)
+    this.openSuccessNotification = this.openSuccessNotification.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
+  }
+
+  openSuccessNotification = (type) => {
+    notification[type]({
+      message: 'Added!',
+      description: 'Your expense has been added.',
+      placement: 'bottomRight',
+    })
   }
 
   handleChange(event) {
@@ -48,21 +58,6 @@ export class CreateGroupExpenseForm extends React.Component {
 
   handleSubmit(event) {
     try {
-      if (
-        !this.state.name ||
-        !this.state.totalCost ||
-        !this.state.paidBy ||
-        this.state.paidBy === 'select'
-      ) {
-        event.preventDefault()
-        alert('A required field is missing.')
-        return
-      }
-      if (!Number(this.state.totalCost)) {
-        event.preventDefault()
-        alert('Cost must be a number.')
-        return
-      }
       event.preventDefault()
       this.props.toggleForm()
       this.props.addGroupExpense(this.props.groupId, {
@@ -71,6 +66,7 @@ export class CreateGroupExpenseForm extends React.Component {
         paidBy: this.state.paidBy,
         owedByMember: this.state.owedByMember,
       })
+      this.openSuccessNotification('success')
     } catch (error) {
       console.error(
         'Failed to handle expense submission due to this error: ',
@@ -133,7 +129,6 @@ export class CreateGroupExpenseForm extends React.Component {
             name="paidBy"
             required
           >
-            <option value="member">select</option>
             {this.props.groupMembers.map((member) => (
               <option key={`member-${member.id}`} value={member.id}>
                 {member.firstName} {member.lastName}

@@ -8,7 +8,7 @@ import {
 } from '../../store'
 import {CreateGroupExpenseForm} from '../index'
 import currency from 'currency.js'
-import {List, Avatar, Button} from 'antd'
+import {List, Avatar, Button, notification} from 'antd'
 
 export class GroupExpenses extends React.Component {
   constructor() {
@@ -18,6 +18,8 @@ export class GroupExpenses extends React.Component {
     this.toggleShowForm = this.toggleShowForm.bind(this)
     this.checkMembersList = this.checkMembersList.bind(this)
     this.deleteExpense = this.deleteExpense.bind(this)
+    this.openSuccessNotification = this.openSuccessNotification.bind(this)
+    this.openFailureNotification = this.openFailureNotification.bind(this)
   }
 
   componentDidMount() {
@@ -25,11 +27,27 @@ export class GroupExpenses extends React.Component {
     this.props.loadGroupMembers(this.props.groupId)
   }
 
+  openSuccessNotification = (type) => {
+    notification[type]({
+      message: 'Deleted',
+      description: 'The expense has been removed.',
+      placement: 'bottomRight',
+    })
+  }
+
+  openFailureNotification = (type) => {
+    notification[type]({
+      message: 'Required failed',
+      description: 'Add a group member before creating a group expense.',
+      placement: 'bottomRight',
+    })
+  }
+
   checkMembersList() {
     if (this.props.groupMembers.length > 1) {
       this.toggleShowForm()
     } else {
-      alert('Add a group member before creating a group expense.')
+      this.openFailureNotification('error')
     }
   }
 
@@ -45,6 +63,7 @@ export class GroupExpenses extends React.Component {
     ) {
       const {groupId} = this.props
       this.props.deleteGroupExpense(groupId, expenseId)
+      this.openSuccessNotification('success')
     }
   }
 

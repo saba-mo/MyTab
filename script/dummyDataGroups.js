@@ -1,7 +1,7 @@
 const groupData = [
   [
     {title: 'My Afternoons with Margueritte (La tête en friche)'},
-    {title: 'Star Kid'},
+    {title: 'Adventures with friends'},
     {title: "Fool's Gold"},
     {title: 'Broadway Melody of 1938'},
     {title: 'The Gardener'},
