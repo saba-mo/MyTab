@@ -2,8 +2,9 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {_loadGroupMembers, _deleteGroupMember} from '../../store'
 import {AddGroupMemberForm} from '../index'
-import {List, Avatar, Button, Skeleton} from 'antd'
+import {List, Avatar, Skeleton} from 'antd'
 
+// import Button from antd
 // ant example loads 3 (the number stored in count) fake data inputs that are randomly generated every time fakeDataUrl is called
 // const count = 3
 // const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`

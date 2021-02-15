@@ -1,14 +1,6 @@
 import React from 'react'
-import {Table, Button, Space} from 'antd'
-import {Drawer, List, Avatar, Divider, Col, Row} from 'antd'
+import {Drawer, List, Avatar} from 'antd'
 import AntBalanceTable from './antBalanceTable'
-
-const DescriptionItem = ({title, content}) => (
-  <div className="site-description-item-profile-wrapper">
-    <p className="site-description-item-profile-p-label">{title}:</p>
-    {content}
-  </div>
-)
 
 class BalanceDemo extends React.Component {
   state = {visible: false, tableName: ''}

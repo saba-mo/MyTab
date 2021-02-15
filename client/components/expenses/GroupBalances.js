@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {_loadGroupExpenses, _settleOnePortion} from '../../store/'
-import {CreateGroupExpenseForm} from '../index'
 import currency from 'currency.js'
 import BalanceDemo from './antBalanceProfiles'
 
@@ -28,11 +27,6 @@ export class GroupBalances extends React.Component {
 
   render() {
     const {groupExpenses, user} = this.props
-
-    const groupTotal = groupExpenses.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.totalCost,
-      0
-    )
 
     let expenses = []
     let totalOwedToUser = 0
@@ -73,115 +67,6 @@ export class GroupBalances extends React.Component {
           settleThisPortion={this.settleThisPortion}
           user={user}
         />
-        {/* <h3>
-          Total Owed to {user.firstName} {user.lastName}:{' '}
-          {currency(totalOwedToUser).format()}
-        </h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Expense</th>
-              <th>Paid By</th>
-              <th>Owes Funds</th>
-              <th>Amount</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {expenses
-              .filter((expense) => expense[0].id === user.id)
-              .map((expense) => (
-                <tr key={expense[5].id}>
-                  <td>{expense[3]}</td>
-                  <td>
-                    {expense[0].firstName} {expense[0].lastName}
-                  </td>
-                  <td>
-                    {expense[1].firstName} {expense[1].lastName}
-                  </td>
-                  <td>{currency(expense[2]).format()}</td>
-                  <td>
-                    <button
-                      type="submit"
-                      onClick={() => this.settleThisPortion(expense[5])}
-                    >
-                      Settle
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-
-        <h3>
-          Total {user.firstName} {user.lastName} Owes:{' '}
-          {currency(totalUserOwes).format()}
-        </h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Expense</th>
-              <th>Paid By</th>
-              <th>Owes Funds</th>
-              <th>Amount</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {expenses
-              .filter((expense) => expense[1].id === user.id)
-              .map((expense) => (
-                <tr key={expense[5].id}>
-                  <td>{expense[3]}</td>
-                  <td>
-                    {expense[0].firstName} {expense[0].lastName}
-                  </td>
-                  <td>
-                    {expense[1].firstName} {expense[1].lastName}
-                  </td>
-                  <td>{currency(expense[2]).format()}</td>
-                  <td>
-                    <button
-                      type="submit"
-                      onClick={() => this.settleThisPortion(expense[5])}
-                    >
-                      Settle
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-
-        <h3>Other group expenses: </h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Expense</th>
-              <th>Paid By</th>
-              <th>Owes Funds</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {expenses
-              .filter(
-                (expense) => ![expense[0].id, expense[1].id].includes(user.id)
-              )
-              .map((expense) => (
-                <tr key={expense[5].id}>
-                  <td>{expense[3]}</td>
-                  <td>
-                    {expense[0].firstName} {expense[0].lastName}
-                  </td>
-                  <td>
-                    {expense[1].firstName} {expense[1].lastName}
-                  </td>
-                  <td>{currency(expense[2]).format()}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table> */}
       </div>
     )
   }

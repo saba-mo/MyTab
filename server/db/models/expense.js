@@ -5,11 +5,11 @@ const currency = require('currency.js')
 const Expense = db.define('expense', {
   name: {
     type: Sequelize.STRING,
-    // allowNull: false,
-    // validate: {
-    //   notEmpty: true,
-    //   notNull: true,
-    // },
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+      notNull: true,
+    },
   },
   totalCost: {
     type: Sequelize.FLOAT,

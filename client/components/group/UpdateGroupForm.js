@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_updateGroup} from '../../store/groups/singleGroup'
+import {_updateGroup} from '../../store/'
 import {notification} from 'antd'
 
 export class UpdateGroupForm extends React.Component {

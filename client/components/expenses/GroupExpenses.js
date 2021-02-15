@@ -97,9 +97,6 @@ export class GroupExpenses extends React.Component {
                   >
                     Delete expense
                   </a>,
-                  // <a key="group-expense" onClick={() => console.log('edit')}>
-                  //   Edit expense
-                  // </a>,
                 ]}
               >
                 <List.Item.Meta
