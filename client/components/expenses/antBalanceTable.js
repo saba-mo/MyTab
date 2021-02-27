@@ -24,7 +24,7 @@ class AntBalanceTable extends React.Component {
         ellipsis: true,
       },
       {
-        title: 'Owing user',
+        title: 'Owed by',
         dataIndex: 'owingUser',
         key: 'owingUser',
       },

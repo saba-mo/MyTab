@@ -75,7 +75,7 @@ class BalanceDemo extends React.Component {
           )}
         />
         <Drawer
-          width={640}
+          width={window.innerWidth > 900 ? 640 : window.innerWidth * 0.9}
           placement="right"
           closable={false}
           onClose={this.onClose}
