@@ -95,7 +95,7 @@ export class GroupExpenses extends React.Component {
                     key="group-expense"
                     onClick={() => this.deleteExpense(item.id)}
                   >
-                    Delete expense
+                    Delete
                   </a>,
                 ]}
               >

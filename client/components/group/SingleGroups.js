@@ -54,7 +54,7 @@ export class SingleGroup extends React.Component {
       <div>
         <main>
           <div>
-            <div className="editGroupPencil">
+            <div>
               <h2>{this.props.singleGroup.title}</h2>
               {this.state.showForm ? (
                 <UpdateGroupForm toggleForm={this.toggleShowForm} />

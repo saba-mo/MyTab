@@ -8,7 +8,7 @@ const userData = [
     },
     {
       firstName: 'Saba',
-      lastName: 'Mohtasham Schuttloffel',
+      lastName: 'Schuttloffel',
       email: 'saba@this.com',
       password: 'password',
     },

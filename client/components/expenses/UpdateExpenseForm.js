@@ -102,7 +102,7 @@ export class UpdateExpenseForm extends React.Component {
             name="name"
             value={this.state.name}
             onChange={this.handleChange}
-            placeholder="Ex: Quarantine Brunch"
+            placeholder="Ex: Brunch"
             required
           />
           <label htmlFor="totalCost">Edit Cost:</label>
@@ -114,7 +114,7 @@ export class UpdateExpenseForm extends React.Component {
             min={0}
             value={this.state.totalCost === 0 ? '' : this.state.totalCost}
             onChange={this.handleChange}
-            placeholder="Ex: 100 or 9.39"
+            placeholder="Ex: 10.89"
             required
           />
           <label htmlFor="paidBy">Edit Paid By:</label>
@@ -150,7 +150,7 @@ export class UpdateExpenseForm extends React.Component {
                         : this.state.owedByMember[member.id]
                     }
                     placeholder={
-                      member.id === this.state.paidBy ? 'Paid by' : undefined
+                      member.id === this.state.paidBy ? 'Paid by' : 'Ex: 10.89'
                     }
                     onChange={(event) =>
                       this.handleAmountOwedChange(

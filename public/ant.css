@@ -99,7 +99,9 @@ select:required {
   border-color: red !important;
 }
 .create-expense-button {
-  width: 25%;
+  max-width: fit-content;
+  padding-left: 1em;
+  padding-right: 1em;
   background-color: #4caf50;
   color: white;
   margin: 8px 0;
