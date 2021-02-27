@@ -62,7 +62,15 @@ class Routes extends Component {
         )}
         {isLoggedIn && (
           <Layout>
-            <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+            <Sider
+              trigger={null}
+              collapsible
+              collapsed={this.state.collapsed}
+              breakpoint="sm"
+              onBreakpoint={(broken) => {
+                if (broken) this.toggle()
+              }}
+            >
               <div className="logo" />
               <Menu
                 theme="dark"

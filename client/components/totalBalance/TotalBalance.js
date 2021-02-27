@@ -16,7 +16,7 @@ export class TotalBalance extends React.Component {
       return (
         <div>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Card>
                 <Statistic
                   title="Total Balance on MyTab"
@@ -32,7 +32,7 @@ export class TotalBalance extends React.Component {
       return (
         <div className="site-statistic-demo-card">
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Card>
                 <Statistic
                   title="Total Balance on MyTab"
@@ -44,7 +44,7 @@ export class TotalBalance extends React.Component {
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Card>
                 <Statistic
                   title="You lent"
@@ -57,7 +57,7 @@ export class TotalBalance extends React.Component {
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Card>
                 <Statistic
                   title="You borrowed"
@@ -75,7 +75,7 @@ export class TotalBalance extends React.Component {
       return (
         <div className="site-statistic-demo-card">
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Card>
                 <Statistic
                   title="Total Balance on MyTab"
@@ -87,7 +87,7 @@ export class TotalBalance extends React.Component {
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Card>
                 <Statistic
                   title="You lent"
@@ -100,7 +100,7 @@ export class TotalBalance extends React.Component {
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Card>
                 <Statistic
                   title="You borrowed"
