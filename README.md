@@ -5,6 +5,7 @@ My Tab is a progressive web app designed to simplify tracking shared expenses. S
 As a user, you can log in using Amazon or create an account.
 
 # Technologies
+![image](https://user-images.githubusercontent.com/67703233/109435761-ec53b780-79d0-11eb-9ab7-cd6df4566007.png)
 
 Front-end
 
