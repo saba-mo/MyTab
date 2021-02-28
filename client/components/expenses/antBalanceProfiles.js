@@ -40,6 +40,7 @@ class BalanceDemo extends React.Component {
     return (
       <>
         <List
+          itemLayout={window.innerWidth < 700 ? 'vertical' : 'horizontal'}
           dataSource={[
             {
               name: 'You lent',
