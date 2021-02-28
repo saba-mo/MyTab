@@ -43,7 +43,7 @@ export class AllFriends extends React.Component {
           {this.noFriends(friendList)}
           <List
             className="friends-list"
-            itemLayout="horizontal"
+            itemLayout={window.innerWidth < 700 ? 'vertical' : 'horizontal'}
             dataSource={friendList}
             renderItem={(item) => (
               <List.Item
