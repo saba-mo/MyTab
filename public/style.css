@@ -146,6 +146,10 @@ footer {
 }
 
 @media screen and (max-width: 600px) {
+  .friend-form-container {
+    width: 100%;
+  }
+
   .tab_buttons_div {
     display: flex;
     flex-direction: column;
