@@ -56,9 +56,9 @@ class Routes extends Component {
         {/* Routes placed here are available to all visitors */}
         {!isLoggedIn && (
           <>
-            <Route path="/" component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
+            <Route exact path="/" component={Login} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
           </>
         )}
         {isLoggedIn && (
