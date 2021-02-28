@@ -42,10 +42,11 @@ export class CreateGroupForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label htmlFor="name">Group Name:</label>
+        <label htmlFor="name" />
         <input
           type="text"
           name="title"
+          placeholder="Enter group name"
           value={this.state.title}
           onChange={this.handleChange}
         />
