@@ -85,8 +85,8 @@ export class GroupExpenses extends React.Component {
         <div id="group-expense-list">
           {this.noExpenses(groupExpenses)}
           <List
+            itemLayout={window.innerWidth < 700 ? 'vertical' : 'horizontal'}
             className="group-expenses"
-            itemLayout="horizontal"
             dataSource={groupExpenses}
             renderItem={(item) => (
               <List.Item
