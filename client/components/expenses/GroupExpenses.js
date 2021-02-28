@@ -118,7 +118,7 @@ export class GroupExpenses extends React.Component {
               </List.Item>
             )}
           />
-          <h3>Total group expenses: {currency(groupTotal).format()}</h3>
+          <h5>Total group expenses: {currency(groupTotal).format()}</h5>
         </div>
         <div className="editGroupPencil">
           {this.state.showForm ? (
