@@ -57,22 +57,15 @@ export class CreateGroupExpenseForm extends React.Component {
   }
 
   handleSubmit(event) {
-    try {
-      event.preventDefault()
-      this.props.toggleForm()
-      this.props.addGroupExpense(this.props.groupId, {
-        name: this.state.name,
-        totalCost: currency(this.state.totalCost).value,
-        paidBy: this.state.paidBy,
-        owedByMember: this.state.owedByMember,
-      })
-      this.openSuccessNotification('success')
-    } catch (error) {
-      console.error(
-        'Failed to handle expense submission due to this error: ',
-        error
-      )
-    }
+    event.preventDefault()
+    this.props.toggleForm()
+    this.props.addGroupExpense(this.props.groupId, {
+      name: this.state.name,
+      totalCost: currency(this.state.totalCost).value,
+      paidBy: this.state.paidBy,
+      owedByMember: this.state.owedByMember,
+    })
+    this.openSuccessNotification('success')
   }
 
   render() {

@@ -4,7 +4,6 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user/user'
 import {default as friends, friendsErrorReducer} from './friends/friends'
-import singleFriend from './friends/singleFriend'
 import groups from './groups/groups'
 import groupExpenses from './expenses/expenses'
 import singleExpense from './expenses/singleExpense'
@@ -20,7 +19,6 @@ const reducer = combineReducers({
   groups: groups,
   singleGroup: singleGroup,
   friends: friends,
-  singleFriend: singleFriend,
   friendsErrorReducer: friendsErrorReducer,
   groupMembers: groupMembers,
   groupExpenses: groupExpenses,
@@ -36,7 +34,6 @@ const store = createStore(reducer, middleware)
 export default store
 export * from './user/user'
 export * from './friends/friends'
-export * from './friends/singleFriend'
 export * from './groups/groups'
 export * from './expenses/expenses'
 export * from './expenses/singleExpense'

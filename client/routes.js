@@ -7,7 +7,6 @@ import {
   Signup,
   UserHome,
   AllFriends,
-  Friend,
   AddFriendForm,
   SingleExpense,
   Groups,
@@ -25,9 +24,6 @@ import {Layout, Menu} from 'antd'
 const {Header, Sider, Content} = Layout
 import history from './history'
 
-/**
- * COMPONENT
- */
 class Routes extends Component {
   state = {
     collapsed: false,
@@ -113,11 +109,9 @@ class Routes extends Component {
                 }}
               >
                 <Switch>
-                  {/* Routes placed here are only available after logging in */}
                   <Route path="/home" component={UserHome} />
                   <Route path="/friends" component={AllFriends} />
                   <Route path="/friend/add" component={AddFriendForm} />
-                  <Route path="/friend/:friendId" component={Friend} />
                   <Route exact path="/groups/:userId" component={Groups} />
                   <Route
                     exact
@@ -141,9 +135,6 @@ class Routes extends Component {
   }
 }
 
-/**
- * CONTAINER
- */
 const mapState = (state) => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
@@ -161,13 +152,8 @@ const mapDispatch = (dispatch) => {
   }
 }
 
-// The `withRouter` wrapper makes sure that updates are not blocked
-// when the url changes
 export default withRouter(connect(mapState, mapDispatch)(Routes))
 
-/**
- * PROP TYPES
- */
 Routes.propTypes = {
   loadInitialData: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,

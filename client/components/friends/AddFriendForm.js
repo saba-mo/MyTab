@@ -66,30 +66,23 @@ class AddFriendForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault()
     this.props.toggleForm()
-    try {
-      const checkIfFriends = this.props.friends.filter(
-        (friend) => friend.email === this.state.email
-      )
-      const checkIfUser = this.props.allUsers.filter(
-        (user) => user.email === this.state.email
-      )
+    const checkIfFriends = this.props.friends.filter(
+      (friend) => friend.email === this.state.email
+    )
+    const checkIfUser = this.props.allUsers.filter(
+      (user) => user.email === this.state.email
+    )
 
-      if (this.props.user.email === this.state.email) {
-        this.openFailureSelfNotification('error')
-      } else if (checkIfFriends.length) {
-        this.openFailureAlreadyFriendsNotification('error')
-      } else if (!checkIfUser.length) {
-        this.openFailureNoAccountNotification('error')
-      } else {
-        this.props.addFriend(this.props.user.id, this.state.email)
-        this.setState({email: ''})
-        this.openSuccessNotification('success')
-      }
-    } catch (error) {
-      console.error(
-        'Hmm, having a hard time adding this friend, here are more details: ',
-        error
-      )
+    if (this.props.user.email === this.state.email) {
+      this.openFailureSelfNotification('error')
+    } else if (checkIfFriends.length) {
+      this.openFailureAlreadyFriendsNotification('error')
+    } else if (!checkIfUser.length) {
+      this.openFailureNoAccountNotification('error')
+    } else {
+      this.props.addFriend(this.props.user.id, this.state.email)
+      this.setState({email: ''})
+      this.openSuccessNotification('success')
     }
   }
 

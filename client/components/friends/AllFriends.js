@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {_loadFriends, _deleteFriend} from '../../store'
 import {AddFriendForm} from '../../components'
-import {List, Avatar, Skeleton, Button} from 'antd'
+import {List, Avatar, Skeleton, Button, notification} from 'antd'
 
 export class AllFriends extends React.Component {
   constructor(props) {
@@ -11,10 +11,19 @@ export class AllFriends extends React.Component {
 
     this.toggleShowForm = this.toggleShowForm.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.successRemoveFriend = this.successRemoveFriend.bind(this)
   }
 
   componentDidMount() {
     this.props.loadFriends(this.props.user.id)
+  }
+
+  successRemoveFriend = (type) => {
+    notification[type]({
+      message: 'Removed',
+      description: 'You are no longer friends on MyTab.',
+      placement: 'bottomRight',
+    })
   }
 
   toggleShowForm() {
@@ -23,6 +32,7 @@ export class AllFriends extends React.Component {
 
   handleDelete = (userId, friendToDelete) => {
     this.props.deleteFriend(userId, friendToDelete)
+    this.successRemoveFriend('success')
   }
 
   noFriends = (friendList) => {

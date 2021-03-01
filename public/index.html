@@ -18,18 +18,9 @@
     <link rel="icon" href="/images/receipt.png" />
 
     <script defer src="/bundle.js"></script>
-    <script type="module">
-      // import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate'
-
-      // const el = document.createElement('pwa-update')
-      // document.body.appendChild(el)
-    </script>
   </head>
   <body>
     <div id="app"></div>
-
-    <!-- Below is optional code to manually add a service worker, from next-steps.md -->
-
     <noscript>Your browser does not support JavaScript!</noscript>
     <script>
       if (!navigator.serviceWorker.controller) {
@@ -38,13 +29,6 @@
          console.log("Service worker has been registered for scope: " + reg.scope);
         });
       }
-      // if ('serviceWorker' in navigator) {
-      //   window.addEventListener('load', function() {
-      //     console.log('hello')
-      //     navigator.serviceWorker.register('./pwabuilder-sw.js', {scope: "./"});
-      //     console.log('sw: ', navigator.serviceWorker)
-      //   })
-      // }
     </script>
   </body>
 </html>

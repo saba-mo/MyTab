@@ -47,9 +47,6 @@ class Navbar extends React.Component {
   }
 }
 
-/**
- * CONTAINER
- */
 const mapState = (state) => {
   return {
     isLoggedIn: !!state.user.id,
@@ -66,9 +63,6 @@ const mapDispatch = (dispatch) => {
 
 export default withRouter(connect(mapState, mapDispatch)(Navbar))
 
-/**
- * PROP TYPES
- */
 Navbar.propTypes = {
   handleClick: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
