@@ -7,21 +7,19 @@ As a user, you can log in using Amazon or create an account.
 # Technologies
 ![techStackSlide (1)](https://user-images.githubusercontent.com/67703233/109438710-f8934100-79df-11eb-87bf-fd757fa60751.png)
 
-Front-end
+**Front-end**
+* JavaScript
+* React
+* Redux
+* Currency.js
+* Ant Design
 
-JavaScript
-React
-Redux
-Currency
-Ant Design
-
-Back-end
-
-Amazon OAUTH
-Node JS
-Express
-Sequelize
-Postgres
+**Back-end**
+* Amazon OAUTH
+* Node JS
+* Express
+* Sequelize
+* Postgres
 
 # Setup
 
