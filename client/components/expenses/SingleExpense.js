@@ -31,7 +31,6 @@ class SingleExpense extends React.Component {
 
   render() {
     const {expense} = this.props
-    console.log(expense)
 
     return (
       <div className="expense-individual">
