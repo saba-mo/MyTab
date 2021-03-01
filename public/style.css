@@ -93,6 +93,14 @@ a.grp_tab_btns:hover {
   color: white;
 }
 
+.edit-expense-button {
+  float: left;
+  cursor: pointer;
+  background-color: #1890ff;
+  color: white;
+  margin-right: 100em;
+}
+
 .toggle-button {
   float: right;
 }

@@ -4,14 +4,16 @@ import {Link} from 'react-router-dom'
 import {_loadAnExpense, _deleteGroupExpense} from '../../store/'
 import {UpdateExpenseForm} from '../index'
 import currency from 'currency.js'
+import {EditOutlined, RollbackOutlined} from '@ant-design/icons'
+import {Button} from 'antd'
 
 class SingleExpense extends React.Component {
   constructor() {
     super()
     this.state = {showForm: false}
 
-    this.deleteAndGoBack = this.deleteAndGoBack.bind(this)
     this.toggleShowForm = this.toggleShowForm.bind(this)
+    this.goBack = this.goBack.bind(this)
   }
 
   componentDidMount() {
@@ -23,51 +25,48 @@ class SingleExpense extends React.Component {
     this.setState({showForm: !this.state.showForm})
   }
 
-  deleteAndGoBack() {
-    if (
-      window.confirm(
-        'Are you sure you want to delete this expense? This will remove this expense for all members involved.'
-      )
-    ) {
-      const {groupId, id} = this.props.expense
-      this.props.deleteGroupExpense(groupId, id)
-      window.location.href = `/groups/singleGroup/${groupId}`
-    }
+  goBack(groupId) {
+    window.location.assign(`/groups/singleGroup/${groupId}`)
   }
 
   render() {
     const {expense} = this.props
+    console.log(expense)
 
     return (
       <div className="expense-individual">
-        <div className="pages-view-navbar">
-          <Link to={`/groups/singleGroup/${expense.groupId}`}>
-            <h3>Back to Group Expenses </h3>
-          </Link>
-        </div>
         <h4>
-          {expense.name}
-          {currency(expense.totalCost).format()}
+          {expense.name} {currency(expense.totalCost).format()}
         </h4>
-        <div className="editGroupPencil">
+        <div>
           {this.state.showForm ? (
             <UpdateExpenseForm
               toggleForm={this.toggleShowForm}
               groupId={this.props.match.params.groupId}
             />
           ) : (
-            <img
-              className="groupImg"
-              src="/images/pencil.png"
-              // height="400px"
-              // width="407.406px"
+            <Button
+              className="edit-expense-button"
+              icon={<EditOutlined />}
               onClick={this.toggleShowForm}
-            />
+              size="small"
+            >
+              Edit Expense
+            </Button>
           )}
         </div>
-        <button type="submit" onClick={this.deleteAndGoBack}>
-          Remove
-        </button>
+        <br />
+        <div>
+          <Link to={`/groups/singleGroup/${expense.groupId}`}>
+            <Button
+              className="edit-expense-button"
+              icon={<RollbackOutlined />}
+              size="small"
+            >
+              Back
+            </Button>
+          </Link>
+        </div>
       </div>
     )
   }
