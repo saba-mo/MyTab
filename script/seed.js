@@ -35,27 +35,19 @@ async function seed() {
 
 // this function is first finding things already in the database, then associating them
 async function associations() {
-  // gives an array of objects that are newly created users
   let usersToAssoc = await User.findAll()
-
-  // gives an array of objects that are newly created groups
   let groupsToAssoc = await Group.findAll()
-
-  // gives an array of objects that are newly created expenses
   let expensesToAssoc = await Expense.findAll()
 
-  // manually adding 2 Users to a particular group (Star Kid) for testing
   await groupsToAssoc[1].addUser(usersToAssoc[3].id)
   await groupsToAssoc[1].addUser(usersToAssoc[0].id)
 
   // associations creation loops
-  // loops through all the groups, assigns two users to each group. Many users will be in more than one group this way
   for (let i = 0; i < groupsToAssoc.length; i++) {
     await usersToAssoc[i].addGroups([groupsToAssoc[i]])
     await usersToAssoc[i + 1].addGroups([groupsToAssoc[i]])
   }
 
-  // loops through all the expenses, assigns one user to each expense. Quick and dirty association for our limited dummy data.
   let count = 0
   for (let i = 0; i < expensesToAssoc.length; i++) {
     await usersToAssoc[count].addExpenses([expensesToAssoc[i]])
@@ -84,10 +76,7 @@ async function associations() {
 
 // function to create portions assocations
 async function portionsOfExpenses() {
-  // gives an array of objects that are newly created users
   let usersToAssoc = await User.findAll()
-
-  // add friend and group association group
   let user2 = await User.findByPk(2)
   await user2.addFriends([6, 5])
   await usersToAssoc[4].addFriends([2])
@@ -95,10 +84,7 @@ async function portionsOfExpenses() {
   let group10 = await Group.create({title: 'Princess Bride'})
   await group10.addUsers([2, 5, 6])
 
-  // gives an array of objects that are newly created portions of the expenses, ready to assign to Users
   let portionsOfExpensesToAssoc = await Item.findAll()
-
-  // add portions of expenses to specific Users. Ensured that the Users are in the same group and that group has the Expense that the item/portion is part of
   await usersToAssoc[1].addItem(portionsOfExpensesToAssoc[0].id)
   await usersToAssoc[0].addItem(portionsOfExpensesToAssoc[1].id)
   await usersToAssoc[3].addItem(portionsOfExpensesToAssoc[2].id)

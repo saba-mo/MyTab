@@ -17,12 +17,6 @@ const Expense = db.define('expense', {
       min: 0,
     },
     get() {
-      // broken down of return state to more easily read as an engineer:
-      // let storedValue = this.getDataValue('totalCost')
-      // let currency = currency(storedValue)
-      // let floatValue = currency.value
-      // return floatValue
-
       // Use Currency.js to force an appropriate currency friendly float representation of the value
       return currency(this.getDataValue('totalCost')).value
     },
