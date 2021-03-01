@@ -4,6 +4,8 @@ My Tab is a progressive web app designed to simplify tracking shared expenses. S
 
 ![](logging-in.gif)
 
+![](adding-expense.gif)
+
 # Technologies
 ![techStackSlide (1)](https://user-images.githubusercontent.com/67703233/109438710-f8934100-79df-11eb-87bf-fd757fa60751.png)
 
