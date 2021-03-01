@@ -52,13 +52,6 @@ h2 {
   justify-content: center;
 }
 
-#add-friend-dropdown {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .tab_buttons_div {
   background-color: #1890ff;
   padding-top: 5px;
@@ -91,6 +84,14 @@ a.grp_tab_btns:hover {
   cursor: pointer;
   background-color: #1890ff;
   color: white;
+}
+
+#add-member-dropdown {
+  float: right;
+  cursor: pointer;
+  background-color: #1890ff;
+  color: white;
+  padding: 0 0.5em;
 }
 
 .edit-expense-button {

@@ -7,7 +7,15 @@ import {
   _addGroupMember,
   _deleteGroupMember,
 } from '../../store'
-import {List, Avatar, Skeleton, Menu, Dropdown, message} from 'antd'
+import {
+  List,
+  Avatar,
+  Skeleton,
+  Menu,
+  Dropdown,
+  message,
+  notification,
+} from 'antd'
 import {DownOutlined} from '@ant-design/icons'
 
 export class GroupMembers extends React.Component {
@@ -21,6 +29,8 @@ export class GroupMembers extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.friendsNotInGroup = this.friendsNotInGroup.bind(this)
+    this.addedSuccessNotification = this.addedSuccessNotification.bind(this)
+    this.removeSuccessNotification = this.removeSuccessNotification.bind(this)
   }
 
   componentDidMount() {
@@ -41,6 +51,30 @@ export class GroupMembers extends React.Component {
     return availableFriends
   }
 
+  addedSuccessNotification = (type) => {
+    notification[type]({
+      message: 'Added',
+      description: 'Your friend has been added to this group.',
+      placement: 'bottomRight',
+    })
+  }
+
+  removeSuccessNotification = (type) => {
+    notification[type]({
+      message: 'Removed',
+      description: 'You have removed the member from this group.',
+      placement: 'bottomRight',
+    })
+  }
+
+  removeFailureNotification = (type) => {
+    notification[type]({
+      message: 'Request failed',
+      description: 'You cannot remove a member with a balance in the group.',
+      placement: 'bottomRight',
+    })
+  }
+
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value,
@@ -53,7 +87,7 @@ export class GroupMembers extends React.Component {
       return
     }
     this.props.addGroupMember(this.props.groupId, {member: key})
-    message.info(`You added a friend`)
+    this.addedSuccessNotification('success')
   }
 
   // if group member has outstanding balance in the group, alert they cannot be removed, else remove them
@@ -61,8 +95,8 @@ export class GroupMembers extends React.Component {
     this.setState({numberOfMembers: lengthOfMembersArray})
     await this.props.deleteGroupMember(groupId, memberId)
     if (this.props.groupMembers.length === this.state.numberOfMembers) {
-      message.info('You cannot remove a member with a balance in the group.')
-    } else message.info(`You have removed ${item.firstName} from this group`)
+      this.removeFailureNotification('error')
+    } else this.removeSuccessNotification('success')
   }
 
   noMembers = (memberList) => {
@@ -129,13 +163,10 @@ export class GroupMembers extends React.Component {
             )}
           />
         </div>
-        <div id="add-friend-dropdown">
+        <div id="add-member-dropdown">
           <Dropdown overlay={addFriendMenu}>
-            <a
-              className="add-to-group-dropdown"
-              onClick={(e) => e.preventDefault()}
-            >
-              Add a friend to this group <DownOutlined />
+            <a onClick={(e) => e.preventDefault()}>
+              + Add friend to group <DownOutlined />
             </a>
           </Dropdown>
         </div>

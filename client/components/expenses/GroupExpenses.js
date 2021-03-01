@@ -37,7 +37,7 @@ export class GroupExpenses extends React.Component {
 
   openFailureNotification = (type) => {
     notification[type]({
-      message: 'Required failed',
+      message: 'Request failed',
       description: 'Add a group member before creating a group expense.',
       placement: 'bottomRight',
     })
