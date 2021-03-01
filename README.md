@@ -2,9 +2,9 @@
 
 My Tab is a progressive web app designed to simplify tracking shared expenses. Sign up, add your friends and create groups to keep track of household expenses, trips, events and more. Just enter the total cost, who paid and which group members owe money, and MyTab will conveniently show you the breakdown of your expenses and allow you to mark them as settled. As a user, you can log in using Amazon or create an account. Your home page will show your total balance consolidated from all of your groups.
 
-![](logging-in.gif)
+<img src="logging-in.gif" width="705" height="341"/>
 
-![](adding-expense.gif)
+<img src="adding-expense.gif" width="705" height="341"/>
 
 # Technologies
 ![techStackSlide (1)](https://user-images.githubusercontent.com/67703233/109438710-f8934100-79df-11eb-87bf-fd757fa60751.png)
