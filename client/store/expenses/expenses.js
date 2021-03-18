@@ -27,9 +27,7 @@ const initialState = []
 /* THUNK CREATORS */
 export const _loadGroupExpenses = (groupId) => async (dispatch) => {
   try {
-    const {data} = await axios.get(
-      `/api/groups/singleGroup/${groupId}/expenses`
-    )
+    const {data} = await axios.get(`/api/groups/${groupId}/expenses`)
     dispatch(getGroupExpenses(data))
   } catch (error) {
     console.error(
@@ -41,10 +39,7 @@ export const _loadGroupExpenses = (groupId) => async (dispatch) => {
 
 export const _addGroupExpense = (groupId, expense) => async (dispatch) => {
   try {
-    const {data} = await axios.post(
-      `/api/groups/singleGroup/${groupId}/expenses`,
-      expense
-    )
+    const {data} = await axios.post(`/api/groups/${groupId}/expenses`, expense)
     dispatch(addGroupExpense(data))
   } catch (error) {
     console.error(
@@ -56,9 +51,7 @@ export const _addGroupExpense = (groupId, expense) => async (dispatch) => {
 
 export const _deleteGroupExpense = (groupId, expenseId) => async (dispatch) => {
   try {
-    await axios.delete(
-      `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`
-    )
+    await axios.delete(`/api/groups/${groupId}/expenses/${expenseId}`)
     dispatch(deleteGroupExpense(expenseId))
   } catch (error) {
     console.error(

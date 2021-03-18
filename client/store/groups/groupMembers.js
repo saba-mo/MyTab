@@ -27,7 +27,7 @@ const initialState = []
 /* THUNK CREATORS */
 export const _loadGroupMembers = (groupId) => async (dispatch) => {
   try {
-    const {data} = await axios.get(`/api/groups/singleGroup/${groupId}/members`)
+    const {data} = await axios.get(`/api/groups/${groupId}/members`)
     dispatch(getGroupMembers(data))
   } catch (error) {
     console.error(
@@ -39,10 +39,7 @@ export const _loadGroupMembers = (groupId) => async (dispatch) => {
 
 export const _addGroupMember = (groupId, member) => async (dispatch) => {
   try {
-    const {data} = await axios.post(
-      `/api/groups/singleGroup/${groupId}/members`,
-      member
-    )
+    const {data} = await axios.post(`/api/groups/${groupId}/members`, member)
     dispatch(addGroupMember(data))
   } catch (error) {
     console.error(
@@ -54,12 +51,9 @@ export const _addGroupMember = (groupId, member) => async (dispatch) => {
 
 export const _deleteGroupMember = (groupId, memberId) => async (dispatch) => {
   try {
-    const {data} = await axios.delete(
-      `/api/groups/singleGroup/${groupId}/members`,
-      {
-        data: {memberId},
-      }
-    )
+    const {data} = await axios.delete(`/api/groups/${groupId}/members`, {
+      data: {memberId},
+    })
     if (data) {
       dispatch(getGroupMembers)
     } else {

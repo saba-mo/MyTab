@@ -104,9 +104,7 @@ export class GroupExpenses extends React.Component {
                     <Avatar src="https://i.pinimg.com/564x/f5/95/b8/f595b89bc0216e93537cf81ff799cbef.jpg" />
                   }
                   title={
-                    <Link
-                      to={`/groups/singleGroup/${item.groupId}/expenses/${item.id}`}
-                    >
+                    <Link to={`/groups/${item.groupId}/expenses/${item.id}`}>
                       {item.name}
                     </Link>
                   }

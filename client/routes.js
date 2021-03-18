@@ -78,10 +78,7 @@ class Routes extends Component {
                 <Menu.Item key="/home" icon={<UserOutlined />}>
                   Home
                 </Menu.Item>
-                <Menu.Item
-                  key={`/groups/${this.props.user.id}`}
-                  icon={<TeamOutlined />}
-                >
+                <Menu.Item key="/groups" icon={<TeamOutlined />}>
                   Groups
                 </Menu.Item>
                 <Menu.Item key="/friends" icon={<SmileOutlined />}>
@@ -112,15 +109,15 @@ class Routes extends Component {
                   <Route path="/home" component={UserHome} />
                   <Route path="/friends" component={AllFriends} />
                   <Route path="/friend/add" component={AddFriendForm} />
-                  <Route exact path="/groups/:userId" component={Groups} />
+                  <Route exact path="/groups" component={Groups} />
                   <Route
                     exact
-                    path="/groups/singleGroup/:groupId"
+                    path="/groups/:groupId"
                     component={SingleGroups}
                   />
                   <Route
                     exact
-                    path="/groups/singleGroup/:groupId/expenses/:expenseId"
+                    path="/groups/:groupId/expenses/:expenseId"
                     component={SingleExpense}
                   />
                 </Switch>

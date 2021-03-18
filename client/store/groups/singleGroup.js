@@ -16,7 +16,7 @@ export const setSingleGroup = (group) => ({
 export const _getSingleGroup = (groupId) => {
   return async (dispatch) => {
     try {
-      const {data} = await axios.get(`/api/groups/singleGroup/${groupId}`)
+      const {data} = await axios.get(`/api/groups/${groupId}`)
       // security check so user doesn't access a group they are not in
       if (data.title) {
         dispatch(setSingleGroup(data))
@@ -32,7 +32,7 @@ export const _getSingleGroup = (groupId) => {
 
 export const _updateGroup = (groupId, group) => async (dispatch) => {
   try {
-    const {data} = await axios.put(`/api/groups/singleGroup/${groupId}`, group)
+    const {data} = await axios.put(`/api/groups/${groupId}`, group)
     dispatch(updateGroup(data))
   } catch (err) {
     console.error(

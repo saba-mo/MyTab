@@ -1,22 +1,10 @@
 const router = require('express').Router()
 const currency = require('currency.js')
 const {Group, User, Expense, Item} = require('../db/models')
-const {isInGroup, isIdentity} = require('../express-gate-auth')
-
-//GET all groups
-router.get('/:userId', isIdentity, async (req, res, next) => {
-  try {
-    const user = await User.findByPk(req.params.userId, {
-      include: [{model: Group}],
-    })
-    res.json(user.groups)
-  } catch (err) {
-    next(err)
-  }
-})
+const {isInGroup} = require('../express-gate-auth')
 
 //GET a single group
-router.get('/singleGroup/:groupId', isInGroup, async (req, res, next) => {
+router.get('/:groupId', isInGroup, async (req, res, next) => {
   try {
     const group = await Group.findByPk(req.params.groupId)
     res.json(group)
@@ -25,46 +13,8 @@ router.get('/singleGroup/:groupId', isInGroup, async (req, res, next) => {
   }
 })
 
-//ADD a new group
-router.post('/', async function (req, res, next) {
-  try {
-    const newGroup = await Group.create(req.body)
-    await newGroup.addUsers([req.user])
-    res.send(newGroup)
-  } catch (err) {
-    next(err)
-  }
-})
-
-//DELETE a group
-router.delete('/:groupId', async (req, res, next) => {
-  try {
-    // get all expenses for the group
-    const groupExpenses = await Expense.findAll({
-      where: {groupId: req.params.groupId},
-    })
-    // destroy all of them and their associated items in the db
-    for (let i = 0; i < groupExpenses.length; i++) {
-      let expense = groupExpenses[i]
-      const expenseItems = await expense.getItems()
-      expenseItems.forEach((item) => item.destroy())
-      await expense.destroy()
-    }
-
-    // destroy the group in the db
-    Group.destroy({
-      where: {
-        id: req.params.groupId,
-      },
-    })
-    res.status(204).end()
-  } catch (err) {
-    next(err)
-  }
-})
-
-//Edit groups
-router.put('/singleGroup/:groupId', async (req, res, next) => {
+//Edit a group name
+router.put('/:groupId', async (req, res, next) => {
   try {
     const data = await Group.findByPk(req.params.groupId)
     const group = await data.update(req.body)
@@ -75,54 +25,47 @@ router.put('/singleGroup/:groupId', async (req, res, next) => {
 })
 
 // GET all of group's expenses
-router.get(
-  '/singleGroup/:groupId/expenses',
-  isInGroup,
-  async (req, res, next) => {
-    try {
-      const groupId = parseInt(req.params.groupId)
-      if (isNaN(groupId)) return res.sendStatus(404)
+router.get('/:groupId/expenses', isInGroup, async (req, res, next) => {
+  try {
+    const groupId = parseInt(req.params.groupId)
+    if (isNaN(groupId)) return res.sendStatus(404)
 
-      const thisGroup = await Group.findByPk(groupId)
-      if (!thisGroup) res.sendStatus(404)
+    const thisGroup = await Group.findByPk(groupId)
+    if (!thisGroup) res.sendStatus(404)
 
-      const groupExpenses = await thisGroup.getExpenses({
-        attributes: ['id', 'name', 'totalCost', 'groupId'],
-        include: [{model: User}, {model: Item, include: {model: User}}],
-      })
+    const groupExpenses = await thisGroup.getExpenses({
+      attributes: ['id', 'name', 'totalCost', 'groupId'],
+      include: [{model: User}, {model: Item, include: {model: User}}],
+    })
 
-      res.json(groupExpenses)
-    } catch (err) {
-      next(err)
-    }
+    res.json(groupExpenses)
+  } catch (err) {
+    next(err)
   }
-)
+})
 
 // GET single group expense
-router.get(
-  '/singleGroup/:groupId/expenses/:expenseId',
-  async (req, res, next) => {
-    try {
-      const expenseId = parseInt(req.params.expenseId)
-      if (isNaN(expenseId)) return res.sendStatus(404)
+router.get('/:groupId/expenses/:expenseId', async (req, res, next) => {
+  try {
+    const expenseId = parseInt(req.params.expenseId)
+    if (isNaN(expenseId)) return res.sendStatus(404)
 
-      const thisExpense = await Expense.findByPk(expenseId, {
-        attributes: ['id', 'name', 'totalCost', 'groupId'],
-      })
-      if (!thisExpense) res.sendStatus(404)
+    const thisExpense = await Expense.findByPk(expenseId, {
+      attributes: ['id', 'name', 'totalCost', 'groupId'],
+    })
+    if (!thisExpense) res.sendStatus(404)
 
-      // find user who paid for this expense and send it back on the expense object
-      const paidBy = await thisExpense.getUsers()
-      thisExpense.dataValues.paidBy = paidBy
-      res.json(thisExpense)
-    } catch (err) {
-      next(err)
-    }
+    // find user who paid for this expense and send it back on the expense object
+    const paidBy = await thisExpense.getUsers()
+    thisExpense.dataValues.paidBy = paidBy
+    res.json(thisExpense)
+  } catch (err) {
+    next(err)
   }
-)
+})
 
 // POST a new group expense
-router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
+router.post('/:groupId/expenses', async (req, res, next) => {
   try {
     // for extra safely checking we can add this todo check after MVP:
     // todo: validate totalCost format, and return a 400 status for non float data e.g if (!Number(req.body.totalCost))
@@ -172,109 +115,99 @@ router.post('/singleGroup/:groupId/expenses', async (req, res, next) => {
 })
 
 //UPDATE single group expense
-router.put(
-  '/singleGroup/:groupId/expenses/:expenseId',
-  async (req, res, next) => {
-    try {
-      // request comes in with
-      // 1. expense name
-      // 2. expense totalCost
-      // 3. id of user who paid
-      // 4. object of who owes payer money {userId: amount}
+router.put('/:groupId/expenses/:expenseId', async (req, res, next) => {
+  try {
+    // request comes in with
+    // 1. expense name
+    // 2. expense totalCost
+    // 3. id of user who paid
+    // 4. object of who owes payer money {userId: amount}
 
-      // update expense
-      const thisExpense = await Expense.findByPk(Number(req.params.expenseId))
-      const updatedExpense = await thisExpense.update({
-        name: req.body.name,
-        totalCost: req.body.totalCost,
-      })
-      await updatedExpense.setUsers([req.body.paidBy])
+    // update expense
+    const thisExpense = await Expense.findByPk(Number(req.params.expenseId))
+    const updatedExpense = await thisExpense.update({
+      name: req.body.name,
+      totalCost: req.body.totalCost,
+    })
+    await updatedExpense.setUsers([req.body.paidBy])
 
-      // update items
-      const items = await updatedExpense.getItems()
-      // iterate through existing list of items from db before the update
-      for (let i = 0; i < items.length; i++) {
-        let item = items[i]
-        // if the item in the database is also in the request body
-        if (req.body.owedByMember[item.userId]) {
-          // update that item
-          await item.update({
-            amount: req.body.owedByMember[item.userId],
-            userId: item.userId,
-          })
-          // else, the item is in the database but not in the request body, so destroy it
-        } else await item.destroy()
-      }
-
-      // check request for a user id that does not exist in the items array and then create an item
-      const newItemOwersStr = Object.keys(req.body.owedByMember)
-      const newItemOwers = newItemOwersStr.map((ower) => Number(ower))
-      const existingItemOwers = items.map((item) => item.userId)
-
-      // iterate through users who are on the request as owers
-      for (let i = 0; i < newItemOwers.length; i++) {
-        let owerOnRequest = newItemOwers[i]
-        // if the database does not include a row for this user and this item, create one
-        if (!existingItemOwers.includes(owerOnRequest)) {
-          await Item.create({
-            amount: req.body.owedByMember[owerOnRequest],
-            userId: Number(owerOnRequest),
-            expenseId: thisExpense.id,
-          })
-        }
-      }
-      const updatedItems = await updatedExpense.getItems()
-      updatedExpense.dataValues.items = updatedItems
-      res.json(updatedExpense)
-    } catch (err) {
-      next(err)
+    // update items
+    const items = await updatedExpense.getItems()
+    // iterate through existing list of items from db before the update
+    for (let i = 0; i < items.length; i++) {
+      let item = items[i]
+      // if the item in the database is also in the request body
+      if (req.body.owedByMember[item.userId]) {
+        // update that item
+        await item.update({
+          amount: req.body.owedByMember[item.userId],
+          userId: item.userId,
+        })
+        // else, the item is in the database but not in the request body, so destroy it
+      } else await item.destroy()
     }
+
+    // check request for a user id that does not exist in the items array and then create an item
+    const newItemOwersStr = Object.keys(req.body.owedByMember)
+    const newItemOwers = newItemOwersStr.map((ower) => Number(ower))
+    const existingItemOwers = items.map((item) => item.userId)
+
+    // iterate through users who are on the request as owers
+    for (let i = 0; i < newItemOwers.length; i++) {
+      let owerOnRequest = newItemOwers[i]
+      // if the database does not include a row for this user and this item, create one
+      if (!existingItemOwers.includes(owerOnRequest)) {
+        await Item.create({
+          amount: req.body.owedByMember[owerOnRequest],
+          userId: Number(owerOnRequest),
+          expenseId: thisExpense.id,
+        })
+      }
+    }
+    const updatedItems = await updatedExpense.getItems()
+    updatedExpense.dataValues.items = updatedItems
+    res.json(updatedExpense)
+  } catch (err) {
+    next(err)
   }
-)
+})
 
 // DELETE single group expense
-router.delete(
-  '/singleGroup/:groupId/expenses/:expenseId',
-  async (req, res, next) => {
-    try {
-      const expenseId = parseInt(req.params.expenseId)
-      const thisExpense = await Expense.findByPk(expenseId)
-      if (!thisExpense) res.sendStatus(404)
-      // find all items associated to expense and destroy them, too
-      const expenseItems = await thisExpense.getItems()
-      await expenseItems.forEach((item) => item.destroy())
-      await thisExpense.destroy()
-      res.sendStatus(204)
-    } catch (err) {
-      next(err)
-    }
+router.delete('/:groupId/expenses/:expenseId', async (req, res, next) => {
+  try {
+    const expenseId = parseInt(req.params.expenseId)
+    const thisExpense = await Expense.findByPk(expenseId)
+    if (!thisExpense) res.sendStatus(404)
+    // find all items associated to expense and destroy them, too
+    const expenseItems = await thisExpense.getItems()
+    await expenseItems.forEach((item) => item.destroy())
+    await thisExpense.destroy()
+    res.sendStatus(204)
+  } catch (err) {
+    next(err)
   }
-)
+})
 
 // GET all of group's members
-router.get(
-  '/singleGroup/:groupId/members',
-  isInGroup,
-  async (req, res, next) => {
-    try {
-      const groupId = parseInt(req.params.groupId)
-      if (isNaN(groupId)) return res.sendStatus(404)
+router.get('/:groupId/members', isInGroup, async (req, res, next) => {
+  try {
+    const groupId = parseInt(req.params.groupId)
+    if (isNaN(groupId)) return res.sendStatus(404)
 
-      const thisGroup = await Group.findByPk(groupId)
-      if (!thisGroup) res.sendStatus(404)
+    const thisGroup = await Group.findByPk(groupId)
+    if (!thisGroup) res.sendStatus(404)
 
-      const groupMembers = await thisGroup.getUsers({
-        attributes: ['id', 'email', 'firstName', 'lastName'],
-      })
-      res.json(groupMembers)
-    } catch (err) {
-      next(err)
-    }
+    const groupMembers = await thisGroup.getUsers({
+      attributes: ['id', 'email', 'firstName', 'lastName'],
+    })
+    res.json(groupMembers)
+  } catch (err) {
+    next(err)
   }
-)
+})
 
 // ADD a group member
-router.post('/singleGroup/:groupId/members', async (req, res, next) => {
+router.post('/:groupId/members', async (req, res, next) => {
   try {
     const id = Number(req.body.member)
     let thisUser = await User.findByPk(id, {
@@ -288,7 +221,7 @@ router.post('/singleGroup/:groupId/members', async (req, res, next) => {
 })
 
 // DELETE a group member
-router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
+router.delete('/:groupId/members', async (req, res, next) => {
   try {
     const memberId = Number(req.body.memberId)
     const groupId = Number(req.params.groupId)
@@ -363,7 +296,7 @@ router.delete('/singleGroup/:groupId/members', async (req, res, next) => {
 
 // UPDATE one portion of an expense within a group by updating Item table column boolean to TRUE
 router.put(
-  '/singleGroup/:groupId/expenses/:expenseId/:itemId',
+  '/:groupId/expenses/:expenseId/item/:itemId',
   async (req, res, next) => {
     try {
       const thisPortion = await Item.findByPk(req.params.itemId)

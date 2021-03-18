@@ -31,7 +31,7 @@ export class CreateGroupForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault()
     this.props.toggleForm()
-    this.props.createGroup(this.state)
+    this.props.createGroup(this.props.user.id, this.state)
     if (this.state.title.length) {
       this.openSuccessNotification('success')
     }
@@ -58,11 +58,12 @@ export class CreateGroupForm extends React.Component {
 const mapState = (state) => {
   return {
     groups: state.groups,
+    user: state.user,
   }
 }
 const mapDispatch = (dispatch) => {
   return {
-    createGroup: (newGroup) => dispatch(_createGroup(newGroup)),
+    createGroup: (userId, newGroup) => dispatch(_createGroup(userId, newGroup)),
   }
 }
 export default connect(mapState, mapDispatch)(CreateGroupForm)

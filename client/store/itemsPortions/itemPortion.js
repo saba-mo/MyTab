@@ -17,7 +17,7 @@ export const _settleOnePortion = (itemToSettle, groupId) => async (
 ) => {
   try {
     const {data} = await axios.put(
-      `/api/groups/singleGroup/${groupId}/expenses/${itemToSettle.expenseId}/${itemToSettle.id}`,
+      `/api/groups/${groupId}/expenses/${itemToSettle.expenseId}/item/${itemToSettle.id}`,
       {
         itemToSettle,
       }

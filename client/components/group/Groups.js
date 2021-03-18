@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {_getGroups, _deleteGroup, _loadBalance} from '../../store'
+import {_getGroups, _deleteGroup} from '../../store'
 import {Link} from 'react-router-dom'
 import {TotalBalance, CreateGroupForm} from '../index'
 import {List, Card, Col, notification} from 'antd'
@@ -16,11 +16,7 @@ export class Groups extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getGroups(this.props.match.params.userId)
-    // check if user is trying to access someone else's groups list
-    if (this.props.user.id !== Number(this.props.match.params.userId)) {
-      window.location = '/home'
-    }
+    this.props.getGroups(this.props.user.id)
   }
 
   openSuccessNotification = (type) => {
@@ -35,14 +31,13 @@ export class Groups extends React.Component {
     this.setState({showForm: !this.state.showForm})
   }
 
-  handleDeleteGroup(groupId) {
+  handleDeleteGroup(userId, groupId) {
     if (
       window.confirm(
         'Are you sure? You will be deleting the group and expenses for all members.'
       )
     ) {
-      this.props.deleteGroup(groupId)
-      this.props.loadBalance(this.props.user.id)
+      this.props.deleteGroup(userId, groupId)
       this.openSuccessNotification('success')
     }
   }
@@ -65,12 +60,14 @@ export class Groups extends React.Component {
             renderItem={(group) => (
               <List.Item>
                 <Card title={group.title}>
-                  <Link to={`/groups/singleGroup/${group.id}`}>Open</Link>
+                  <Link to={`/groups/${group.id}`}>Open</Link>
                   <Col span={1} />
                   {[
                     <Link
                       key="list-loadmore-more"
-                      onClick={() => this.handleDeleteGroup(group.id)}
+                      onClick={() =>
+                        this.handleDeleteGroup(this.props.user.id, group.id)
+                      }
                     >
                       Delete
                     </Link>,
@@ -105,8 +102,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     getGroups: (userId) => dispatch(_getGroups(userId)),
-    deleteGroup: (groupId) => dispatch(_deleteGroup(groupId)),
-    loadBalance: (userId) => dispatch(_loadBalance(userId)),
+    deleteGroup: (userId, groupId) => dispatch(_deleteGroup(userId, groupId)),
   }
 }
 

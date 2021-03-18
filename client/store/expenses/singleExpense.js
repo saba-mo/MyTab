@@ -19,7 +19,7 @@ const updateExpense = (expense) => ({
 export const _loadAnExpense = (groupId, expenseId) => async (dispatch) => {
   try {
     const {data} = await axios.get(
-      `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`
+      `/api/groups/${groupId}/expenses/${expenseId}`
     )
     dispatch(getAnExpense(data))
   } catch (error) {
@@ -35,7 +35,7 @@ export const _updateExpense = (groupId, expenseId, expense) => async (
 ) => {
   try {
     const {data} = await axios.put(
-      `/api/groups/singleGroup/${groupId}/expenses/${expenseId}`,
+      `/api/groups/${groupId}/expenses/${expenseId}`,
       expense
     )
     dispatch(updateExpense(data))

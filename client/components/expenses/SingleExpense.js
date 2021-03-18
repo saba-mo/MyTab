@@ -56,7 +56,7 @@ class SingleExpense extends React.Component {
         </div>
         <br />
         <div>
-          <Link to={`/groups/singleGroup/${expense.groupId}`}>
+          <Link to={`/groups/${expense.groupId}`}>
             <Button
               className="edit-expense-button"
               icon={<RollbackOutlined />}
