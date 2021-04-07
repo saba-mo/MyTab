@@ -20,16 +20,9 @@ import {DownOutlined} from '@ant-design/icons'
 export class GroupMembers extends React.Component {
   constructor() {
     super()
-    this.state = {
-      numberOfMembers: 0,
-    }
 
-    this.attemptToRemoveMember = this.attemptToRemoveMember.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.friendsNotInGroup = this.friendsNotInGroup.bind(this)
-    this.addedSuccessNotification = this.addedSuccessNotification.bind(this)
-    this.removeSuccessNotification = this.removeSuccessNotification.bind(this)
   }
 
   componentDidMount() {
@@ -37,8 +30,31 @@ export class GroupMembers extends React.Component {
     this.props.loadFriends(this.props.user.id)
   }
 
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value,
+    })
+  }
+
+  handleSubmit({key}) {
+    if (key == 0) {
+      message.info(`Choose a friend`)
+      return
+    }
+    this.props.addGroupMember(this.props.groupId, {member: key})
+    this.addedSuccessNotification('success')
+  }
+
+  // if group member has outstanding balance in the group, alert they cannot be removed, else remove them
+  attemptToRemoveMember = async (groupId, memberId, lengthOfMembersArray) => {
+    await this.props.deleteGroupMember(groupId, memberId)
+    if (this.props.groupMembers.length === lengthOfMembersArray) {
+      this.removeMemberNotification('error')
+    } else this.removeMemberNotification('success')
+  }
+
   // filters out user's friends that are already in group so they don't appear in dropdown menu
-  friendsNotInGroup(friends, groupMembers) {
+  friendsNotInGroup = (friends, groupMembers) => {
     const availableFriends = []
     for (let i = 0; i < friends.length; i++) {
       let friend = friends[i]
@@ -58,44 +74,15 @@ export class GroupMembers extends React.Component {
     })
   }
 
-  removeSuccessNotification = (type) => {
+  removeMemberNotification = (type) => {
     notification[type]({
-      message: 'Removed',
-      description: 'You have removed the member from this group.',
+      message: type === 'error' ? 'Request failed' : 'Removed',
+      description:
+        type === 'error'
+          ? 'You cannot remove a member with a balance in the group.'
+          : 'You have removed the member from this group.',
       placement: 'bottomRight',
     })
-  }
-
-  removeFailureNotification = (type) => {
-    notification[type]({
-      message: 'Request failed',
-      description: 'You cannot remove a member with a balance in the group.',
-      placement: 'bottomRight',
-    })
-  }
-
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    })
-  }
-
-  handleSubmit({key}) {
-    if (key == 0) {
-      message.info(`Choose a friend`)
-      return
-    }
-    this.props.addGroupMember(this.props.groupId, {member: key})
-    this.addedSuccessNotification('success')
-  }
-
-  // if group member has outstanding balance in the group, alert they cannot be removed, else remove them
-  async attemptToRemoveMember(groupId, memberId, lengthOfMembersArray) {
-    this.setState({numberOfMembers: lengthOfMembersArray})
-    await this.props.deleteGroupMember(groupId, memberId)
-    if (this.props.groupMembers.length === this.state.numberOfMembers) {
-      this.removeFailureNotification('error')
-    } else this.removeSuccessNotification('success')
   }
 
   noMembers = (memberList) => {
@@ -141,8 +128,7 @@ export class GroupMembers extends React.Component {
                       this.attemptToRemoveMember(
                         this.props.groupId,
                         item.id,
-                        lengthOfMembersArray,
-                        item
+                        lengthOfMembersArray
                       )
                     }
                   >
