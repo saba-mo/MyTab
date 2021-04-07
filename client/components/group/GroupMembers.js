@@ -21,19 +21,12 @@ export class GroupMembers extends React.Component {
   constructor() {
     super()
 
-    this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   componentDidMount() {
     this.props.loadGroupMembers(this.props.groupId)
     this.props.loadFriends(this.props.user.id)
-  }
-
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    })
   }
 
   handleSubmit({key}) {
